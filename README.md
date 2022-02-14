@@ -6,4 +6,4 @@
 [4. 제어문](https://kimjinoook.github.io/TIL/todayLearn/java/4.control) 
 
 ### javascript
-[지구본잡기](https://kimjinoook.github.io/TIL/) 
+[지구본잡기](https://kimjinoook.github.io/TIL/getmin/getmin) 
