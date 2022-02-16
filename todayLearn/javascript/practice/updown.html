@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>난수를 발생시켜 맞추는 게임</title>
+</head>
+<body>
+    <script>
+        var low = 0;
+        var high = 0;
+        var card = 0;
+        
+        while(true) {
+            var count = 0;
+            low = 0;
+            high = 99;
+            card = 
+            Math.floor(Math.random()*100);
+            alert("수 결정");
+            
+            while(true) {
+                var n = 0;
+                alert(low + " ~ " + high);
+                count++;
+                alert("시도횟수 : " + count);
+                n = prompt("숫자 입력");
+                n = parseInt(n);
+                if(n > high || n <low) {
+                    alert("값의 범위 벗어남");
+
+                }
+                else {
+                    
+                    if(n == card) {
+                        alert("정답");
+                        break;
+                    }
+                else if(n > card) {
+                    alert("down")
+                    high = n;
+                }
+                else {
+                    alert("up")
+                    low = n;
+                }
+                }
+            }
+
+            var con = confirm("다시?");
+            if(con == false){
+                break;
+            }
+        }
+
+    </script>    
+</body>
+</html>
