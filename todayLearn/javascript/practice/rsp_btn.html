@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가위바위보</title>
+</head>
+<body>
+    <div id "cho">
+        <button onclick = "가위버튼()">가위</button>
+        <button onclick = "바위버튼()">바위</button>
+        <button onclick="보버튼()">보</button>
+    </div>
+    <script>
+        alert("가위바위보를 시작합니다");
+            function 가위버튼() {
+                var user = "가위";
+                var com = Math.floor(Math.random()*100)%3;
+            if (com == 0) {
+                com = "가위";
+            }
+            else if (com == 1) {
+                com = "바위";
+            }
+            else {
+                com = "보";
+            }
+
+            if (com == user) {
+                alert ("무승부" + "\n컴퓨터 : " + com + "\n당신 : " + user);
+            }
+            else if ((com == "가위" && user == "바위") || (com == "바위" && user == "보") || (com == "보" && user == "바위")) {
+                alert ("승리" + "\n컴퓨터 : " + com + "\n당신 : " + user);
+            }
+            else {
+                alert ("패배" + "\n컴퓨터 : " + com + "\n당신 : " + user);
+            }
+            }
+            function 바위버튼() {
+                var user = "바위";
+                var com = Math.floor(Math.random()*100)%3;
+            if (com == 0) {
+                com = "가위";
+            }
+            else if (com == 1) {
+                com = "바위";
+            }
+            else {
+                com = "보";
+            }
+
+            if (com == user) {
+                alert ("무승부" + "\n컴퓨터 : " + com + "\n당신 : " + user);
+            }
+            else if ((com == "가위" && user == "바위") || (com == "바위" && user == "보") || (com == "보" && user == "바위")) {
+                alert ("승리" + "\n컴퓨터 : " + com + "\n당신 : " + user);
+            }
+            else {
+                alert ("패배" + "\n컴퓨터 : " + com + "\n당신 : " + user);
+            }
+            }
+            function 보버튼() {
+                var user = "보";
+                var com = Math.floor(Math.random()*100)%3;
+            if (com == 0) {
+                com = "가위";
+            }
+            else if (com == 1) {
+                com = "바위";
+            }
+            else {
+                com = "보";
+            }
+
+            if (com == user) {
+                alert ("무승부" + "\n컴퓨터 : " + com + "\n당신 : " + user);
+            }
+            else if ((com == "가위" && user == "바위") || (com == "바위" && user == "보") || (com == "보" && user == "바위")) {
+                alert ("승리" + "\n컴퓨터 : " + com + "\n당신 : " + user);
+            }
+            else {
+                alert ("패배" + "\n컴퓨터 : " + com + "\n당신 : " + user);
+            }
+            }
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가위바위보</title>
+</head>
+<body>
+    <script>
+        var user = 0;
+        while(true) {
+            var com = Math.floor(Math.random()*100)%3;
+            if (com == 0) {
+                com = "가위";
+            }
+            else if (com == 1) {
+                com = "바위";
+            }
+            else {
+                com = "보";
+            }
+
+            alert("가위바위보를 시작합니다");
+            user = prompt("무엇을 내시겠습니까?");
+            
+            if (com == user) {
+                alert ("무승부" + "\n컴퓨터 : " + com + "\n당신 : " + user);
+            }
+            else if ((com == "가위" && user == "바위") || (com == "바위" && user == "보") || (com == "보" && user == "바위")) {
+                alert ("승리" + "\n컴퓨터 : " + com + "\n당신 : " + user);
+            }
+            else {
+                alert ("패배" + "\n컴퓨터 : " + com + "\n당신 : " + user);
+            }
+
+            var con = confirm("다시 하시겠습니까?")
+            if (con == false) {
+                break;
+            }
+        }
+    </script>
+    
+</body>
+</html>
