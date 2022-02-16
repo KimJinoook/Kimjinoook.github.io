@@ -3,7 +3,7 @@
 [1. 기본 골격과 구정](https://kimjinoook.github.io/TIL/todayLearn/java/1.java_start)   
 [2. 변수와 데이터타입, 형변환](https://kimjinoook.github.io/TIL/todayLearn/java/2.var&dataType)  
 [3. 연산자](https://kimjinoook.github.io/TIL/todayLearn/java/3.operator)   
-[4. 제어문](https://kimjinoook.github.io/TIL/todayLearn/java/4.control) 
+[4. 제어문](https://kimjinoook.github.io/TIL/todayLearn/java/4.control)   
 [5.메서드](https://kimjinoook.github.io/TIL/todayLearn/java/5.method)
 
 ### javascript
