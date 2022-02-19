@@ -5,6 +5,7 @@
 [3. 연산자](https://kimjinoook.github.io/TIL/todayLearn/java/3.operator)   
 [4. 제어문](https://kimjinoook.github.io/TIL/todayLearn/java/4.control)   
 [5. 메서드](https://kimjinoook.github.io/TIL/todayLearn/java/5.method)
+[6. 배열](https://kimjinoook.github.io/TIL/todayLearn/java/6.arrays)
 
 ### javascript
 [지구본잡기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/getmin/getmin)   
