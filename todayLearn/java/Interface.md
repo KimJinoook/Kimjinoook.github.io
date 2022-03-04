@@ -75,6 +75,36 @@ public class InterfaceTest {
 - 인터페이스의 구현과 부모클래스의 상속 동시 가능
 	> class child extneds fater implements interface{}   
 
+```java
+class Tv{
+	public void onTv() {
+		System.out.println("전원 on");
+	}
+}
+interface Computer{
+	public void dataReceive();
+}
+
+//상속과 구현을 동시에
+class IPTv extends Tv implements Computer{
+	public void dataReceive() {
+		System.out.println("영상 데이터 수신 중");
+	}
+	public void powerOn() {
+		dataReceive();
+		onTv();
+	}
+}
+
+public class IpTvTest {
+
+	public static void main(String[] args) {
+		IPTv t = new IPTv();
+		t.powerOn();
+	}
+}
+```   
+
 ## 3. 인터페이스 상속
 - 인터페이스는 인터페이스만 상속받을 수 있다
 - **다중 상속 가능**
@@ -91,4 +121,99 @@ interface Fightable extends Movable, Attackable{}
 interface TV{}
 interface Computer{}
 class IPTV implements TV, Computer{}
-```
+```   
+```java
+interface Tv2{
+	public void onTv();
+}
+interface Computer2{
+	public void dataReceive();
+}
+
+//인터페이스 다중 상속 가능
+class IPTv2 implements Tv2, Computer2{
+	public void dataReceive() {
+		System.out.println("영상 데이터 수신 중");
+	}
+	public void onTv() {
+		System.out.println("tv영상 출력");
+	}
+	public void powerOn() {
+		dataReceive();
+		onTv();
+	}
+}
+
+public class IpTvTest2 {
+
+	public static void main(String[] args) {
+		IPTv2 t = new IPTv2();
+		t.powerOn();
+	}
+}
+```   
+
+- 종합   
+
+```java
+interface Attackable{
+	/**
+	 * 지정된 대상을 공격하는 기능
+	 * @param u
+	 */
+	public abstract void attack(Unit u);
+}
+
+interface Movable{
+	/**
+	 * 지정된 위치로 이동하는 기능
+	 * @param x
+	 * @param y
+	 */
+	void move(int x, int y);
+}
+
+//인터페이스끼리의 상속 - extends 사용, 다중상속 가능
+interface Fightable extends Attackable, Movable{
+	
+}
+
+abstract class Unit{
+	protected int x, y; //위치
+	protected int currentHP; //체력
+	
+	Unit(int x, int y, int currentHP){
+		this.x = x;
+		this.y = y;
+		this.currentHP = currentHP;
+	}
+}
+
+class Fighter extends Unit implements Fightable{
+	public Fighter(int x, int y, int currentHP) {
+		super(x,y,currentHP);
+	}
+	public void move(int x, int y) {
+		this.x = x;
+		this.y = y;
+		System.out.println(x+","+y+"위치로 이동");
+	}
+	public void attack(Unit u) {
+		System.out.println(u.x+","+u.y+"위치의"+u.currentHP+"체력 유닛 공격");
+	}
+}
+
+public class UnitTest {
+
+	public static void main(String[] args) {
+		Fighter f = new Fighter(10,25,350);
+		f.move(30,40);
+		
+		f.attack(new Fighter(30,40,240));
+		f.move(70, 80);
+		f.attack(new Fighter(70,80,100));
+	}
+}
+```   
+
+
