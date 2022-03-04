@@ -216,4 +216,96 @@ public class UnitTest {
 }
 ```   
 
+## 4. 인터페이스의 장점
+- 표준화가 가능하다
+	- 인터페이스를 기본 틀로, 일관되고 정형화된 프로그램의 개발 가능
+- 관계없는 클래스들에게 관계를 맺어줄 수 있다
+	- 상속관계도 아닌, 같은 조상을 가지고 있지 않은 클래스도 인터페이스를 통해 공통적으로 구현, 관계 형성 가능
+- 독립적인 프로그래밍 가능
+	- 클래스 간 직접적인 관계를 인터페이스를 통해 간접적인 관계로 변경
+	- 클래스의 변경이 다른 클래스에게 영향을 미치지 않도록 독립적인 프로그래밍 가능
+
+- ex) 직접적인 관계   
+
+```java
+/*
+ * 직접적인 관계의 두 클래스 A,B
+ * 단점 : 한쪽이 provider 되면 다른쪽도 변경
+ */
+class A{
+	/*
+	public void methodA(B b) {
+		b.methodB();
+	}*/
+	public void methodA(C c) {
+		c.methodC();
+	}
+}
+class B{
+	public void methodB() {
+		System.out.println("B클래스 메서드");
+	}
+}
+class C{
+	public void methodC() {
+		System.out.println("C 클래스 메서드");
+	}
+}
+
+public class InterfaceTest2 {
+
+	public static void main(String[] args) {
+		A a = new A();
+		//메서드A 호출
+		//a.methodA(new B());
+		
+		//c클래스를 추가해 c를 호출하고 싶은 경우
+		//a클래스의 메서드 구현부를 변경해주어야 한다
+		a.methodA(new C());
+	}
+}
+```   
+
+- ex) 간접적인 관계   
+
+```java
+/*
+ * 간접적인 관계의 두 클래스 (A-I-B)
+ * 클래스 A가 클래스 B를 직접 호출하지 않고 인터페이스를 매개체로 하는 경우
+ * 클래스A는 인터페이스 I하고만 직접적인 관계에 있기 때문에 클래스B의 변경에
+ * 영향을 받지 않는다
+ */
+
+interface I{
+	void method();
+}
+class AA{
+	public void methodA(I i) {
+		i.method();
+	}
+}
+class BB implements I{
+	public void method() {
+		System.out.println("B클래스 메서드");
+	}
+}
+class CC implements I{
+	public void method() {
+		System.out.println("C클래스 메서드");
+	}
+}
+public class InterfaceTest3 {
+
+	public static void main(String[] args) {
+		AA a = new AA();
+		//methodA()호출
+		a.methodA(new BB());
+
+		//c클래스를 추가해 c를 호출하고 싶은 경우
+		//a클래스의 메서드 구현부를 변경할 필요 없다
+		a.methodA(new CC());
+	}
+}
+```   
+
 
