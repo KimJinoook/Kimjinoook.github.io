@@ -308,4 +308,57 @@ public class InterfaceTest3 {
 }
 ```   
 
+## 5. 인터페이스 기반의 상수 표현
+- 인터페이스 내 변수는 무조건 public static final로 선언되는 특성을 활용
+
+```java
+interface Week{
+	int MON=1, THE=2, WED=3, THU=4, FRI=5, SAT=6, SUN=7;
+} // 인터페이스 활용
+
+class Week2 {
+	public static final int MON=1;
+	public static final int TUE=2;
+	public static final int WED=3;
+	public static final int THU=4;
+	public static final int FRI=5;
+	public static final int SAT=6;
+	public static final int SUN=7;
+} // 클래스로 선언할 경우
+
+public class InterfaceConst {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("요일 선택:1.월 ~ 7.일");
+		int type = sc.nextInt();
+		
+		switch(type) {
+		case Week.MON :
+			System.out.println("주간회의");
+			break;
+		case Week.THE :
+			System.out.println("프로젝트 기획 회의");
+			break;
+		case Week.WED :
+			System.out.println("진행사항 보고");
+			break;
+		case Week.THU :
+			System.out.println("사내 축구");
+			break;
+		case Week.FRI :
+			System.out.println("프로젝트 마감");
+			break;
+		case Week.SAT :
+			System.out.println("가족");
+			break;
+		case Week.SUN :
+			System.out.println("휴일");
+			break;		
+		}
+	}
+}
+
+```   
+
 
