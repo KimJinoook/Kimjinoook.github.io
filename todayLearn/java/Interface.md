@@ -70,4 +70,25 @@ public class InterfaceTest {
 
 	}
 }
+```   
+
+- 인터페이스의 구현과 부모클래스의 상속 동시 가능
+	> class child extneds fater implements interface{}   
+
+## 3. 인터페이스 상속
+- 인터페이스는 인터페이스만 상속받을 수 있다
+- **다중 상속 가능**
+
+```java
+interface Movable{}
+interface Attackable{}
+interface Fightable extends Movable, Attackable{}
+```   
+
+- 하나의 클래스가 여러개의 인터페이스를 구현할 수 있다
+
+```java
+interface TV{}
+interface Computer{}
+class IPTV implements TV, Computer{}
 ```
