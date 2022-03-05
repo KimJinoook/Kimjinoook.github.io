@@ -234,7 +234,18 @@ class cA{
 > float a= 3.1415f;   
 > int b = Math.round(a*100); // b=314;   
 > float c = b/100f; // c = 3.14;   
+> static int round (float a)   
+> static long round (double a)   
 
+
+```java
+class mr{
+	public static voud main(String[] a){
+		int num1 = Math.round(3.14f); // 3
+		long num2 = Math.round(-3.8); // -4
+	}
+}
+```
 ### b. Math.random()
 - 0.0 <= x < 1.0 의 실수를 랜덤으로 추출한다.
 - 원하는 범위의 정수 추출하기 ex(1~100)
@@ -263,3 +274,46 @@ class cA{
 		- (int)(Math.random()*100+1)
 		- 97 <= x < 123
 
+## array클래스
+### a. arrays.sort()
+- 배열 요소를 오름차순 정렬해주는 메서드
+- public static void sort(int[] a)
+
+```java
+import java.util.*;
+public class SortTest {
+	public static void main(String[] args) {
+		int[] arr = {10,5,44,55,1000,140,3,55};
+		
+		System.out.println("sort 정렬전");
+		for(int i: arr)System.out.print(i+"\t");
+		System.out.println("\n");
+		
+		System.out.println("sort 정렬후");
+		Arrays.sort(arr);
+		for(int i:arr) System.out.print(i+"\t");
+		System.out.println("\n");
+	}
+}
+```
+
+## 명령줄 인수(Command-Line Arguments)
+- 자바프로그램의 main 메서드의 형식을 보면
+	> public static void main(String[] args)
+- main메서드 또한 문자열 배열을 매개변수로 받는 메서드임을 알 수 있다.
+- cmd창에서 자바프로그램 실행 시, 배개변수 입력을 통해 main메서드에 매개변수를 전달할 수 있다.
+	> 기존 자바프로그램 (Test.class) 실행 시
+	> 파일 경로> java Test   
+	> 매개변수 전달 시   
+	> 파일 경로> java Test 매개변수1 매개변수2 매개변수3 ...
+- main 메서드 내에서 args[] 배열을 통해 문자열에 접근할 수 있다.
+
+```java
+class CmdTest{
+	public static void main(String[] args){
+		for (String s : args) System.out.println(s) ;
+		// cmd창에서 프로그램 실행과 동시에 매개변수를 입력한 만큼
+		// 해당 매개변수가 출력되는 것을 알 수 있다.
+	}
+}
+```
