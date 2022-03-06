@@ -9,7 +9,7 @@
 [7. 클래스](https://kimjinoook.github.io/TIL/todayLearn/java/7.class)   
 [8. 스태틱](https://kimjinoook.github.io/TIL/todayLearn/java/8.static)   
 [9. 상속](https://kimjinoook.github.io/TIL/todayLearn/java/9.extends)   
-[10. 다형성](https://kimjinoook.github.io/TIL/todayLearn/java/10.polymotphism)   
+[10. 다형성](https://kimjinoook.github.io/TIL/todayLearn/java/10.polymorphism)   
 [11. 추상](https://kimjinoook.github.io/TIL/todayLearn/java/11.abstract)   
 [12. 인터페이스](https://kimjinoook.github.io/TIL/todayLearn/java/12.interface)   
 [13. 패키지](https://kimjinoook.github.io/TIL/todayLearn/java/13.package)   
