@@ -20,6 +20,8 @@
 [가위바위보 1](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/rsp_num)   
 [가위바위보 2](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/rsp_btn)   
 [업다운](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/updown)   
+[단어맞추기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/woodle)   
+
 
 ### 기타언어
 [엄랭](https://kimjinoook.github.io/TIL/todayLearn/extraLang/1.umm)
