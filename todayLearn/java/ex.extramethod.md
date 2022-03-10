@@ -93,6 +93,67 @@ class If{
 }
 ```
 
+### b. toString()
+- Object클래스의 toString()메서드
+- 해당 객체가 어떤 객체인지 문자열로 표현하는 값 리턴
+	- 클래스명@16진수 해시코드
+- p.toString()과 p를 출력한 결과값 동일
+	- 클래스의 멤버가 할당된 주소를 숨기려는 특성=>
+	- 직접 주소 칠력시, 자동으로 출력형식의 메서드 (toString)로 연결
+- 자동으로 호출되는 경우
+	- System.out.pritnln() 메서드에 매개변수로 들어가는 경우
+	- 객체에 대하여 더하기 연산을 하는경우
+- 클래스에서 오버라이딩 후 사용 가능
+- toString 결과값 확인   
+
+
+
+```java
+class Person{
+	public void showInfo() {
+		System.out.println(this);
+	}
+}
+
+public class ToStringTest {
+
+	public static void main(String[] args) {
+		Person p = new Person();
+		p.showInfo();
+		
+		System.out.println("p객체 문자열"+p.toString());
+		System.out.println("p"+p);
+		System.out.println(p);
+
+	}
+}
+```
+- toString 오버라이딩   
+
+```java
+class Person2{
+	private String name;
+	private int age;
+	
+	//object의 toString()메서드를 오버라이딩
+	public String toString() {
+		return "Person2[name="+name+", age="+age+"]";
+	}
+}
+
+public class ToStringTest2 {
+
+	public static void main(String[] args) {
+		Person2 p =new Person2();
+		System.out.println(p);
+		System.out.println(p.toString());
+		
+
+	}
+
+}
+```
+
 ## Character클래스
 ### a. 대문자 변환 메서드
 - Character.toUpperCase()
