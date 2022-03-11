@@ -154,6 +154,140 @@ public class ToStringTest2 {
 }
 ```
 
+### c. length
+- 변수,length()
+- 문자열의 길이 확인
+
+> String a = "가나다라마바";
+> int b = a.length(); // b=6
+
+### d. charAt
+- 변수.charAt(i)
+- String의 문자열중 한글자만 선택해 char 타입으로 변환
+- i값은 String 문자열 내 index번호
+- index는 0부터 문자길이-1 까지
+
+```java
+class cA{
+	public static void main(String[] args){
+		String str = "가나다라마"
+		// index 0번 : 가
+		// index 4번 : 마
+		char c = str.charAt(0); // c에 '가'가 저장된다.
+		char d = str.charAt(3); // d에 '라'가 저장된다.
+		System.out.println(c); //가
+	}
+}
+```
+
+-nextLine 뒤에 붙여 바로 뽑아내는 것도 가능하다.
+> String a= "가나다라마";
+> char b = sc.nextLine().charAt(1);   
+
+### e. indexOf, substring
+- indexOf
+	- 문자열을 첫부분부터 검색, 입력한 문자열을 만나는 위치를 int로 반환
+- lastIndexOf
+	- 문자열을 마지막 부분부터 검색, 입력한 문자열을 만나는 위치를 int로 반환
+- substring
+	- 일부 문자열 추출   
+
+```java
+public class StringTest {
+
+	public static void main(String[] args) {
+		            //012345678901234567890123456789
+		String str = "Hello Java, Hi Java!";
+		char ch = str.charAt(4); //o
+		System.out.println("ch="+ch);
+		
+		int idx = str.indexOf("Java");
+		System.out.println("앞 Java의 위치 : "+idx); //6
+		System.out.println("뒤 Java의 위치 : "+str.lastIndexOf("Java")); //15
+		
+		String sub = str.substring(6,10); //6<= x < 10, Java
+		System.out.println("sub="+sub);
+		System.out.println(str.substring(15)); //15부터 끝까지, Java!
+		
+		String s = "www.nate.com";
+		if(s.startsWith("www")) {
+			System.out.println("www로 시작함");
+			
+		}
+		if (s.endsWith(".com")) {
+			System.out.println(".com으로 끝남");
+		}
+		
+		            //01234567890123
+		String email="hong@gmail.com"; 
+					//
+		if(email.indexOf("@") != -1&& email.indexOf(".")!=-1
+				&& email.indexOf("@")<email.indexOf(".")) {
+			System.out.println("이메일 규칙이 올바르다");
+		}else {
+			System.out.println("이메일 규칙이 올바르지 않다");
+		}
+		
+		int gol = email.indexOf("@");
+		int dot = email.lastIndexOf(".");
+		//hong만 추출
+		System.out.println(email.substring(0,gol));
+		//com
+		System.out.println(email.substring(dot+1));
+		//gmail
+		System.out.println(email.substring(gol+1,dot));
+	}
+}
+```
+
+### . String[] split
+- 특정 문자들을 경계로 하여 문자열을 여러개의 토막으로 분리
+- 인수로 배열을 전달하면, 토막 문자열을 배열형태로 리턴   
+
+```java
+package com.day23.extra;
+
+public class SplitTest {
+
+	public static void main(String[] args) {
+		//String[] split(String regex)
+		str = "java,oracle,jsp,spring";
+		String[] arr = str.split(",");
+		for(String s3 : arr) System.out.println(s3);
+		
+		System.out.println("\n\n");
+		str="html.css.js.jquery";
+		String[] arr2 = str.split("\\.",3); //특정 기호로 잘리지않으면 역슬래시 두개
+						//두번째 매개변수는 limit, 자를 개수
+		for(String s3 : arr2) System.out.println(s3);
+
+	}
+}
+```
+### . replace
+- 문자열을 다른 문자열로 교체   
+
+```java
+public class SplitTest {
+
+	public static void main(String[] args) {
+		String str = "123456789";
+		String s = str.replace('7', '칠');
+		String s2 = str.replace("89", "여덟아홉");
+		System.out.println(s);
+		System.out.println(s2);
+	}
+}
+```
+### . trim
+- 앞위 공백 제거   
+
+```java
+s="             java spring!!          ";
+String s2= s.trim();
+System.out.println("s2=["+s2+"]"); // [java spring!!]
+```
+
 ## Character클래스
 ### a. 대문자 변환 메서드
 - Character.toUpperCase()
@@ -200,34 +334,6 @@ class  a66{
 }
 ```
 
-## 문자열 길이 확인
-- 변수,length()
-
-> String a = "가나다라마바";
-> int b = a.length(); // b=6
-
-## 문자열 뽑기
-- 변수.charAt(i)
-- String의 문자열중 한글자만 선택해 char 타입으로 변환
-- i값은 String 문자열 내 index번호
-- index는 0부터 문자길이-1 까지
-
-```java
-class cA{
-	public static void main(String[] args){
-		String str = "가나다라마"
-		// index 0번 : 가
-		// index 4번 : 마
-		char c = str.charAt(0); // c에 '가'가 저장된다.
-		char d = str.charAt(3); // d에 '라'가 저장된다.
-		System.out.println(c); //가
-	}
-}
-```
-
--nextLine 뒤에 붙여 바로 뽑아내는 것도 가능하다.
-> String a= "가나다라마";
-> char b = sc.nextLine().charAt(1);
 
 ## hasNext()
 - 다음 데이터가 있다면 true를 반환한다.
