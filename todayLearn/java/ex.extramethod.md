@@ -475,6 +475,11 @@ public class SortTest {
 	- GregorianCalendar cal = new GregorianCalendar()
 		- 양력을 나타내는 자식클래스   
 
+- Calendar를 Date로
+	- Date date = cal.getTime();
+- Date를 Calendar로
+	- cal.setTime(date);
+
 ```java
 import java.util.*;
 
@@ -583,6 +588,27 @@ public class CalendarTest2 {
 		System.out.println("\n 두 날짜 사이의 간격 : " + gap);
 	}
 
+}
+```
+```java
+public class Calendat {
+
+	public static void main(String[] args) {
+		// 1. Calendar를 Date로 변환
+		Calendar cal = Calendar.getInstance();
+		cal.set(2022,5,10);
+		
+		Date d = cal.getTime();
+		System.out.println(d.toLocaleString());
+		
+		//2. Date를 Calendar로 변환
+		Date date = new Date(2022,7,23);
+		Calendar cal2 = Calendar.getInstance();
+		cal2.setTime(date);
+		
+		System.out.println(CalendarTest2.showDate(cal2));
+
+	}
 }
 ```
 
