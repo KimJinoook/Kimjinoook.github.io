@@ -464,6 +464,128 @@ public class SortTest {
 }
 ```
 
+## Calendar & Date 클래스
+- 날짜와 시간에 관련된 데이를 처리하기 위한 클래스
+- java.util에 존재
+- Calendar
+	- 추상클래스로, 메서들 통해 구현된 클래스의 인스턴스를 얻어야 한다.
+	- Calendar cal = Calendar.getInstance();
+		- getInstance는 캘린더 클래스를 구현한 클래스의 인스턴스 반환
+	- Calendar cal = new GregorianCalendar();
+	- GregorianCalendar cal = new GregorianCalendar()
+		- 양력을 나타내는 자식클래스   
+
+```java
+import java.util.*;
+
+
+public class DateTest1 {
+
+	public static void main(String[] args) {
+		Date d = new Date();
+		System.out.println(d);
+		System.out.println(d.toLocaleString());
+		
+		int year=d.getYear();
+		System.out.println((year+1900)+"년");
+		System.out.println((d.getMonth()+1)+"월 "+d.getDate()+"일");
+		//=> 월은 0~11 리턴
+		
+		System.out.println(d.getHours()+":"+d.getMinutes()+":"
+				+d.getSeconds());
+		
+		System.out.println("요일:"+d.getDay()); //0 : 일요일
+		
+		//1970-01-01 0:0:0 기준 경과된 시간을 밀리초로 리턴
+		long gap = d.getTime()/1000;  //초 (초는 1000밀리초)
+		System.out.println("1970~ 경과시간(초)"+gap);
+		
+		gap=gap/(24*60*60); //일
+		System.out.println("경과일수:"+gap+"일");
+
+	}
+}
+``` 
+```java
+public class CalanderTest {
+
+	public static void main(String[] args) {
+		// Calendar cal = new Calendar(); error
+		Calendar cal = Calendar.getInstance();
+		Calendar cal2 = new GregorianCalendar();
+		
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH);
+		int date = cal.get(Calendar.DATE);
+		int h = cal.get(Calendar.HOUR); //12시간
+		int h2 = cal.get(Calendar.HOUR_OF_DAY); //24시간
+		int m = cal.get(Calendar.MINUTE);
+		int s = cal.get(Calendar.SECOND);
+		int week = cal.get(Calendar.DAY_OF_WEEK);
+		
+		System.out.println(year+"-"+(month+1)+"-"+date);
+		System.out.println(h+":"+m+":"+s);
+		System.out.println(h2+"시, "+cal.get(Calendar.AM));
+		System.out.println("요일:"+week); // 1: 일요일
+		
+		long gap = cal.getTimeInMillis()/1000;
+		gap=gap/(24*60*60);
+		System.out.println("경과일"+gap);
+		
+					//  0   1    2    3   4    5   6   7
+		String[] arr = {"","일","월","화","수","목","금","토"};
+		System.out.println("요일 : " + arr[week]);
+		
+
+	}
+
+}
+
+```
+```java
+public class CalendarTest2 {
+
+	public static String showDate(Calendar cal) {
+		return cal.get(Calendar.YEAR)+"년"
+		+(cal.get(Calendar.MONTH)+1)+"월"
+		+cal.get(Calendar.DATE);
+	}
+	
+	public static void main(String[] args) {
+		// 100일 후, 3개월 전, 7년 후
+		Calendar today = Calendar.getInstance();
+		
+		//2022-01-01
+		Calendar cal = new GregorianCalendar(2022,0,1);
+		
+		System.out.println("현재일자 : "+showDate(today));
+		
+		System.out.println("\n===100일 후===");
+		today.add(Calendar.DATE, 100);
+		System.out.println(showDate(today));
+		
+		today.add(Calendar.MONTH, -3);
+		System.out.println("\n3개월전 일자 : "+showDate(today));
+
+		today.add(Calendar.YEAR, 7);
+		System.out.println("\n7년후 일자 : "+showDate(today));
+		
+		//2 두 날짜 사이의 간격
+		// 크리스마스까지 며칠 남았는지
+		Date d = new Date();
+		Date d2 = new Date(2022-1900,11,25);
+		
+		long gap = (d2.getTime()-d.getTime())/1000;
+		gap=gap/(24*60*60);
+		
+		System.out.println("\n"+d.toLocaleString());
+		System.out.println(d2.toLocaleString());
+		System.out.println("\n 두 날짜 사이의 간격 : " + gap);
+	}
+
+}
+```
+
 ## 명령줄 인수(Command-Line Arguments)
 - 자바프로그램의 main 메서드의 형식을 보면
 	> public static void main(String[] args)
