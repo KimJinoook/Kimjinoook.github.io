@@ -13,6 +13,8 @@
 [11. 추상](https://kimjinoook.github.io/TIL/todayLearn/java/11.abstract)   
 [12. 인터페이스](https://kimjinoook.github.io/TIL/todayLearn/java/12.interface)   
 [13. 패키지](https://kimjinoook.github.io/TIL/todayLearn/java/13.package)   
+[14. 예외처리](https://kimjinoook.github.io/TIL/todayLearn/java/14.exception)   
+[15. 컬렉션](https://kimjinoook.github.io/TIL/todayLearn/java/15.collection)   
 [ex. 기타 참고](https://kimjinoook.github.io/TIL/todayLearn/java/ex.extramethod)   
 
 ### javascript
