@@ -71,6 +71,26 @@ class If{
   }
 }
 ```
+### c. 명령줄 인수(Command-Line Arguments)
+- 자바프로그램의 main 메서드의 형식을 보면
+	> public static void main(String[] args)
+- main메서드 또한 문자열 배열을 매개변수로 받는 메서드임을 알 수 있다.
+- cmd창에서 자바프로그램 실행 시, 배개변수 입력을 통해 main메서드에 매개변수를 전달할 수 있다.
+	> 기존 자바프로그램 (Test.class) 실행 시
+	> 파일 경로> java Test   
+	> 매개변수 전달 시   
+	> 파일 경로> java Test 매개변수1 매개변수2 매개변수3 ...
+- main 메서드 내에서 args[] 배열을 통해 문자열에 접근할 수 있다.
+
+```java
+class CmdTest{
+	public static void main(String[] args){
+		for (String s : args) System.out.println(s) ;
+		// cmd창에서 프로그램 실행과 동시에 매개변수를 입력한 만큼
+		// 해당 매개변수가 출력되는 것을 알 수 있다.
+	}
+}
+```
 
 
 ## String 클래스 
@@ -612,23 +632,79 @@ public class Calendat {
 }
 ```
 
-## 명령줄 인수(Command-Line Arguments)
-- 자바프로그램의 main 메서드의 형식을 보면
-	> public static void main(String[] args)
-- main메서드 또한 문자열 배열을 매개변수로 받는 메서드임을 알 수 있다.
-- cmd창에서 자바프로그램 실행 시, 배개변수 입력을 통해 main메서드에 매개변수를 전달할 수 있다.
-	> 기존 자바프로그램 (Test.class) 실행 시
-	> 파일 경로> java Test   
-	> 매개변수 전달 시   
-	> 파일 경로> java Test 매개변수1 매개변수2 매개변수3 ...
-- main 메서드 내에서 args[] 배열을 통해 문자열에 접근할 수 있다.
+## 형식화 클래스
+### DecimalFormat
+- 형식화 클래스 중 **숫자를 형식화**하는데 사용된다
+- 숫자 데이터를 정수, 부동소수점, 금액 등의 다양한 형식으로 표현
+- 일정한 형식의 텍스트 데이터를 숫자로 변환   
 
 ```java
-class CmdTest{
-	public static void main(String[] args){
-		for (String s : args) System.out.println(s) ;
-		// cmd창에서 프로그램 실행과 동시에 매개변수를 입력한 만큼
-		// 해당 매개변수가 출력되는 것을 알 수 있다.
+import java.text.*;
+class PrintTest{
+	public static void main(String[] args) {
+		DecimalFormat df = new DecimalFormat("#,###.##");
+		String s2 = df.format(1234567.89512);
+		System.out.println("\n" +s2); // 결과 1,234,567.9
+
+		DecimalFormat df2 = new DecimalFormat("#,###.00");
+		s2 = df2.format(1234567.89512);
+		System.out.println("\n" +s2); // 결과 1,234,567.90
+
+		DecimalFormat df3 = new DecimalFormat("#,##0");
+		s2 = df3.format(123456.723456);
+		System.out.println("\n" +s2); // 결과 123,457
+	}
+}
+```
+
+### SimpleDateFormat
+- 날짜 데이터를 원하는 형태로 출력
+- Date 인스턴스만 format()메서드 사용 가능
+- parser()메서드는 문자열을 날짜로 변환   
+
+
+```java
+import java.util.*;
+import java.text.*;
+class DateFormatEx2{
+	public static void main(String[] args) {
+		// Calendar와 Date간의 변환
+		Calendar cal = Calendar.getInstance();
+		cal.set(2012, 4, 30); // 2012년 5월 30일 - Month는 0~11의 범위
+		Date date = cal.getTime();
+		SimpleDateFormat sdf1, sdf2, sdf3, sdf4;
+		sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+		sdf2 = new SimpleDateFormat("yy-MM-dd E요일");
+		sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		sdf4 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+		String str = sdf1.format(date) // format(Date d)
+		System.out.println(str); 
+		System.out.println(sdf2.format(date));
+		System.out.println(sdf3.format(date));
+		System.out.println(sdf4.format(date));
+	}
+}
+```
+```java
+import java.util.*;
+import java.text.*;
+class DateFormatTest5{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("오늘 이전 날짜를 입력하세요(2013-09-30)");
+		String str = sc.nextLine();
+
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		
+		try {
+			Date date = df.parse(str);
+			Date today=new Date();
+			long diff = (today.getTime()-date.getTime())/1000;
+			diff = diff/(24*60*60);
+			System.out.println("두 날짜 사이의 간격 : "+diff);
+		} catch(ParseException e) {
+			e.printStackTrace();
+		}
 	}
 }
 ```
