@@ -15,7 +15,19 @@
 [13. 패키지](https://kimjinoook.github.io/TIL/todayLearn/java/13.package)   
 [14. 예외처리](https://kimjinoook.github.io/TIL/todayLearn/java/14.exception)   
 [15. 컬렉션](https://kimjinoook.github.io/TIL/todayLearn/java/15.collection)   
+[16. 스트링](https://kimjinoook.github.io/TIL/todayLearn/java/16.string)   
+[17. 오브젝트클래스](https://kimjinoook.github.io/TIL/todayLearn/java/17.object)   
+[18. 내부클래스](https://kimjinoook.github.io/TIL/todayLearn/java/18.class2)   
+[19. 람다식](https://kimjinoook.github.io/TIL/todayLearn/java/19.lambda)   
+[20. 스트림](https://kimjinoook.github.io/TIL/todayLearn/java/20.stream)   
+[21. 옵셔널](https://kimjinoook.github.io/TIL/todayLearn/java/21.optional)   
 [ex. 기타 참고](https://kimjinoook.github.io/TIL/todayLearn/java/ex.extramethod)   
+
+### sql
+[1. dbs란](https://kimjinoook.github.io/TIL/todayLearn/sql/1.sql)   
+[2. select문](https://kimjinoook.github.io/TIL/todayLearn/sql/2.select)   
+[3. 단일행 함수](https://kimjinoook.github.io/TIL/todayLearn/sql/3.function1)   
+[4. 복수행 함수](https://kimjinoook.github.io/TIL/todayLearn/sql/4.function2)   
 
 ### javascript
 [지구본잡기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/getmin/getmin)   
