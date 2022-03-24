@@ -30,6 +30,8 @@
 [4. 복수행 함수](https://kimjinoook.github.io/TIL/todayLearn/sql/4.function2)   
 [5. 조인](https://kimjinoook.github.io/TIL/todayLearn/sql/5.join)   
 [6. 서브쿼리](https://kimjinoook.github.io/TIL/todayLearn/sql/6.subquery)   
+[7. 데이터조작어](https://kimjinoook.github.io/TIL/todayLearn/sql/7.dml)   
+[8. 트랜잭션제어어](https://kimjinoook.github.io/TIL/todayLearn/sql/8.tcl)   
 
 ### javascript
 [지구본잡기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/getmin/getmin)   
