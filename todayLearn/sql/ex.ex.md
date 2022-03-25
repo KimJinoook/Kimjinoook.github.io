@@ -12,3 +12,9 @@ from dual;
 
 --:id, :pwd에 바인드된 값
 ```
+
+## 각종 참조 시스템 뷰
+- USER_TABLES : 해당 사용자가 생성한 테이블 내역
+- USER_CONSTRAINTS
+- USER_INDEXES
+- USER_OBJECTS
