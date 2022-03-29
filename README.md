@@ -33,7 +33,8 @@
 [7. 데이터조작어](https://kimjinoook.github.io/TIL/todayLearn/sql/7.dml)   
 [8. 트랜잭션제어어](https://kimjinoook.github.io/TIL/todayLearn/sql/8.tcl)   
 [9. 데이터정의어, 제약조건](https://kimjinoook.github.io/TIL/todayLearn/sql/9.ddl)   
-[10. 시퀀스,인덱스,뷰](https://kimjinoook.github.io/TIL/todayLearn/sql/10.)   
+[10. 시퀀스,인덱스,뷰](https://kimjinoook.github.io/TIL/todayLearn/sql/10.sequence)   
+[11. PL/SQL문](https://kimjinoook.github.io/TIL/todayLearn/sql/11.pl)   
 
 ### javascript
 [지구본잡기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/getmin/getmin)   
