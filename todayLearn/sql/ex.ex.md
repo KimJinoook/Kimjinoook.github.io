@@ -18,3 +18,4 @@ from dual;
 - USER_CONSTRAINTS
 - USER_INDEXES
 - USER_OBJECTS
+- user_source : 저장프로시저, 함수 확인
