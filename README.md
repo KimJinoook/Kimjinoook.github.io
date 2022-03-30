@@ -37,6 +37,7 @@
 [11. PL/SQL문](https://kimjinoook.github.io/TIL/todayLearn/sql/11.pl)   
 [12. sys계정 사용자 관리](https://kimjinoook.github.io/TIL/todayLearn/sql/12.sys)   
 [13. 데이터딕셔너리](https://kimjinoook.github.io/TIL/todayLearn/sql/13.dictionary)   
+[14. 데이터딕셔너리](https://kimjinoook.github.io/TIL/todayLearn/sql/14.trigger)   
 
 ### javascript
 [지구본잡기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/getmin/getmin)   
