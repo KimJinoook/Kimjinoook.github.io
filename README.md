@@ -35,6 +35,8 @@
 [9. 데이터정의어, 제약조건](https://kimjinoook.github.io/TIL/todayLearn/sql/9.ddl)   
 [10. 시퀀스,인덱스,뷰](https://kimjinoook.github.io/TIL/todayLearn/sql/10.sequence)   
 [11. PL/SQL문](https://kimjinoook.github.io/TIL/todayLearn/sql/11.pl)   
+[12. sys계정 사용자 관리](https://kimjinoook.github.io/TIL/todayLearn/sql/12.sys)   
+[13. 데이터딕셔너리](https://kimjinoook.github.io/TIL/todayLearn/sql/13.dictionary)   
 
 ### javascript
 [지구본잡기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/getmin/getmin)   
