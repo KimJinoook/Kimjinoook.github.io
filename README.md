@@ -22,6 +22,8 @@
 [20. 스트림](https://kimjinoook.github.io/TIL/todayLearn/java/20.stream)   
 [21. 옵셔널](https://kimjinoook.github.io/TIL/todayLearn/java/21.optional)   
 [ex. 기타 참고](https://kimjinoook.github.io/TIL/todayLearn/java/ex.extramethod)   
+
+### jdbc
 [1. jdbc](https://kimjinoook.github.io/TIL/todayLearn/java2/1.jdbc)   
 
 ### sql
