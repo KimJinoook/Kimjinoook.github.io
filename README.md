@@ -1,8 +1,8 @@
 # TIL
-[1. JAVA](###java)   
-[2. SQL](###sql)   
-[3. JDBC](###jdbc)   
-[4. JavaScript](###javascript)   
+[1. JAVA](### java)   
+[2. SQL](### sql)   
+[3. JDBC](### jdbc)   
+[4. JavaScript](### javascript)   
 
 
 ### java
