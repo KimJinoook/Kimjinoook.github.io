@@ -25,6 +25,7 @@
 
 ### jdbc
 [1. jdbc](https://kimjinoook.github.io/TIL/todayLearn/java2/1.jdbc)   
+[2. DAO,DTO](https://kimjinoook.github.io/TIL/todayLearn/java2/2.dao)   
 
 ### sql
 [1. dbs란](https://kimjinoook.github.io/TIL/todayLearn/sql/1.sql)   
