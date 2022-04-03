@@ -1,11 +1,11 @@
 # TIL
-[1. JAVA](###java)   
-[2. SQL](###sql)   
-[3. JDBC](###jdbc)   
-[4. JavaScript](###javascript)   
+[1. JAVA](##java)   
+[2. SQL](##sql)   
+[3. JDBC](##jdbc)   
+[4. JavaScript](##javascript)   
 
 
-### java
+## java
 [1. 기본 골격과 구정](https://kimjinoook.github.io/TIL/todayLearn/java/1.java_start)   
 [2. 변수와 데이터타입, 형변환](https://kimjinoook.github.io/TIL/todayLearn/java/2.var&dataType)  
 [3. 연산자](https://kimjinoook.github.io/TIL/todayLearn/java/3.operator)   
@@ -29,7 +29,7 @@
 [21. 옵셔널](https://kimjinoook.github.io/TIL/todayLearn/java/21.optional)   
 [ex. 기타 참고](https://kimjinoook.github.io/TIL/todayLearn/java/ex.extramethod)   
 
-### sql
+## sql
 [1. dbs란](https://kimjinoook.github.io/TIL/todayLearn/sql/1.sql)   
 [2. select문](https://kimjinoook.github.io/TIL/todayLearn/sql/2.select)   
 [3. 단일행 함수](https://kimjinoook.github.io/TIL/todayLearn/sql/3.function1)   
@@ -46,11 +46,11 @@
 [14. 트리거](https://kimjinoook.github.io/TIL/todayLearn/sql/14.trigger)   
 [15. 분석함수](https://kimjinoook.github.io/TIL/todayLearn/sql/15.)   
 
-### jdbc
+## jdbc
 [1. jdbc](https://kimjinoook.github.io/TIL/todayLearn/java2/1.jdbc)   
 [2. DAO,DTO](https://kimjinoook.github.io/TIL/todayLearn/java2/2.dao)   
 
-### javascript
+## javascript
 [지구본잡기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/getmin/getmin)   
 [네모점프](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/dino/Untitled-1)   
 [가위바위보 1](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/rsp_num)   
@@ -59,5 +59,5 @@
 [단어맞추기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/woodle)   
 
 
-### 기타언어
+## 기타언어
 [엄랭](https://kimjinoook.github.io/TIL/todayLearn/extraLang/1.umm)
