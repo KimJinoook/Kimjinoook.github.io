@@ -1,4 +1,10 @@
 # TIL
+[1. JAVA] (###java)   
+[2. SQL] (###sql)   
+[3. JDBC] (###jdbc)   
+[4. JavaScript] (###javascript)   
+
+
 ### java
 [1. 기본 골격과 구정](https://kimjinoook.github.io/TIL/todayLearn/java/1.java_start)   
 [2. 변수와 데이터타입, 형변환](https://kimjinoook.github.io/TIL/todayLearn/java/2.var&dataType)  
@@ -23,10 +29,6 @@
 [21. 옵셔널](https://kimjinoook.github.io/TIL/todayLearn/java/21.optional)   
 [ex. 기타 참고](https://kimjinoook.github.io/TIL/todayLearn/java/ex.extramethod)   
 
-### jdbc
-[1. jdbc](https://kimjinoook.github.io/TIL/todayLearn/java2/1.jdbc)   
-[2. DAO,DTO](https://kimjinoook.github.io/TIL/todayLearn/java2/2.dao)   
-
 ### sql
 [1. dbs란](https://kimjinoook.github.io/TIL/todayLearn/sql/1.sql)   
 [2. select문](https://kimjinoook.github.io/TIL/todayLearn/sql/2.select)   
@@ -43,6 +45,10 @@
 [13. 데이터딕셔너리](https://kimjinoook.github.io/TIL/todayLearn/sql/13.dictionary)   
 [14. 트리거](https://kimjinoook.github.io/TIL/todayLearn/sql/14.trigger)   
 [15. 분석함수](https://kimjinoook.github.io/TIL/todayLearn/sql/15.)   
+
+### jdbc
+[1. jdbc](https://kimjinoook.github.io/TIL/todayLearn/java2/1.jdbc)   
+[2. DAO,DTO](https://kimjinoook.github.io/TIL/todayLearn/java2/2.dao)   
 
 ### javascript
 [지구본잡기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/getmin/getmin)   
