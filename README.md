@@ -35,7 +35,7 @@
 [3. AWT](https://kimjinoook.github.io/TIL/todayLearn/java2/3.awt)   
 
 
-## sql
+# sql
 [1. dbs란](https://kimjinoook.github.io/TIL/todayLearn/sql/1.sql)   
 [2. select문](https://kimjinoook.github.io/TIL/todayLearn/sql/2.select)   
 [3. 단일행 함수](https://kimjinoook.github.io/TIL/todayLearn/sql/3.function1)   
@@ -52,11 +52,8 @@
 [14. 트리거](https://kimjinoook.github.io/TIL/todayLearn/sql/14.trigger)   
 [15. 분석함수](https://kimjinoook.github.io/TIL/todayLearn/sql/15.)   
 
-## jdbc
-[1. jdbc](https://kimjinoook.github.io/TIL/todayLearn/java2/1.jdbc)   
-[2. DAO,DTO](https://kimjinoook.github.io/TIL/todayLearn/java2/2.dao)   
 
-## javascript
+# javascript
 [지구본잡기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/getmin/getmin)   
 [네모점프](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/dino/Untitled-1)   
 [가위바위보 1](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/rsp_num)   
@@ -65,5 +62,5 @@
 [단어맞추기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/woodle)   
 
 
-## 기타언어
+# 기타언어
 [엄랭](https://kimjinoook.github.io/TIL/todayLearn/extraLang/1.umm)
