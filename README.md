@@ -1,11 +1,12 @@
-# TIL
+# TIL 목차
 [1. JAVA](#java)   
 [2. SQL](#sql)   
 [3. JDBC](#jdbc)   
 [4. JavaScript](#javascript)   
 
 
-## java
+# java
+## java기본
 [1. 기본 골격과 구정](https://kimjinoook.github.io/TIL/todayLearn/java/1.java_start)   
 [2. 변수와 데이터타입, 형변환](https://kimjinoook.github.io/TIL/todayLearn/java/2.var&dataType)  
 [3. 연산자](https://kimjinoook.github.io/TIL/todayLearn/java/3.operator)   
@@ -28,6 +29,11 @@
 [20. 스트림](https://kimjinoook.github.io/TIL/todayLearn/java/20.stream)   
 [21. 옵셔널](https://kimjinoook.github.io/TIL/todayLearn/java/21.optional)   
 [ex. 기타 참고](https://kimjinoook.github.io/TIL/todayLearn/java/ex.extramethod)   
+## java심화
+[1. jdbc](https://kimjinoook.github.io/TIL/todayLearn/java2/1.jdbc)   
+[2. DAO,DTO](https://kimjinoook.github.io/TIL/todayLearn/java2/2.dao)   
+[3. AWT](https://kimjinoook.github.io/TIL/todayLearn/java2/3.awt)   
+
 
 ## sql
 [1. dbs란](https://kimjinoook.github.io/TIL/todayLearn/sql/1.sql)   
