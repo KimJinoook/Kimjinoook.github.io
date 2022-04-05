@@ -33,7 +33,7 @@
 [2. DAO,DTO](https://kimjinoook.github.io/TIL/todayLearn/java2/2.dao)   
 [3. AWT란, 기본컴포넌트](https://kimjinoook.github.io/TIL/todayLearn/java2/3.awt)   
 [4. 메뉴컴포넌트](https://kimjinoook.github.io/TIL/todayLearn/java2/4.awt2)   
-[3. 레이아웃매니저](https://kimjinoook.github.io/TIL/todayLearn/java2/5.awt3)   
+[5. 레이아웃매니저](https://kimjinoook.github.io/TIL/todayLearn/java2/5.awt3)   
 
 
 # sql
