@@ -1,8 +1,7 @@
 # TIL 목차
 [1. JAVA](#java)   
 [2. SQL](#sql)   
-[3. JDBC](#jdbc)   
-[4. JavaScript](#javascript)   
+[3. JavaScript](#javascript)   
 
 
 # java
@@ -32,7 +31,7 @@
 ## java심화
 [1. jdbc](https://kimjinoook.github.io/TIL/todayLearn/java2/1.jdbc)   
 [2. DAO,DTO](https://kimjinoook.github.io/TIL/todayLearn/java2/2.dao)   
-[3. AWT](https://kimjinoook.github.io/TIL/todayLearn/java2/3.awt)   
+[3. AWT란](https://kimjinoook.github.io/TIL/todayLearn/java2/3.awt)   
 
 
 # sql
