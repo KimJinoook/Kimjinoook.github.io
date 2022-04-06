@@ -34,6 +34,7 @@
 [3. AWT란, 기본컴포넌트](https://kimjinoook.github.io/TIL/todayLearn/java2/3.awt)   
 [4. 메뉴컴포넌트](https://kimjinoook.github.io/TIL/todayLearn/java2/4.awt2)   
 [5. 레이아웃매니저](https://kimjinoook.github.io/TIL/todayLearn/java2/5.awt3)   
+[6. 이벤트처리](https://kimjinoook.github.io/TIL/todayLearn/java2/6.awt4)   
 
 
 # sql
