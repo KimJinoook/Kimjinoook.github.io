@@ -1,5 +1,7 @@
 # TIL 목차
 [1. JAVA](#java)   
+- [a. JAVA 기본](#java기본)   
+- [b. JAVA 심화](#java심화)   
 [2. SQL](#sql)   
 [3. JavaScript](#javascript)   
 
