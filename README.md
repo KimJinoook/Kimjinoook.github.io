@@ -41,6 +41,9 @@
 [7. Swing 기본, JTable](https://kimjinoook.github.io/TIL/todayLearn/java2/7.swing)   
 [8. 입출력 IO](https://kimjinoook.github.io/TIL/todayLearn/java2/8.io)   
 [9. File클래스](https://kimjinoook.github.io/TIL/todayLearn/java2/9.file)   
+[10. 직렬화](https://kimjinoook.github.io/TIL/todayLearn/java2/10.serialization)   
+[11. 쓰레드](https://kimjinoook.github.io/TIL/todayLearn/java2/11.thread)   
+[12. 데몬쓰레드](https://kimjinoook.github.io/TIL/todayLearn/java2/12.)   
 
 # sql
 [1. dbs란](https://kimjinoook.github.io/TIL/todayLearn/sql/1.sql)   
