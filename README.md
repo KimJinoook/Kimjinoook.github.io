@@ -44,7 +44,7 @@
 [10. 직렬화](https://kimjinoook.github.io/TIL/todayLearn/java2/10.serialization)   
 [11. 쓰레드](https://kimjinoook.github.io/TIL/todayLearn/java2/11.thread)   
 [12. 동기화](https://kimjinoook.github.io/TIL/todayLearn/java2/12.threadsync)   
-[13. 네트워크](https://kimjinoook.github.io/TIL/todayLearn/java2/12.network)   
+[13. 네트워크](https://kimjinoook.github.io/TIL/todayLearn/java2/13.network)   
 
 # sql
 [1. dbs란](https://kimjinoook.github.io/TIL/todayLearn/sql/1.sql)   
