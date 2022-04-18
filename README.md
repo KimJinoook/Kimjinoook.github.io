@@ -4,7 +4,7 @@
 - [b. JAVA 심화](#java심화)   
 
 [2. SQL](#sql)   
-[3. SQL](#html)   
+[3. HTML](#html)   
 [4. JavaScript](#javascript)   
 
 
