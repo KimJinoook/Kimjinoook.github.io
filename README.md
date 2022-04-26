@@ -6,6 +6,7 @@
 [2. SQL](#sql)   
 [3. HTML](#html)   
 [4. JavaScript](#javascript)   
+[5. JQuery](#jquery)   
 
 
 # java
@@ -78,6 +79,12 @@
 [가위바위보 2](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/rsp_btn)   
 [업다운](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/updown)   
 [단어맞추기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/woodle)   
+
+# jQuery
+[1.개요](https://kimjinoook.github.io/TIL/todayLearn/jquery/1.what)   
+[2.선택자](https://kimjinoook.github.io/TIL/todayLearn/jquery/2.selector)   
+[3.기본메서드](https://kimjinoook.github.io/TIL/todayLearn/jquery/3.method)   
+
 
 
 # 기타언어
