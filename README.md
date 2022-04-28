@@ -84,6 +84,11 @@
 [1.개요](https://kimjinoook.github.io/TIL/todayLearn/jquery/1.what)   
 [2.선택자](https://kimjinoook.github.io/TIL/todayLearn/jquery/2.selector)   
 [3.기본메서드](https://kimjinoook.github.io/TIL/todayLearn/jquery/3.method)   
+[4.문서객체조작](https://kimjinoook.github.io/TIL/todayLearn/jquery/4.manupulation)   
+[5.css메서드](https://kimjinoook.github.io/TIL/todayLearn/jquery/5.cssmethod)   
+[6.탐색메서드](https://kimjinoook.github.io/TIL/todayLearn/jquery/6.traversing)   
+[7.이벤트메서드](https://kimjinoook.github.io/TIL/todayLearn/jquery/7.event)   
+[8.정규표현식](https://kimjinoook.github.io/TIL/todayLearn/jquery/8.flag)   
 
 
 
