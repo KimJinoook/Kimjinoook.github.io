@@ -89,6 +89,8 @@
 [6.탐색메서드](https://kimjinoook.github.io/TIL/todayLearn/jquery/6.traversing)   
 [7.이벤트메서드](https://kimjinoook.github.io/TIL/todayLearn/jquery/7.event)   
 [8.정규표현식](https://kimjinoook.github.io/TIL/todayLearn/jquery/8.flag)   
+[9.효과메서드](https://kimjinoook.github.io/TIL/todayLearn/jquery/9.effects)   
+[10.UI플러그인](https://kimjinoook.github.io/TIL/todayLearn/jquery/10.plugin)   
 
 
 
