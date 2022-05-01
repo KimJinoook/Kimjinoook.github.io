@@ -68,8 +68,11 @@
 [16. 정규화](https://kimjinoook.github.io/TIL/todayLearn/sql/16.normalization)   
 
 
-# html
-[1.개요](https://kimjinoook.github.io/TIL/todayLearn/html/1.tag)   
+# html, CSS
+[1.태그](https://kimjinoook.github.io/TIL/todayLearn/html/1.tag)   
+[2.선택자](https://kimjinoook.github.io/TIL/todayLearn/html/2.css)   
+[3.css단위(https://kimjinoook.github.io/TIL/todayLearn/html/3.css2)   
+[4.css속성](https://kimjinoook.github.io/TIL/todayLearn/html/4.css3)   
 
 # javascript
 [1. 개요](https://kimjinoook.github.io/TIL/todayLearn/javascript/1.info)   
