@@ -4,7 +4,7 @@
 - [b. JAVA 심화](#java심화)   
 
 [2. SQL](#sql)   
-[3. HTML](#html)   
+[3. HTML](#html/css)   
 [4. JavaScript](#javascript)   
 [5. JQuery](#jquery)   
 
@@ -68,10 +68,10 @@
 [16. 정규화](https://kimjinoook.github.io/TIL/todayLearn/sql/16.normalization)   
 
 
-# html, CSS
+# html/CSS
 [1.태그](https://kimjinoook.github.io/TIL/todayLearn/html/1.tag)   
 [2.선택자](https://kimjinoook.github.io/TIL/todayLearn/html/2.css)   
-[3.css단위(https://kimjinoook.github.io/TIL/todayLearn/html/3.css2)   
+[3.css단위](https://kimjinoook.github.io/TIL/todayLearn/html/3.css2)   
 [4.css속성](https://kimjinoook.github.io/TIL/todayLearn/html/4.css3)   
 
 # javascript
