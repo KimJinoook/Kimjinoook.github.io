@@ -99,6 +99,8 @@
 # jsp
 [1. 개요, 설정 및 웹 어플리케이션 생성](https://kimjinoook.github.io/TIL/todayLearn/jsp/1.jsp)   
 [2. 웹 프로그래밍 기초](https://kimjinoook.github.io/TIL/todayLearn/jsp/2.)   
+[3. JSP페이지의 구성 요소](https://kimjinoook.github.io/TIL/todayLearn/jsp/3.code)   
+[4. 지시어 / directive](https://kimjinoook.github.io/TIL/todayLearn/jsp/4.directive)   
 
 
 
