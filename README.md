@@ -7,7 +7,7 @@
 [3. HTML / CSS](#html)   
 [4. JavaScript](#javascript)   
 [5. JQuery](#jquery)   
-[6. JQuery](#jsp)   
+[6. JSP](#jsp)   
 
 
 # java
@@ -97,7 +97,7 @@
 [10. UI플러그인](https://kimjinoook.github.io/TIL/todayLearn/jquery/10.plugin)   
 
 # jsp
-[1. 개요, 설정 및 웹 어플리케이션 생성](https://kimjinoook.github.io/TIL/todayLearn/jquery/1.jsp)   
+[1. 개요, 설정 및 웹 어플리케이션 생성](https://kimjinoook.github.io/TIL/todayLearn/jsp/1.jsp)   
 
 
 
