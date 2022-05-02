@@ -7,6 +7,7 @@
 [3. HTML / CSS](#html)   
 [4. JavaScript](#javascript)   
 [5. JQuery](#jquery)   
+[6. JQuery](#jsp)   
 
 
 # java
@@ -94,6 +95,9 @@
 [8. 정규표현식](https://kimjinoook.github.io/TIL/todayLearn/jquery/8.flag)   
 [9. 효과메서드](https://kimjinoook.github.io/TIL/todayLearn/jquery/9.effects)   
 [10. UI플러그인](https://kimjinoook.github.io/TIL/todayLearn/jquery/10.plugin)   
+
+# jsp
+[1. 개요, 설정 및 웹 어플리케이션 생성](https://kimjinoook.github.io/TIL/todayLearn/jquery/1.jsp)   
 
 
 
