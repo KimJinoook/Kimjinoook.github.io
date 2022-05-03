@@ -101,6 +101,8 @@
 [2. 웹 프로그래밍 기초](https://kimjinoook.github.io/TIL/todayLearn/jsp/2.)   
 [3. JSP페이지의 구성 요소](https://kimjinoook.github.io/TIL/todayLearn/jsp/3.code)   
 [4. 내장객체](https://kimjinoook.github.io/TIL/todayLearn/jsp/4.inner)   
+[5. http, get과 post](https://kimjinoook.github.io/TIL/todayLearn/jsp/5.http)   
+[6. JDBC 활용](https://kimjinoook.github.io/TIL/todayLearn/jsp/6.jdbc)   
 
 
 
