@@ -76,7 +76,7 @@
 [4.css속성](https://kimjinoook.github.io/TIL/todayLearn/html/4.css3)   
 
 # javascript
-[1. 개요](https://kimjinoook.github.io/TIL/todayLearn/javascript/1.info)   
+[1. 개요](https://kimjinoook.github.io/TIL/todayLearn/javascript/1.infojs)   
 [지구본잡기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/getmin/getmin)   
 [네모점프](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/dino/Untitled-1)   
 [가위바위보 1](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/rsp_num)   
