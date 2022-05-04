@@ -103,6 +103,7 @@
 [4. 내장객체](https://kimjinoook.github.io/TIL/todayLearn/jsp/4.inner)   
 [5. http, get과 post](https://kimjinoook.github.io/TIL/todayLearn/jsp/5.http)   
 [6. JDBC 활용](https://kimjinoook.github.io/TIL/todayLearn/jsp/6.jdbc)   
+[7. Servlet](https://kimjinoook.github.io/TIL/todayLearn/jsp/7.servlet)   
 
 
 
