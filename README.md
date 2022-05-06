@@ -77,12 +77,7 @@
 
 # javascript
 [1. 개요](https://kimjinoook.github.io/TIL/todayLearn/javascript/1.infojs)   
-[지구본잡기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/getmin/getmin)   
-[네모점프](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/dino/Untitled-1)   
-[가위바위보 1](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/rsp_num)   
-[가위바위보 2](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/rsp_btn)   
-[업다운](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/updown)   
-[단어맞추기](https://kimjinoook.github.io/TIL/todayLearn/javascript/practice/woodle)   
+
 
 # jQuery
 [1. 개요](https://kimjinoook.github.io/TIL/todayLearn/jquery/1.what)   
