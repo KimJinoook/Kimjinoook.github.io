@@ -74,6 +74,8 @@
 [2.css선택자](https://kimjinoook.github.io/TIL/todayLearn/html/2.css)   
 [3.css단위](https://kimjinoook.github.io/TIL/todayLearn/html/3.css2)   
 [4.css속성](https://kimjinoook.github.io/TIL/todayLearn/html/4.css3)   
+[5.css 위치속성](https://kimjinoook.github.io/TIL/todayLearn/html/5.css4)   
+[6.레이아웃](https://kimjinoook.github.io/TIL/todayLearn/html/6.layout)   
 
 # javascript
 [1. 개요](https://kimjinoook.github.io/TIL/todayLearn/javascript/1.infojs)   
