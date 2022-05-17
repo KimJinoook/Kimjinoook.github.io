@@ -109,6 +109,7 @@
 [13. 액션태그](https://kimjinoook.github.io/TIL/todayLearn/jsp/13.action)   
 [14. 자바빈](https://kimjinoook.github.io/TIL/todayLearn/jsp/14.javabean)   
 [15. DBCP](https://kimjinoook.github.io/TIL/todayLearn/jsp/15.dbcp)   
+[16. 에러처리](https://kimjinoook.github.io/TIL/todayLearn/jsp/16.error)   
 
 
 
