@@ -3,6 +3,6 @@ layout: tag-blog
 title: Lang
 slug: lang
 category: lang
-menu: false
+menu: true
 order: 1
 ---
