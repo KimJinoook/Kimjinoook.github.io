@@ -1,4 +1,13 @@
-# 배열
+---
+layout: post
+title:  "6. 배열"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## 1. 배열이란
 - 같은 타입의 데이터를 여러개 저장할 수 있는 저장소
 - 동일한 타입의 변수들을 하나의 이름으로 묶어 놓은 것
