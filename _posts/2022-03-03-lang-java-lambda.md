@@ -1,4 +1,13 @@
-# 람다식
+---
+layout: post
+title:  "19. 람다식"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## 1. 람다식이란
 - 메서드를 하나의 식으로 표현한 것
 - 메서드
