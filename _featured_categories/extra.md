@@ -1,6 +1,6 @@
 ---
 layout: list
-title: 기타
+title: Extra
 slug: extra
 menu: true
 submenu: true
