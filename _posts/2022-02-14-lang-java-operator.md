@@ -1,4 +1,13 @@
-# 연산자
+---
+layout: post
+title:  "3. 연산자"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## 1. 연산자의 종류
   1. 단항연산자 : ++, --, +, -, ~, !, (type)
   2. 산술연산자 : *, /, %, +, -, <<, >>, >>>
