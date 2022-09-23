@@ -1,3 +1,12 @@
+---
+layout: post
+title:  "변수와 데이터타입, 형변환"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
 # 변수와 데이터타입, 형변환
 ## 1. 변수
 ### 1. 변수란
