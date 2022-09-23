@@ -1,7 +1,7 @@
 ---
 layout: list
-title: 개발언어
-slug: ang
+title: Lang
+slug: lang
 menu: true
 submenu: true
 order: 1
