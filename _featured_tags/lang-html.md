@@ -1,5 +1,5 @@
 ---
-layout: tag-blog
+layout: list
 title: HTML
 slug: html
 category: lang
