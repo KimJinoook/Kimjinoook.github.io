@@ -1,4 +1,13 @@
-# 스트림 (stream)
+---
+layout: post
+title:  "20. 스트림"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## 1. 스트림API
 - 배열이나 컬렉션에 접근하기 위해서는
   - 매번 새로운 코드 작성, 반복문 사용
