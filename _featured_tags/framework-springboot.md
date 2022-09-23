@@ -1,5 +1,5 @@
 ---
-layout: tag-blog
+layout: list
 title: SpringBoot
 slug: springboot
 category: framework
