@@ -1,10 +1,10 @@
 ---
 layout: list
-title: Favorites
-slug: favorites
+title: 형상관리
+slug: git
 menu: true
 submenu: false
-order: 7
+order: 4
 description: >
-  개발, 일상 등 유용한 즐겨찾기 모음.
+  형상관리
 ---
