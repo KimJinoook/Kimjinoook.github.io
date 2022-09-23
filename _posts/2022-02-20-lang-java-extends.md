@@ -1,4 +1,14 @@
-# 상속
+---
+layout: post
+title:  "9. "
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
+
 ## 1. 상속 (extends)
 - 기존의 클래스를 재사용하여 새로운 클래스를 작성하는 것
 - 이미 만들어진 클래스의 멤버들을 물려받아 새로운 클래스를 정의한다
