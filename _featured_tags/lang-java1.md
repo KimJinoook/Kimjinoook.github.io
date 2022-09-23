@@ -1,5 +1,5 @@
 ---
-layout: tag-blog
+layout: list
 title: Java
 slug: java1
 category: lang
