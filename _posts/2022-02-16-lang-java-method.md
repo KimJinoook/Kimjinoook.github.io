@@ -1,0 +1,289 @@
+# 메서드
+## 1. 메서드 기본
+### a. 메서드란
+- 자주 반복하여 사용하는 내용에 대해 특정 이름으로 정의한 묶음
+- 클래스 내부에 존재하면서 특정기능(**Function**)을 수행하는 최소 실행단위
+  - 반환값, 메서드 이름, 매개변수로 구성
+- 불필요한 반복 제거, 코드의 재사용성 향상
+- 객체지향기법 : 함수는 클래스에 소속되며 이를 메서드라 한다.
+
+### b. 메서드의 종류
+- 기본적으로 제공되는 메서드(**내장 메서드**)
+  - System.out.println() 등
+- 사용자 정의 메서드
+  - 매개변수가 있는 / 없는 메서드
+  - 반환값이 있는 / 없는 메서드
+
+```java
+public class MethodSample {
+	public static void main(String[] args) {
+		for(int i=0;i<5;i++) {
+			System.out.print("*");
+		}
+		System.out.println("\nHello");
+		for(int i=0;i<5;i++) {
+			System.out.print("*");
+		}
+		System.out.println("\nHello");
+		for(int i=0;i<5;i++) {
+			System.out.print("*");
+		}
+		System.out.println("\nHello");
+	}
+}// 별을 찍는 함수가 지속적으로 반복된다.
+```
+
+> 결과   
+> \*****   
+> Hello   
+> \*****   
+> Hello   
+> \*****   
+> Hello
+
+```java
+public class MethodSample2 {
+	public static void x(){
+		for(int i=0;i<5;i++) {
+			System.out.print("*");
+		}
+	} // 별을 찍는 함수 생성
+	public static void main(String[] args) {	
+		x(); // 별을찍는 함수 호출
+		System.out.println("\nHello");
+		x();
+		System.out.println("\nHello");
+		x();
+		System.out.println("\nHello");
+	}
+}
+```
+> 결과   
+> \*****   
+> Hello   
+> \*****   
+> Hello   
+> \*****   
+> Hello
+
+### c. 메서드 형식 및 구성
+> 형식   
+> 접근제한자 반환형(결과값 형태) 메서드이름 (매개변수){   
+> 블록;   
+> return 반환값;   
+> }
+
+
+> public(접근제한자) static void(반환형) sample() (메서드이름(매개변수))
+
+> ex) puplic(접근 제한자) static double(반환형) calcInterest(메서드이름) (int money)(매개변수 선언) {   
+> double interest = money*0.016;   
+> return interest; // 결과값 반환   
+> }
+
+```java
+public static double calcInterest(int money) {
+	//1. 입력값 결정 - 매개변수 지정
+	//2. 매개변수를 이용 기능구현
+	double interest = money*0.016;
+	//3. 결과값 return
+	return interest;
+	//4. 반환타입 결정(return값 interest는 double, 반환형은 doubel)
+}
+```
+
+#### 1) 매개변수(parameter, 인수, 인자)
+- 입력 값
+- 메서드명 다음에 나오는 괄호안에 위치
+- 각 매개변수에 자료형과 이름 지정
+- 메서드 외부에서 내부라 값을 전달
+- 호출시 각 매개변수에 값이 전달됨
+```java
+public ststic void methodA(int n, String y) // 메서드 정의, 매개변수1 : int n, 매개변수2 : String y
+{}
+piblic static void main(String[] args){
+	methodA(2, "Hello"); // 메서드 호출, 매개변수1 : 2대입,  매개변수2 : Hello 대입
+```
+
+#### 2) 반환형 (return type)
+- 작업을 마친 후 결과를 돌려주는 값의 형태
+- return
+	- 메서드의 실행을 종료하고 호출원으로 복귀
+	- 메서드의 처리결과를 호출원으로 반환
+- 반환값
+	- 반환값의 type에 따라 메서드 정의시 이름앞에 반환형이 와야한다.
+	- 반환값이 없는 메서드 : void
+	- 반환값이 있는 메서드는 반드시 값을 return해야함.
+
+
+#### 3) 접근 제한자(접근 제어자)
+- 메서드의 속성
+- 메서드를 외보에 있는 클래스에 노출시킬 것인지, 숨길 것인지 등을 결정
+- public, private, protected, default
+
+### d. 메서드 호출
+- 반환타입자료형 결과값받는 변수 = 메서드명(매개변수)
+> 1. 메서드명을 쓰고 ()를 붙인다.   
+> calcInterest();   
+> 2. ()안에 매개변수 값을 넣는다 (매개변수 자료형에 해당하는 값)   
+> calcInterest(1000000);   
+> 3. 결과값을 받는다 (반환타입에 해당하는 자료형의 변수로 받는다)   
+> double d = calcInterest(1000000); 
+
+- 같은 클래스 안에 있는 메서드 호출
+	- 메서드명()
+		- 메서드 이름으로 호출(괄호 안에 매개변수 목록 사용)
+- 다른 클래스 안에 있는 public 메서드 호출
+	- 클래스명.메서드명()
+		- 호출되는 메서드는 반드시 public 키워드로 선언되어야 함
+- 중첩 호출 가능
+	- 메서드가 또 다른 메서드를 호출할 수 있다.
+
+- 매개변수, 반환값에 따른 호출
+```java
+public class MethodTest2 {
+	//1. 매개변수, 반환값 없는 메서드
+	public static void func1() {
+		System.out.println("*********");
+	}
+	
+	//2. 반환값 없는 메서드
+	public static void func2(int cnt) {
+		for(int i = 0; i<cnt;i++) {
+			System.out.print("*");
+		}
+		System.out.println();
+	}
+	
+	//3. 매개변수 없는 메서드
+	public static float func3() {
+		int sum = 0;
+		for(int i = 1; i<=10; i++) {
+			sum+=i;
+		}
+		float avg = sum/10f;
+		return avg;
+	}
+	
+	//4 둘다 있는 매서드
+	public static int func4(int n1, int n2) {
+		int sum = n1 + n2;
+		return sum;
+	}
+	
+	public static void main(String[] args) {
+		
+		//1) 매개변수, 반환값이 없는 메서드 호출
+		func1(); //*********
+		
+		//2) 반환값 없는 메서드 호출
+		func2(3); //***
+		
+		//3) 매개변수 없는 메서드 호출
+		float a = func3();
+		System.out.println(a); //5.5
+		
+		//4) 둘다 있는 변수 호출
+		int b = func4(5,10);
+		System.out.println(b); //15
+	}
+}
+```
+
+***
+
+## 2. 메서드 오버로딩
+- 하나의 클래스 내에서 동일한 이름을 공유하는 메서드
+- 메서드 이름은 동일하지만 **매개변수의 개수**나 매개변수의 **자료형**이 다를 경우 별개의 메서드로 인정
+- 하나의 이름으로 비슷한 기능을 중복 정의
+- 리턴타입으로는 구별하지 않는다.
+	- 리턴타입이 다르고, 매개변수가 같으면 오버로딩하지 못한다.
+- 매개변수의 개수나 자료형에 따라 다른 처리를 해야할 필요가 있을 때 사용
+- ex) Math.round()
+	- 매개변수 double 입력 => long 반환
+	- 매개변수 float 입력 => int 반환
+
+> void func(int a)   
+> void func(double a)   
+> void func(int a, int b)   
+> void func(int a, String b)
+
+```java
+import java.util.Scanner;
+public class OverloadTest {
+	
+	public static int add(int a, int b) {
+		int c = a+b;
+		return c;
+	}
+	public static double add(double a, double b) {
+		double c = a+b;
+		return c;
+	}
+	public static String add(String a, String b) {
+		String c = a+b;
+		return c;
+	}
+	/*
+	 * public static String add(int a, int b) {
+		String c = Integer.toString(a+b);
+		return c;
+	}   
+	int a, int b를 매개변수로 받는 add메서드가 이미 있기 때문에
+	반환타입이 달라도 오버로딩되지 못하고 error가 난다.
+	매개변수 입력시, 어떤 add메서드를 사용할지 모르기 때문	
+	*/
+	
+	
+	public static void main(String[] args) {
+		int res = add(5,7);
+		double d1 = 3.14, d2 = 5.78;
+		double res2 = add(d1,d2);
+		
+		Scanner sc = new Scanner(System.in);
+		System.out.println("문자열 두개 입력");
+		String s1 = sc.nextLine();
+		String s2 = sc.nextLine();
+		
+		String result = add(s1,s2);
+		
+		System.out.println(res); // 12
+		System.out.println(res2); // 8.92
+		System.out.println(result); // 가나다라
+	}
+}
+```
+- 같은 사용자정의 add메서드를 이용하지만, 매개변수에 따라 다른 기능을 한다.
+
+***
+
+## 3. 재귀호출 (recursive call)
+- **메서드의 내부에서 메서드 자기 자신을 다시 호출하는 것**
+- 반복문 대신 재귀호출 이용 시 훨씬 간단해지는 경우가 있다
+- 재귀 호출은 다소 효율이 떨어진다
+	- 재귀호출은 반복적으로 메서드를 호출하는 것
+	- 메서드를 호출하는데 드는 비용이 추가적으로 발생한다.
+> 재귀호출의 예) 팩토리얼   
+> 5! = 5*4*3*2*1   
+> f(n) = n*f(n-1)*f(n-2)* ... f(1)
+
+```java
+public class recall {
+	public static long fact(int n) {
+		long rst = 0;
+		if(n==1) {
+			rst=1;
+		}else {
+			rst = n*fact(n-1);
+		}
+		return rst;
+	}
+	public static void main(String[] args) {
+		System.out.println(fact(5)); //120
+	}
+} // 호출-> 호출-> 호출 -> 호출 -> 호출 -> 리턴 -> 리턴 -> 리턴 -> 리턴 -> 리턴
+  // f(5)-> f(4)->f(3) -> f(2) -> f(1)->   1  ->  2   ->  6   ->  24 -> 120
+```
+
+
+

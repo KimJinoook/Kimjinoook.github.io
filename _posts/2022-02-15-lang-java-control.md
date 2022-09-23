@@ -1,0 +1,528 @@
+# 제어문
+
+## 1. 조건문
+  - 조건의 진위 여부에 따라 명령의 실행 여부를 결정하는 문장
+  - 특정 조건이 만족될 때에만 실행하고 싶은 경우 사용
+### a. if문
+#### 1) 기본 if문
+> if(조건식){   
+> 문장;   
+> }
+
+- 조건을 만족하면 문장을 실행하고, 다음 라인을 수행한다.
+- if문의 조건을 만족하지 않으면 수행을 한번도 하지 않는다.
+
+```java
+import java.util.*;
+class If{
+  public static void main(String[] args){
+    
+    System.out.println("숫자 1을 입력하세요");
+    
+    Scanner sc = new Scanner(System.in);
+    int num = sc.nextInt();
+    if (num==1){
+      System.out.println("맞았습니다.");
+    }
+  }
+}
+```
+
+#### 2) if~else문
+> if(조건식){   
+> 문장1;   
+> }else{   
+> 문장2;   
+> }
+
+- 조건을 만족하면 문장1을 수행   
+- 조건을 만족하지 않으면 문장 2 수행
+
+```java
+import java.util.*;
+class If{
+  public static void main(String[] args){
+    
+    System.out.println("숫자 1을 입력하세요");
+    
+    Scanner sc = new Scanner(System.in);
+    int num = sc.nextInt();
+    if (num==1){
+      System.out.println("맞았습니다.");
+    }else{
+      System.out.println("틀렸습니다.");
+    }
+  }
+}
+```
+
+#### 3) 다중if문   
+> if(조건1){   
+> 문장1;   
+> }else if(조건2){   
+> 문장2;   
+> }else{   
+> 문장3;   
+> }
+
+- 조건1이 참이면 문장 1 수행
+- 조건1이 거짓이면 조건2와 비교
+- 조건2 참이면 문장 2 수행
+- 조건2 거짓이면 문장3 수행
+- else if를 추가하여 조건을 추가할 수 있다.
+
+```java
+import java.util.*;
+class If{
+  public static void main(String[] args){
+    
+    System.out.println("숫자를 입력하세요");
+    
+    Scanner sc = new Scanner(System.in);
+    int num = sc.nextInt();
+    if (num>0){
+      System.out.println("양수");
+    }else if (num==0){
+      System.out.println("0");
+    }else{
+      System.out.println("음수");
+    }
+  }
+}
+```
+
+#### 4) 중첩if문   
+> if(조건문){   
+> if(조건문){   
+> 문장1;   
+> }   
+> }
+
+- 바깥쪽 if문이 참일 때 안쪽 if문을 수행한다.
+
+```java
+import java.util.*;
+class If{
+  public static void main(String[] args){
+    
+    System.out.println("회원여부를 입력하세요 (1. 회원, 2. 비회원");
+    Scanner sc = new Scanner(System.in);
+    
+    int mem = sc.nextInt();
+    if (mem==1){
+      System.out.printlnt("구매금액을 입력사헤요")
+      int amount = sc.nextInt();
+      if(amount >= 10000){
+        System.out.println("만원 이상 구매 회원");
+      }else{
+        System.out.println("만원 이하 구매 회원");
+      }
+    }else{
+      System.out.println("비회원");
+    }
+  }
+}
+```
+
+### b. switch문
+> switch(제어 변수){   
+> case 값1 :   
+> 실행블록1;   
+> break;   
+> case 값2 :   
+> 실행블록2;   
+> break;   
+> default:   
+> 실행블록 default 처리;   
+> break;   
+> }
+
+- 여러 개의 case 구문을 사용하여 여러 조건 처리
+- case 다음에는 상수만 쓸 수 있다.
+- 제어변수 : byte,short,int,char 자료형의 값을 나타낼 수 있는 필드나 식
+- case 문 안에 있는 코드는 모두 한 묶음으로 {}로 블록을 묶을 필요는 없다.
+- 묶음의 끝을 표시하기 위해 break문이 있어야 한다.
+
+> case1:   
+> case2:   
+> case3:   
+> 실행구문   
+> break;
+
+- case문을 비움으로 여러개의 case를 or로 연결할 수 있다.
+- case만 써두고 명령을 비워두면 아래쪽 case의 명령을 실행한다.
+
+```java
+import java.util.*;
+class If{
+  public static void main(String[] args){
+    
+    System.out.println("숫자를 입력하세요");
+    
+    Scanner sc = new Scanner(System.in);
+    int num = sc.nextInt();
+    switch(num){
+      case 1:
+        System.out.println("one");
+        break;
+      case 2:
+        System.out.println("two");
+        break;
+      default:
+        System.out.println("그 외 숫자");
+        break;
+      }
+  }
+}
+```
+
+***
+
+## 2. 반복문
+### a. for 문
+- 지정된 횟수만큼 반복해서 실행하는 구문
+- 시작값, 최종값, 증가값을 설정하여 반복적인 수행을 한다.
+
+#### 1) for문 기본
+
+> for(초기식;조건식;증감식){   
+> 반복명령;   
+> }
+
+> for(int 1=0; i<3; i++){   
+> System.out.println(i);   
+> ;
+
+- 시작과 동시에 초기식을 실행, i의 시작값을 확인한다.
+- 조건식과 비교하여 만족한다면 명령을 실행한다.
+- 증감식을 통해 i의 값을 변환한다.
+- 조건식과 비교하는 루프를 돌린다
+
+```java
+class For{
+  public static void main(String[] args){
+    for(int=0; i<3; i++){             //0hi
+      System.out.println(i+"hi");     //1hi
+    }                                 //2hi
+  }
+}
+```
+
+#### 2) for 문 활용 누적
+```java
+class For{
+	public static void main(String[] arge){
+		int sum = 0;
+		for(int i=1; i<=3; i++){
+			sum += i;
+			System.out.println("i="+i+", sum="+sum);
+		}
+		System.out.println("1~3까지의 합 : " +sum);
+	}
+}
+```
+
+#### 3) 중첩 for문
+```java
+public class ForOverlap {
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		for(int i=0; i<3; i++){
+			System.out.println("=====현재 i : "+i);		
+			for(int j=0;j<2;j++) {
+				System.out.println("현재 j : "+j);
+			}//안for
+		}//밖for
+	}
+}
+```
+
+#### 4) for 무한루프
+- 조건식을 생략하면 무한루프
+- for(;;)
+- 빠져나올 때는 break문 사용
+
+```java
+public class ForLoop {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc = new Scanner(System.in);
+		
+		for(;;) {
+			System.out.println("진행중");
+			System.out.println("계속하시겠습니까 Y/N");
+			String q = sc.nextLine();
+			if(q.equals("N")) {
+				sc.close();
+				break;
+			}
+		}
+	}
+}
+```
+
+#### 5) Enhanced for문(확장 for문)
+- 일정한 개수로 구성된 **특정 집합의 요소들을 반복 처리** 할 때 사용
+- 배열의 모든 요소를 순회할 때
+- 배열 또는 컬렉션(해시, 리스트 등)에 있는 데이터만큼 반복
+	> for(타입 변수 : 배열){   
+  	> 명령문;   
+  	> }
+  
+  	> int[] number={10,20,30,40};   
+  	> for(int n : number){   
+  	> System.out.println(n);   
+  	> }   
+ 		- 제어변수 n 은 읽기 전용, 반복문 내에서 n의 값을 변경할 수 없다.
+ 
+```java
+ class ForeachTest{
+	public static void main(String[] args) {
+		int[] num= {12, 43, 64, 56, 32};
+		for (int n : num) {
+			System.out.println(n);
+		} // 배열 수만큼 반복, 12, 43, 64, 56, 32 출력
+	} //main
+} //class
+```
+
+```java
+String[] hobby= {"movie", "reading", "sports"};
+	for (String s : hobby){
+		System.out.println(s);
+	}
+ // movie, reading, sports 출력
+ ```
+
+
+### b. while문
+- 특정 조건을 주고, 조건이 참인 동안에는 계속 반복
+- 반복 횟수가 가변적인 처리에 적합
+- while 내부 문장에서 조건이 거짓이 되도록 만들어 루프를 빠져나오게 해야한다.
+
+#### 1) while문 기본
+
+> 초기값;   
+> while(조건식){   
+> 명령문;   
+> 증감식;   
+> }
+
+```java
+class WhileTest{
+	public static void main(String[] args){
+	int n=1; // 초기식
+	while(n<3){ // 조건식
+		System.out.println(n); // 명령
+		n++; // 증감식
+	}
+}
+```
+
+#### 2) while 무한루프
+-조건식에 true를 넣어주면 무한루프가 된다.
+> while(true){}
+
+```java
+import java.util.Scanner;
+public class WhileLoop {
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc = new Scanner(System.in);
+		while(true) {
+			System.out.println("양수입력!");
+			int n = sc.nextInt();
+			String rst = "";
+			
+			if (n>0) {
+				rst = "양수";
+			}else {
+				rst = "음수";
+			}
+			System.out.println(rst+"\n");
+		}
+	}
+}
+```
+
+- 무한루프를 끝내기 위해서는 break문이 필요하다.
+
+```java
+import java.util.Scanner;
+public class WhileLoop {
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc = new Scanner(System.in);
+		while(true) {
+			System.out.println("정수입력! : 0이면 종료");
+			int n = sc.nextInt();
+			String rst = "";
+			
+			if (n==0) break;
+			
+			if (n>0) {
+				rst = "양수";
+			}else {
+				rst = "음수";
+			}
+			System.out.println(rst+"\n");			
+		}
+	}
+}
+```
+
+#### 3) do-while문
+> do{   
+> 명령문;   
+> 증감식;   
+> }while(조건식);   
+
+- 조건보다 명령이 먼저온다.
+- 선 실행 후 조건 처리
+- 조건이 거짓이라도 실행구문을 최소 한번은 수행한다.
+
+```java
+public class DoWhile {
+	public static void main(String[] args) {
+		int k=0;
+		do {
+			System.out.println(k);
+			k++;
+		}while(k<0);
+	} // 조건에 맞지 않아도 0이 출력되는 것을 볼 수 있다.
+}
+```
+
+***
+
+## 3. 분기문
+### a. break
+- 반복문이나 switch문의 case를 벗어날 때 사용
+- 무한루프를 사용할 때 종종 사용
+
+```java
+public class Break {
+
+	public static void main(String[] args) {
+		
+		for(int i=1;i<=10;i++) {
+			if(i==5) break;
+			System.out.print(i);
+		}
+	}
+
+}
+```
+- 결과 : 1234
+
+```java
+public class Break {
+	public static void main(String[] args) {
+		for(int i=0;i<3;i++) {
+			for(int j=0;j<3;j++) {
+				if(j==1) break;
+				System.out.println("i="+i+", j="+j);
+			}
+		}
+	}
+
+}
+```
+- 결과
+> i=0, j=0   
+> i=1, j=0   
+> i=2, j=0
+
+
+### b. continue
+- 루프의 나머지 뒷 부분을 무시하고 반복문의 선두로 점프하여 루프를 실행
+	- 다음 스텝으로 넘어간다
+	- 다음 반복위치로 이동한다
+	- 루프에서 특정 값에 대한 처리를 제외할 때 사용한다
+
+```java
+public class Continue {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		for(int i=1;i<=10;i++) {
+			if(i==5) continue;
+			System.out.print(i);
+		}
+	}
+}
+```
+- 결과 : 1234678910
+
+```java
+public class Continue {
+	public static void main(String[] args) {
+		for(int i=0;i<3;i++) {
+			for(int j=0;j<3;j++) {
+				if(j==1) continue;
+				System.out.println("i="+i+", j="+j);
+			}
+		}
+	}
+}
+```
+- 결과
+> i=0, j=0   
+> i=0, j=2   
+> i=1, j=0   
+> i=1, j=2   
+> i=2, j=0   
+> i=2, j=2
+
+
+### c. return
+- 메서드의 실행을 종료하고 호출원으로 복귀한다
+- 메서드의 처리결과를 호출원으로 돌려주는 기능도 한다.
+
+***
+
+## 4. 라벨
+- 여러 반복문이 중첩되어 있을 때   
+- 반복문 앞에 이름을 붙이고**(Label)**
+- break문과 continue문에 이름을 지정함으로써
+- 하나 이상의 반복문을 벗어나거나 반복을 건너뛸 수 있다.
+
+> Loop1 : for(int i=0; j<3; i++)
+
+```java
+public class ContinueTest2 {
+	public static void main(String[] args) {
+		Loop1: for(int i=0; i<3; i++) {
+			for(int j=0; j<3; j++) {
+				if(j==1) {
+					break Loop1;
+				}
+				System.out.println("i="+i+", j="+j);
+			}
+		}	
+	}
+}
+```
+- 결과 : i=0, j=0
+
+```java
+public class ContinueTest2 {
+	public static void main(String[] args) {
+		Loop1: for(int i=0; i<3; i++) {
+			for(int j=0; j<3; j++) {
+				if(j==1) {
+					continue Loop1;
+				}
+				System.out.println("i="+i+", j="+j);
+			}
+		}		
+	}
+}
+```
+- 결과
+> i=0, j=0   
+> i=1, j=0   
+> i=2, j=0
+
+

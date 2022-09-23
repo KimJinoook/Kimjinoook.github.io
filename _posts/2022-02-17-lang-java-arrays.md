@@ -1,0 +1,249 @@
+# 배열
+## 1. 배열이란
+- 같은 타입의 데이터를 여러개 저장할 수 있는 저장소
+- 동일한 타입의 변수들을 하나의 이름으로 묶어 놓은 것
+- 참조형 객체로 heap에 할당되어야 사용할 수 있다
+- 배열의 이름은 연속된 변수들을 참조하기 위한 참조값
+- 배열의 요소들을 인덱스(intdex, 첨자)로 접근 가능
+
+```java
+int[] arr; // 배열 선언
+arr = new int[3]; // 메모리 할당
+
+//초기화
+arr[0] = 10;
+arr[1] = 20;
+arr[3] = 30;
+
+
+// 배열 선언과 동시에 할당 - 이후 초기화방식은 위와 같음.
+int arr2[] = new int[3];
+
+
+// 선언과 동시에 초기화까지 - 길이를 따로 정해주지 않아도 된다.
+int[] arr3 = {10,20,30};
+```
+
+- 계산된 크기의 배열 선언
+  - 컴파일 시 미리 배열 크기 지정
+    > long[] row = new long[4];
+
+  - 런타임 시 배열 크기 지정
+    > Scanner sc = new Scanner(System.in)   
+    > int size = sc.nextInt();   
+    > long[] row = new long[size]
+
+- 배열의 접근
+  - 배열의 이름과 인덱스번호 이용
+  - 배열명[인덱스번호]
+    > int arr[] = {10,20,30}   
+    > arr[1] // 20
+ 
+```java
+public class ArrayTest {
+
+	public static void main(String[] args) {
+		int[] score = {90,78,59,99,100,81,63,96}; // 배열 선언,할당 및 초기화
+
+    for(int i=0; i < score.length ;i++) {
+			System.out.println(score[i]); // 90,78,59,99,100,81,63,96
+		}
+		System.out.println();
+		int a = 80;
+		for(int i=0; i < score.length ;i++) {
+			score[i] +=5;
+			if (score[i]>=100) {
+				score[i]=100;
+			}
+		}
+		for(int i=0; i < score.length ;i++) {
+			System.out.println(score[i]); // 95,83,64,100,100,86,68,100
+		}
+	}
+  ```
+  
+### ex) 배열에 저장된 최대값 구하기
+  
+  ```java
+  public class ArrayMax {
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int[] arr = {10,57,19,35,77,26};
+		int max = arr[0]; // 10
+		for (int i=0; i<arr.length;i++) {
+			if(arr[i]>max)
+				max = arr[i];
+		}
+		for (int i=0;i<arr.length;i++) {
+			System.out.print(arr[i] + "\t");
+		}
+		System.out.println(max);
+	}
+}
+```
+
+
+
+## 2. 배열 변수의 복사
+
+  - 배열 변수의 복사는 배열 내 변수 자체만 복사하
+  - 배열의 인스턴스는 복사되지 않는다
+  - 원본 배열과 복사된 배열은 모두 동일한 배열 인스턴스를 참조한다
+  - 배열은 참조형으로, 복사된 배열은 원본 배열의 **같은 메모리 영역을 가리킨다.**  
+  
+  	> int [] row = new int [4];   
+  	> int [] copy = row;   
+  	> row[0]++;   
+  	> System.out.println(copy[0])   
+  	> // 원본 배열을 증가시켰더니, 미리 복사한 배열도 증가   
+  
+  
+  ```java
+  class ArrayCopy{
+  	public static void main(String[] args){
+		int[] a = new int[]{10,20,30};
+		int[] b = a ; //배열 a를 복사한 배열 b
+		
+		a[0]++ ; 배열a 0번째 숫자 증가
+		
+		System.out.println(a[0]); // 배열 a 숫자 10 => 11로 증가 
+		System.out.println(b[0]); // 미리 복사한 배열 b의 숫자 10도 11로 증가
+	}
+}
+```
+  
+***
+  
+## 3. 반환타입이 배열인 메서드
+```java
+class test {
+	public static int[] creatArray(){
+		int[] arr = {1,2,3,4,5};
+		return arr; // 배열을 리턴
+	}
+	public static void main(String[] args) {
+		int[] arr = creatArray(); //메서드를 이용해 arr배열에 값을 받아온다.
+		for(int i : arr) System.out.println(i);
+
+	}
+}
+```
+  
+***
+
+## 4. 배열을 매개변수로 받는 메서드
+- 매개변수가 기본자료형일 경우, 변수에 값이 들어간다.
+	 - 메서드 내에서 매개변수의 값을 바꿔도 main에서는 값이 바뀌지 않는다.
+- 매개변수가 배열일 경우, 변수에 배열의 주소값이 들어간다.
+	- 매개변수의 배열 값을 변경하면, 주소 내 배열 값이 변경된다.
+	- main에서도 배열의 변수 값이 변경된다.   
+
+
+```java
+public class Array {
+
+	//call by reference : 매개변수가 배열이면 값이 들어가는 것이 아니라 주소가 들어감
+	//메서드에서 매개변수 배열의 값을 변경하면 main()에서도 변수의 값이 변경됨
+	public static voud add(int[] arr) {
+		arr[0]++; // 메서드 내에서 배열 arr의 0번 값을 변경
+
+	}
+	
+	//call by value
+	//매개변수가 기본형일 경우, 값이 들어감
+	//메서드에서 값을 바꿔도 main에서는 값이 바뀌지 않음
+	public static int add2(int a, int b) {
+		int c= a+b;
+		a++; // 매개변수 a값 변경
+		return c;
+	}
+	public static void main(String[] args) {
+		
+		int[] arr = {10,30}
+		add(arr);
+		System.out.println(arr[0]); // 11, 메서드 내에서 값 변경후, main에서도 값이 변경
+		
+		
+		int a=10, b=30;
+		int rst = add2(a,b);
+		System.out.println(a); // 10, 메서드 내에서 a의 값을 바꿔도, main에서는 바뀌지 않음
+	}
+}
+
+```
+
+***
+
+## 5. 다차원 배열
+> 1차원 배열   
+> [] [] [] []...   
+> n차원 배열   
+> [0.0] [0.1] [0.2] ...   
+> [1.0] [1,1] [1,2] ...   
+> [2,0] [2,1] [2,2] ...   
+
+
+
+```java
+//1. 선언, 할당, 초기화 모두 따로
+		
+//배열선언
+int[][] arr;
+
+//메모리할당
+arr = new int[2][3]; //2행 3열
+
+//초기화
+arr[0][0] = 10;
+arr[0][1] = 10;
+arr[0][2] = 10;
+arr[1][0] = 10;
+arr[1][1] = 10;
+arr[1][2] = 10;
+
+
+//2. 배열선언과 메모리할당 동시에
+int[][] arr2 = new int[3][2]; //3행 2열
+arr2[0][0] = 10;
+arr2[0][1] = 10;
+arr2[1][0] = 10;
+arr2[1][1] = 10;
+arr2[2][0] = 10;
+arr2[2][1] = 10;
+
+//3. 모두 동시에
+int[][] arr3 = \{\{1,2,3,4,\},\{1,2,3,4\},\{2,3,4,5,\}\}; // 3행 4열
+```
+
+- 배열 접근 시
+	- 배열명[행][열]
+- 배열명.length
+	- 배열의 행 개수를 알 수 있다.
+- 배열명[i].length
+	- 배열의 i행의 열 개수를 알 수 있다.
+
+***
+
+## 6. 가변배열
+- 배열의 열 길이가 일정하지 않은 다차원 배열
+- 배열의 행마다 크기를 다르게 할당할 수 있다.
+
+```java
+class JaggedArray{
+	public static void main(){
+		//배열의 선언
+		int[][]arr = new int[3][]; // 배열의 행 개수만 할당
+		
+		//배열의 길이 할당
+		arr[0] = new int[1]; // 배열 1행의 열 개수 1개
+		arr[1] = new int[2]; // 배열 2행의 열 개수 2개
+		arr[2] = new int[3]; // 배열 3행의 열 개수 3개
+		
+		//초기화
+		arr[0] = new int[]{1};
+		arr[1] = new int[]{2,3};
+		arr[3] = new int[]{4,5,6};
+		
+```
+
+

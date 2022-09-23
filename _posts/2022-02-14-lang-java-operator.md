@@ -1,0 +1,243 @@
+# 연산자
+## 1. 연산자의 종류
+  1. 단항연산자 : ++, --, +, -, ~, !, (type)
+  2. 산술연산자 : *, /, %, +, -, <<, >>, >>>
+  3. 비교연산자 : >, <, >=, <=, instanceof, ==, !=
+  4. 논리연산자 : &, ^, \|, &&, \||,
+  5. 삼항연산자 : ?:
+  6. 대입연산자 : =, *= /=, %=, +=, -=, <<=, >>=, >>>=, &=, ^=, \|=
+  
+  ***
+  
+## 2. 연산자의 우선순위
+  - 산술 > 비교 > 논리 > 대입
+  - 단항 > 이항 > 삼항
+  - 단항연산자와 대입연산자를 제외한 모든 연산자의 진행방향은 좌-우 이다.
+  
+***
+
+## 3. 산술연산자
+  > +: 덧셈   
+  > -: 뺄셈   
+  > *: 곱셈   
+  > /: 나눗셈   
+  > %: 나머지연산자   
+  > (>>, <<, >>>) : 쉬프트 
+
+```java
+class ArithOpTest{
+  public static void main(String[] args){
+    int a = 7 + 3; // a=10
+    int b = 7 - 3; // b=4
+    int c = a * b; // c=40
+    double d = 7.0 / 3; //d=2.333334
+    int e = 7 / 3; //몫 2
+    int f = 7 % 3; //나머지 1
+  }
+}
+```
+
+### 쉬프트연산자
+  - 정수형 변수에만 사용   
+  - 피연산자를 2진수로 표현했을 때 각 자리를 오른쪽 또는 왼쪽으로 이동(shift)한다.
+  - 오른쪽으로 n자리 이동하면 피연산자를 2^n 으로 나눈 것과 같다.
+  - 왼쪽으로 n자리 이동하면 피연산자를 2^n 곱한 것과 같다.
+    > x<<n : x*2^n   
+    > x>>n : x/2^n
+  - (<<)연산자 : 부호 상관없이 왼쪽으로 이동시키며, 빈칸을 0으로 채움
+  - (>>)연산자 : 음수인 경우 부호를 유지시키기 위해 빈자리를 1로 채움
+  - (>>>)연산자 : 부호 상관없이 빈칸을 0으로 채움
+ ```java
+ class Shift{
+  public static void main(String[] arge){
+      int temp;//
+      temp = -8;
+      //11111111111111111111111111111000
+      
+      temp = -8<<1; // -16
+      //11111111111111111111111111110000
+      
+      temp = -8<<2; // -32
+      //11111111111111111111111111100000
+      
+      temp = -8>>1; // -4
+      //11111111111111111111111111111100
+      
+      temp = -8>>2; // -2
+      //11111111111111111111111111111110
+      
+      temp = -8>>>1; // 2147483644
+      //1111111111111111111111111111100
+      
+      temp = -8>>>2; // 1073741822
+      //111111111111111111111111111110
+      
+      //Integer.toBianryString(temp) 를 통해 2진수 확인
+   }
+}
+```
+
+***
+
+## 단항연산자
+### 1. 증감연산자  
+   
+- ++a : 연산 전 1 증가   
+- a++ : 연산 후 1 증가   
+- --a : 연산 전 1 감소   
+- a-- : 연산 후 1 감소
+ 
+ ```java
+ class IncermentOp{
+  piblic static void main(String[] arge){
+    int a=3, b=3;
+    System.out.println(a); // 3
+    System.out.println(a++); // 3, 연산 후 1 증가
+    System.out.println(a); // 4
+    System.out.println(++a);//5
+    
+    System.out.println(b); // 3
+    System.out.println(b--); // 3, 연산 후 1 감소
+    System.out.println(b); // 2
+    System.out.println(--b);//1
+  }
+}
+```
+
+### 2. 비트 전환 연산자
+- 연산자 ~
+- 정수형과 char형에만 사용
+- 피연산자를 2진수로 표현했을 때, 0은 1로, 1은 0으로 바꾼다.
+- 연산자 ~에 의해 비트전환 후 피연산자의 부호가 반대로 변경된다.
+
+```java
+class Op{
+  public static voud main(String[] args){
+    byte b = 10;
+    System.out.println(b); // 10
+    //00001010
+    System.out.println(~b); // -11
+    //11110101
+  }
+}
+```
+
+### 3. 논리부정 연산자
+- 연산자 !
+- boolean 형에만 사묭
+- true와 false를 변경
+- 조건문과 반복문의 조건식에 사용된다.
+
+```java
+class Op{
+  public static void main(String[] args){
+    boolean a = false;
+    System.out.println(a); //false
+    a = !a;
+    System.out.println(a); //true
+    
+    int b = 1, c = 10;
+    boolean bool = b>c;
+    System.out.println(bool); // flase
+    System.out.print(!bool); // true
+  }
+}
+```
+
+### 4. 비교 연산자
+> \< : 작다    
+> \<= : 작거나 같다   
+> \> : 크다   
+> \>= : 크거나 같다   
+> == : 같다   
+> != : 같지않다
+
+```java
+class Op{
+  public static void main(String[] args){
+    int a = 1;
+    int b = 10;
+    System.out.println(a==b); // false
+    System.out.println(a!=b); // true
+    System.out.println(a>b); // false
+    System.out.println(a<b); // true
+    System.out.println(a>=b); // false
+    System.out.println(a<=b); // true
+  }
+}
+```
+
+### 5. 논리연산자
+- 연산자 && : AND
+- 연산자 \|\| : or
+- 비트연산자 & : and
+- 비트연산자 \| : or
+- 비트연산자 ^ : xor
+  > 비트연산자 - 이진 비트연산을 수행   
+  > 이진수로 표현, 각 자리수를 논리연산 수행   
+  > float, double 제외 모든 기본형에서 사용 가능   
+  > 피연산자가 boolean인 경우 조건식 연결에 사용 가능
+
+```java
+class Op{
+  public static void main(String[] args){
+    int a = 3; //0011
+    int b = 5; //0101
+    System.out.println(a|b); // 0111 => 7
+    System.out.println(a&b); // 0001 => 1
+    System.out.println(a^b); // 0110 => 6
+    
+    System.out.println(a>4 && b>4); // false
+    System.out.println(a>4 || b>4); // true
+  }
+}
+```
+
+### 6. 대입 연산자
+- 새로운 값을 변수나 속성 등에 대입할 때 사용
+- 우변의 변수나 식의 결과를 좌변의 변수에 대입
+- 좌변과 우변의 타입이 일치해야 한다.
+
+> = : 대입   
+> += : 덧셈 연산 후 대입   
+> -= : 뺄셈 연산 후 대입   
+> \*= : 곱셈 연산 후 대입   
+> /= : 나눗셈 연산 후 대입   
+> %= : 나머지 연산 후 대입
+
+```java
+class Op{
+  public static void main(String[] args){
+    int a = 1;
+    int b = 10;
+    
+    System.out.println(a); //1
+    
+    a+=b;
+    System.out.println(a); //11
+    
+    a*=b;
+    System.out.println(a); // 110
+  }
+}
+```
+
+### 7. 삼항연산자 (조건 연산자)
+> 변수 선언 = (조건문)?값1:값2
+   
+- 조건문 결과가 참이면 변수에 값1 대입   
+- 조건문 결과가 거짓이면 변수에 값2 대입   
+- 변수와 값1, 값2는 데이터타입이 같아야 한다.
+
+```java
+class Op{
+  public static void main(String[] args){
+    int a =10, b=20;
+    int c=(a>b)?a:b;
+    System.out.println(c); // 20
+    
+    int d= 30;
+    System.out.println(d==30?"같다":"다르다"); // 같다 출력
+  }
+}
+```

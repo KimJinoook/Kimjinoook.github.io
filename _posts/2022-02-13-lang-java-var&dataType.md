@@ -1,0 +1,228 @@
+# 변수와 데이터타입, 형변환
+## 1. 변수
+### 1. 변수란
+    * 데이터를 저장하기 위해 메모리에 공간을 만들어 할당하고, 이름을 부여한 것
+    * 데이터의 저장과 참조를 위해 할당된 메모리 공간
+
+#### 1) 지역변수 (Local variables)
+- 메서드 내부에서만 사용 가능한 지역변수, 메서드 내에서 선언되는 변수
+	- 메서드가 시작될 때 생성
+	- 메서드를 빠져나갈 때 소멸
+		- 블럭변수 : 메서드 내 또다른 블럭(if, for 등) 내에서 선언된 변수
+
+#### 2) 멤버변수 (instance 변수)
+- 클래스에서 선언된 변수
+- 클래스의 멤버역할을 하는 member field
+- 클래스 내의 여러 메서드에서 공통으로 사용 가능, 클래스 외부에서도 접근가능하게 할 수 
+
+#### 3) 클래스변수 (static 변수)
+
+
+### 2. 변수 선언
+    >데이터타입 변수명;   
+    >int num;
+
+    * int num;
+        * int -데이터타입 / 정수를 저장할 메모리 공간을 할당하겠다.
+        * num - 해당 변수에 접근할 때에는 num 이라는 이름을 사용하겠다.
+
+### 3. 값 할당
+    * 변수 선언 후 값 할당
+        > int a;   
+        > a = 23;
+    * 선언과 동시에 초기화
+        > int a = 23;
+    * 여러 변수 동시에 선언, 동시 할당
+        > int a=10, b=20;
+    * 여러 변수 동시에 선언 후 할당
+        > int a, b;   
+        > a=10;    
+        > b=20;
+    * 변수끼리의 할당
+        >int a=10, b;   
+        >b=a;
+
+```java
+class VarTest{
+    public static void main(String[] args){
+        int a; //변수선언
+        a = 10; // 값 할당
+
+        int b = 20; //선언과 동시에 값 할당
+
+        int c=30, d=40; //여러개 동시에 선언과 할당
+
+        int e,f;
+        e=100;
+        f=200;
+
+        int k=45;
+        int n = kl
+    }
+}
+```
+
+### 4. 변수의 범위(Scope)
+- 중괄호{}로 묶인 블록내에서 선언된 변수는 블록을 나가면 소멸된다.
+> 단일블록   
+> {   
+> //code   
+> }
+
+> 중첩블록   
+> {   
+> inti;   
+> {   
+> inti; //error 중첩 블록 내 동일한 변수 사용 불가능   
+> }   
+> }
+
+> 다른 블록   
+> {   
+> int i   
+> }   
+> {   
+> int i; // 블록이 달라 사용 가능   
+> }
+
+```java
+class ScopeTest 
+{
+	public static void main(String[] args) 
+	{
+		// 변수의 범위(Scope)
+		//{} 블럭 내에서 선언된 변수는 블록을 빠져나가면 소멸
+		//=> 메서드 내에서 선언된 변수는 해당 메서드가 종료되면 소멸
+
+		int a=10;//main 메서드 내에서 사용 가능
+		System.out.println(a);
+
+		//for(int a=0;a<3;a++){} => error main메서드의 a변수 사용 불가
+		for(int i=0;i<3;i++){
+			System.out.println(a);
+		}
+		for(int i=0;i<4;i++){
+			int k=30;
+			System.out.println(k);
+		}
+		System.out.println(a);
+		//System.out.println(i); i는 for 블록 탈출 후 소멸
+		//System.out.println(k); k는 for 블록 탈출 후 소멸
+	}
+}
+```
+
+***
+
+## 2. 데이터타입
+1. 기본자료형
+    * byte - 1byte, 정수
+    * short - 2byte, 정수
+    * int - 4byte, 정수
+    * long - 8byte, 정수
+    * float - 4byte, 실수
+    * double - 8byte, 실수
+    * char - 2byte, 문자
+        * 영문자나 한글과 같은 문자 하나를 저장해서 사용한다.
+        - 실제로는 해당 문자의 유니코드 값이 저장된다.
+            > char a='A'; => char a=65;
+    * boolean - 1byte, 논리(참거짓)
+    
+2. 참조형
+    - String - 문자열
+
+3. 예제 - 숫자형
+```java
+public class VarTest{
+    public static void main(String[] a){
+        byte a = 127; //-128 ~ 127
+        short b = 32000;
+        int c = 2100000000; //21억
+        long d = 21000000000L;//900경, int의 범위를 넘어설 경우 뒤에 L을 붙인다.
+
+        long e=(long)a*b*c;
+        //byte*short*int => int*int*int로 자동 형변환된다.
+        //값이 int의 범위를 벗어나 잘못된 결과가 나오므로, (Long)을 이용해 형변환해준디.
+    }
+}
+```
+4. 예제 - 문자형
+```java
+public class VarTest{
+    public static void main(String[] a){
+        byte a = 127; //-128 ~ 127
+        short b = 32000;
+        int c = 2100000000; //21억
+        long d = 21000000000L;//900경, int의 범위를 넘어설 경우 뒤에 L을 붙인다.
+
+        long e=(long)a*b*c;
+        //byte*short*int => int*int*int로 자동 형변환된다.
+        //값이 int의 범위를 벗어나 잘못된 결과가 나오므로, (Long)을 이용해 형변환해준디.
+    }
+}
+```
+
+***
+
+## 3. 형변환
+1. 형변환 이란
+    - 연산을 위해 서로다른 데이터타입을 통일하기 위해 변환
+    - 연산 시
+        - 피연산자 중 더 큰 데이터 타입을 이용해 연산
+    - 대입 시
+        - 좌우변의 타입이 일치해야 함
+
+2. 형 변환 종류
+    - 자동 형변환
+        - 작은 범위의 데이터를 큰 범위에 할당하는 경우
+        - 값의 손실이 발생하지 않는 변환
+    - 명시적 형변환
+        - 큰 범위의 데이터를 작은 범위에 할당하는 경우
+        - 값의 중요부분이 손실되지 않을 때만 수행해야함
+
+> 자동 형변환 규칙   
+> byte - short - int - long - float - double   
+> char - int - long - float - double
+
+> 명시적 형변환   
+> float a = 3.14f;   
+> int b = (int)a;
+
+```java
+public class ConversionTest{
+    public static void main(String[] a){
+        long a = 2580L;
+        float b = a; //자동형변환
+
+        double c = 23.489;
+        float d = (float)c; //명시적 형변환
+    }
+}
+```
+
+3. wrapper 클래스
+    - 자료형을 효율적으로 관리하기 위해 만들어진 자료형 대체클래스
+    - 기본형 변수들도 객체로 다루어져야 하는 경우 사용된다.
+    - Boolean / Character / Byte / Short / Integer / Long / Float / Double
+        > Integer.MAX_VALUE   
+        > Integer.MIN_VALUE 등
+
+    - 문자열 => 숫자 형변환
+        > String a = "12345";   
+        > int b = (int)a; //에러   
+
+        > String a = "12345";   
+        > int b = Integer.parseInt(a); //문자열을 정수로 변환   
+
+        > Float.parseFloat()   
+        > Double.parseDouble()   
+        > Byte.parseByte()
+
+    - 숫자열 => 문자 형변환
+        > int a = 10;   
+        > String b = Integer.toString(a);
+
+        > Double.toString()   
+        > Long.toString()   
+        > Float.toString()
+

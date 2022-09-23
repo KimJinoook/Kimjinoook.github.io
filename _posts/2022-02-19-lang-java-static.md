@@ -1,0 +1,290 @@
+# Static
+## 1. static
+### a. 메모리영역
+- 메서드 영역 : 메서드의 바이트코드, static 변수
+- stack 영역 : 값 타입, 지역변수, 매개변수 등
+- heap영역 : 참조타입, 인스턴드 등 / 메서드는 공유하지만 객체는 영역을 따로 할당
+
+- heap메모리영역   
+
+
+```java
+// 참조타입 메모리 영역 확인
+class Person{
+	//1. 멤버변수
+	private String name;
+	private int age;
+	public int count; // 카운트 변화 확인
+	
+	//2. 생성자
+	Person(String name, int age){
+		this.name = name;
+		this.age = age;
+    System.out.println(++count); // 객체 생성될 때 카운트를 찍어 변화하는지 확인
+	}
+	
+	//3. 메서드
+	public void display() {
+		System.out.println("이름:" + name);
+		System.out.println("나이:"+ age+"\n");
+	}
+}
+
+public class PersonTest {
+
+	public static void main(String[] args) {
+		Person hong = new Person("홍길동", 20); //heap 영역에 hond 이라는 객체 생성
+		hong.display(); // 카운트 1
+
+		
+		Person kim = new Person("김길동", 20); // heap 영역에 kim 이라는 객체 생성
+		kim.display(); // 카운트 1, 카운트가 변화하지 않는다
+
+	}
+}
+```
+
+- 메서드 영역   
+
+
+```java
+class Person{
+	//1. 멤버변수
+	private String name;
+	private int age;
+	public static int count; // 카운트 변화 확인 (static변수)
+	
+	//2. 생성자
+	Person(String name, int age){
+		this.name = name;
+		this.age = age;
+    System.out.println(++count); // 객체 생성될 때 카운트를 찍어 변화하는지 확인
+	}
+	
+	//3. 메서드
+	public void display() {
+		System.out.println("이름:" + name);
+		System.out.println("나이:"+ age+"\n");
+	}
+}
+
+public class PersonTest {
+
+	public static void main(String[] args) {
+		Person hong = new Person("홍길동", 20); //heap 영역에 hond 이라는 객체 생성
+		hong.display(); // 카운트 1
+
+		
+		Person kim = new Person("김길동", 20); // heap 영역에 kim 이라는 객체 생성
+		kim.display(); // 카운트 2, static변수는 공유
+
+	}
+}
+```
+
+### b. static 변수 (정적멤버)
+- 개별 객체에 소속되지 않는다
+- 클래스에 직접 소속된다.
+- 메서드 영역에 메모리가 저장된다.
+- 메모리에 딱 한번 생성되며 모든 객체가 공유한다.
+- 객체로 생성되어 참조하지 않고 클래스 차원에서 바로 호출 가능
+	- 클래스의 이름으로 접근
+- 초기화 시점
+	- jvm에 의해 클래스가 메모리 공간에 올라가는 순간
+```java
+class BankAccount{
+	//1. 멤버변수
+	//1.1 인스턴스변수
+	private int balance;
+	
+	//1.2 static 변수
+	public static final double INTEREST_RATE = 0.02;
+	private static int totalBalance;
+	
+	//2. 생성자
+	public BankAccount(int balance) {
+		this.balance=balance;
+	}
+	
+	//3. get,set
+	public int getBalance() {
+		return balance;
+	}
+	public void serBalance(int balance) {
+		this.balance=balance;
+	}
+	public static int getTotalbalance(){
+		return totalBalance;
+	}
+	public static void setTotalbalance(int totalBalance) {
+		//static에는 this 사용 불가
+		BankAccount.totalBalance=totalBalance;
+	}
+	
+	//4. 메서드
+	public void findTotal() {
+		totalBalance+=balance;
+	}
+	
+}
+
+public class AccountStatic {
+
+	public static void main(String[] args) {
+		BankAccount acc1 = new BankAccount(100000);
+		BankAccount acc2 = new BankAccount(200000);
+		
+		acc1.findTotal();
+		acc2.findTotal();
+		
+		System.out.println("계좌1의 원금 : " + acc1.getBalance());
+		System.out.println("계좌2의 원금 : " + acc2.getBalance());
+		System.out.println("이율 : " + BankAccount.INTEREST_RATE);
+		System.out.println("전 계좌의 원금의 합계 : " + BankAccount.getTotalbalance());
+
+	}
+}
+```
+
+> final : 읽기전용, 값을 바꿀 수 없도록 묶음   
+
+
+
+### c. static 변수 초기화
+- static 초기화 블럭
+	- 생성자와 비슷하지만 블럭 내에서 조건문 등을 사용할 수 있다.
+	- 초기화 작업이 복잡하여, 단순 초기화(명시적 초기화)로 부족한 경우 사용
+	> static{ }
+
+```java
+class StaticBlock{
+	static int[] arr = new int[10]; // 명시적 초기화
+	
+	//static 초기화 블럭
+	static {
+		for(int i=0; i<arr.length;i++) {
+			arr[i] = (int)(Math.random()*10+1);
+		}
+	}//초기화 블럭 내 for구문을 통해 arr변수 초기화
+}
+
+public class StaticBlockTest {
+
+	public static void main(String[] args) {
+		for(int i=0;i<StaticBlock.arr.length;i++) {
+			System.out.println(StaticBlock.arr[i]);
+		}
+	}
+}
+```
+- 변수별 초기화 시기 및 순서
+	- 클래스변수
+		- 클래스가 처음 로딩될 때 한번 초기화
+		- default값 -명시적초기화 -static초기화블럭
+	- 인스턴스변수
+		- 인스턴스가 생성될 때마다 각 인스턴스별로 초기화
+		- default값 -명시적초기화 -생성자
+
+### d. static 메서드
+- 클래스에 소속
+- 개별 객체에 대한 동작이 아닌, 클래스 차원의 동작 처리
+- 객체에 대한 처리가 아니기 때문에, 객체에 대한 참조자 this 사용 불가
+- 생성된 객체가 없어도 호출 가능
+- 클래스 소속의 static 필드만 액세스 할 수 있음
+	- 인스턴스 필드는 아직 메모리에 올라가기 전이기 때문
+	- static메서드는 static 멤버변수만 사용 
+- 자주 사용하는 메서드를 static 처리, 클래스 차원에서 호출
+	- 메서드를 사용하기 위해 매번 인스턴스 전체를 불러오는 것을 방지
+	- 메모리 효율
+
+- static / instance 메서드 호출 예)   
+
+
+```java
+class Calculator{
+	//static 메서드
+	public static int add(int a, int b) {
+		return a+b;
+	}
+	
+	//instance 메서드
+	public int subtract(int a, int b) {
+		return a-b;
+	}
+}
+
+public class CalculatorTest {
+
+	public static void main(String[] args) {
+		//static 메서드 호출 : 클래스명.메서드();
+		int result = Calculator.add(10,30);
+		System.out.println("합" + result);
+		
+		//int n = Integer.parseInt("123");  static 메서드
+		
+		//instance 메서드 호출 : 객체 생성 후 참조변수.메서드();
+		Calculator cal = new Calculator();
+		result = cal.subtract(50,20);
+		System.out.println("차"+result);
+		
+		//Scanner sc = new Scanner(System.in); //Scanner 객체 생성
+		//int num = sc.nextInt(); // instance 메서드
+	}
+
+}
+```
+
+- static메서드의 static/instance 접근 예)   
+
+
+```java
+public class StaticTest {
+	private int num1 = 10; // 인스턴스 변수
+	private static int num2=20; // static 변수
+	
+	public int add() { //인스턴스 메서드
+		return num1+num2; // static 변수 접근 가능
+	}
+	
+	/*
+	public static int mul() {
+		return num1*num2; // error 인스턴스 변수 num1에 접근불가
+	}
+	*/
+	
+	public static int mul(int a, int b) {
+		return a*b;
+	}
+			
+
+	public static void main(String[] args) {
+		int result = mul(4,4); // static 메서드 호출 : 클래스명.메서드()
+								// 같은 클래스이므로 클래스명 생략, 메서드()
+		System.out.println(result);
+
+		//add(); //main 또한 static메서드 - 인스턴스 메서드 호출 불가, 객체생성 필요
+		StaticTest a = new StaticTest();
+		result = a.add();
+		System.out.println(result);
+	}
+
+}
+```
+
+### e. 변수의 종류
+- 멤버변수 : 클래스 영역에 선언
+	- static 변수
+		- 모든 객체가 공유, 클래스 차원에서 단 하나만 생성
+		- 클래스가 로딩될 때 생성, 프로그램 종료까지 유지
+		- default 값으로 초기화
+	- 인스턴스 변수
+		- 객체를 생성할 때 만들어진다
+		- 객체마다 다른 값을 가질 수 있다
+		- 0, false, null값으로 초기화
+- 지역변수 : 메서드 내부에서 선언된 변수
+	- 메서드가 시작될 때 생성
+	- 메서드를 빠져나갈 때 사라짐
+	- 블럭변수
+		- 메서드 내 또다른 블록(if, for 등) 내에서 선언된 변수
+
+
