@@ -1,5 +1,5 @@
 ---
-layout: tag-blog
+layout: list
 title: Mybatis
 slug: mybatis
 category: framework
