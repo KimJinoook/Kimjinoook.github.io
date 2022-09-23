@@ -2,7 +2,7 @@
 layout: post
 title:  "4. 문서 객체 조작"
 subtitle:   ""
-categories: lang
+categories: library
 tags: jquery
 comments: false
 header-img: 

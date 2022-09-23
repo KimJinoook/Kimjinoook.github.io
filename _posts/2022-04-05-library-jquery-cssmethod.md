@@ -2,7 +2,7 @@
 layout: post
 title:  "5. css 관련 메서드"
 subtitle:   ""
-categories: lang
+categories: library
 tags: jquery
 comments: false
 header-img: 

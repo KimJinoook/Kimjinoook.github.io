@@ -2,7 +2,7 @@
 layout: post
 title:  "10. jquery ui 플러그인"
 subtitle:   ""
-categories: lang
+categories: library
 tags: jquery
 comments: false
 header-img: 

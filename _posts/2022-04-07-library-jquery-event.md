@@ -2,7 +2,7 @@
 layout: post
 title:  "7. 이벤트 관련 메서드"
 subtitle:   ""
-categories: lang
+categories: library
 tags: jquery
 comments: false
 header-img: 

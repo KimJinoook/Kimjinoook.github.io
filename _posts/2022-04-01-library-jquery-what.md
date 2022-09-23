@@ -2,7 +2,7 @@
 layout: post
 title:  "1. 제이쿼리란"
 subtitle:   ""
-categories: lang
+categories: library
 tags: jquery
 comments: false
 header-img: 

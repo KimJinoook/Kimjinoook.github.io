@@ -2,7 +2,7 @@
 layout: post
 title:  "2. 선택자"
 subtitle:   ""
-categories: lang
+categories: library
 tags: jquery
 comments: false
 header-img: 

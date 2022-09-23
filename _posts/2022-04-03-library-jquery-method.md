@@ -2,7 +2,7 @@
 layout: post
 title:  "3. 기본메서드"
 subtitle:   ""
-categories: lang
+categories: library
 tags: jquery
 comments: false
 header-img: 

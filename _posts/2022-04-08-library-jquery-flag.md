@@ -2,7 +2,7 @@
 layout: post
 title:  "8. 정규표현식"
 subtitle:   ""
-categories: lang
+categories: library
 tags: jquery
 comments: false
 header-img: 
