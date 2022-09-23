@@ -1,4 +1,13 @@
-# 다형성
+---
+layout: post
+title:  "10. 다형성"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## 1. 다형성
 ### a. 다형성이란
 - **부모 클래스 타입의 참조변수로 자식클래스의 인스턴스를 참조**
