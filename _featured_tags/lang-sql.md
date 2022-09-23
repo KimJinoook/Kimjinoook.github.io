@@ -1,5 +1,5 @@
 ---
-layout: tag-blog
+layout: list
 title: SQL
 slug: sql
 category: lang
