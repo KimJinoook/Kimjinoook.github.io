@@ -1,4 +1,13 @@
-# 인터페이스
+---
+layout: post
+title:  "12. 인터페이스"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## 1. 인터페이스 란
 - 일종의 추상 클래스
 - **추상메서드와 상수**만을 멤버로 가질 수 있다
