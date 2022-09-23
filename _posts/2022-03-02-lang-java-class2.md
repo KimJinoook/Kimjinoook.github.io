@@ -1,5 +1,13 @@
+---
+layout: post
+title:  "18. 내부클래스"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
 
-# 내부클래스 (inner class)
 ## 1. 내부클래스란
 - 클래스 내에 선언된 클래스
 - 주로 AWT나 Swing과 같은 GUI어플리케이션 이벤트처리에 사용
