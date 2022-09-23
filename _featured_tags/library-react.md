@@ -1,5 +1,5 @@
 ---
-layout: tag-blog
+layout: list
 title: React
 slug: react
 category: library
