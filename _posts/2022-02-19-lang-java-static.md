@@ -1,4 +1,14 @@
-# Static
+---
+layout: post
+title:  "8. static"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
+
 ## 1. static
 ### a. 메모리영역
 - 메서드 영역 : 메서드의 바이트코드, static 변수
