@@ -2,7 +2,7 @@
 layout: post
 title:  "3. DI / 종속 객체 주입"
 subtitle:   ""
-categories: lang
+categories: framework
 tags: spring
 comments: false
 header-img: 

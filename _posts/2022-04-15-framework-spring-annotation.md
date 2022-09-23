@@ -2,7 +2,7 @@
 layout: post
 title:  "5. 어노테이션"
 subtitle:   ""
-categories: lang
+categories: framework
 tags: spring
 comments: false
 header-img: 

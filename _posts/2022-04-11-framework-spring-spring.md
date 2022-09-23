@@ -2,7 +2,7 @@
 layout: post
 title:  "1. spring이란"
 subtitle:   ""
-categories: lang
+categories: framework
 tags: spring
 comments: false
 header-img: 

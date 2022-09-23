@@ -2,7 +2,7 @@
 layout: post
 title:  "6. MVC"
 subtitle:   ""
-categories: lang
+categories: framework
 tags: spring
 comments: false
 header-img: 
