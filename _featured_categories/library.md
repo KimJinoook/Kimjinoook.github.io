@@ -1,6 +1,6 @@
 ---
 layout: list
-title: 라이브러리
+title: Library
 slug: library
 menu: true
 submenu: true
