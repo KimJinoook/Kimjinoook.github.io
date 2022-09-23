@@ -1,4 +1,13 @@
-# 메서드
+---
+layout: post
+title:  "5. 메서드"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## 1. 메서드 기본
 ### a. 메서드란
 - 자주 반복하여 사용하는 내용에 대해 특정 이름으로 정의한 묶음
