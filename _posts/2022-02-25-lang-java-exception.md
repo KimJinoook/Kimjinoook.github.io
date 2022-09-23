@@ -1,4 +1,13 @@
-# 예외 (Exception)
+---
+layout: post
+title:  "14. 예외"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## 1. 예외 기본
 ### a. 예외 란
 - 프로그램의 **실행 도중에 발생하는** 예상치 못한 **오류**
