@@ -3,6 +3,6 @@ layout: tag-blog
 title: ML
 slug: ml
 category: dev
-menu: false
+menu: true
 order: 1
 ---
