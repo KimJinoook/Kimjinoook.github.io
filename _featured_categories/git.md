@@ -1,7 +1,7 @@
 ---
 layout: list
-title: 형상관리
-slug: git
+title: SCM
+slug: scm
 menu: true
 submenu: false
 order: 4
