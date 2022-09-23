@@ -1,4 +1,13 @@
-# Optional 클래스
+---
+layout: post
+title:  "21. optional 클래스"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 - Integer나 Double 클래스처럼 객체를 포장해주는 Wrapper 클래스
 - 모든 타입의 참조변수를 저장할 수 있다
 - Optional 객체 사용시 NullPointerException 메서드로 간단한 회피 가능
