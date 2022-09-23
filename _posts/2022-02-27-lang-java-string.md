@@ -1,4 +1,13 @@
-# 문자열 String
+---
+layout: post
+title:  "16. 문자열 String"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## 1. String
 - 변경이 불가능한 문자열  
 - 상수 개념    
