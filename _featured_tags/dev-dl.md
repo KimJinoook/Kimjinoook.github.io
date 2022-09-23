@@ -1,8 +1,8 @@
 ---
 layout: tag-blog
-title: DL
-slug: dl
-category: dev
+title: SQL
+slug: sql
+category: lang
 menu: false
-order: 2
+order: 3
 ---
