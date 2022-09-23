@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "기본 골격과 구성"
+title:  "1. 기본 골격과 구성"
 subtitle:   ""
 categories: lang
 tags: java1
