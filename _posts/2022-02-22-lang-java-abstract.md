@@ -1,4 +1,13 @@
-# 추상
+---
+layout: post
+title:  "11. 추상"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## 1. 추상메서드 (abstract method)
 - 메서드의 구현부가 없는 것
 - 오버라이딩 관계를 형성하기 위해 정의된 메서드
