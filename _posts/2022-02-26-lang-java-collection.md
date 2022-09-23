@@ -1,4 +1,13 @@
-# 컬렉션
+---
+layout: post
+title:  "15. 컬렉션"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## 1. 컬렉션 프레임 워크
 - 프레임워크(Framework)
   - 잘 정의된, 약속된 구조나 골격
