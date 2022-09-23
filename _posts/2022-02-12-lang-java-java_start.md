@@ -7,7 +7,7 @@ tags: java1
 comments: false
 header-img: 
 ---
-# Java 기본 골격과 구성
+
 ## 1. 구조 
 ### a.실행구조
 * 일반 프로그램 : 하드웨어 - 운영체제 - 프로그램
