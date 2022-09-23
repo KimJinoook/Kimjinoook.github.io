@@ -1,6 +1,6 @@
 ---
 layout: tag-blog
-title: 자바 기본
+title: Java
 slug: java1
 category: lang
 menu: false
