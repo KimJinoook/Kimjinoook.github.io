@@ -1,6 +1,6 @@
 ---
 layout: tag-blog
-title: 자바 심화
+title: Java 심화
 slug: java2
 category: lang
 menu: false
