@@ -1,13 +1,13 @@
 ---
 layout: post
-title:  "변수와 데이터타입, 형변환"
+title:  "2. 변수와 데이터타입, 형변환"
 subtitle:   ""
 categories: lang
 tags: java1
 comments: false
 header-img: 
 ---
-# 변수와 데이터타입, 형변환
+
 ## 1. 변수
 ### 1. 변수란
     * 데이터를 저장하기 위해 메모리에 공간을 만들어 할당하고, 이름을 부여한 것
