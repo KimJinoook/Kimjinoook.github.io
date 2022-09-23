@@ -1,4 +1,12 @@
-# 제어문
+---
+layout: post
+title:  "4. 제어문"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
 
 ## 1. 조건문
   - 조건의 진위 여부에 따라 명령의 실행 여부를 결정하는 문장
