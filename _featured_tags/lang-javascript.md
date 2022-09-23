@@ -1,5 +1,5 @@
 ---
-layout: tag-blog
+layout: list
 title: Javascript
 slug: javascript
 category: lang
