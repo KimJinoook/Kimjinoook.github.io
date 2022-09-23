@@ -1,4 +1,13 @@
-# 오브젝트 클래스
+---
+layout: post
+title:  "17. 오브젝트 클래스"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 - 모든 클래스의 최고 상위 클래스
 - object클래스의 멤버들은 모든 클래스에서 바로 사용 가능
 - 8개의 메서드 보유
