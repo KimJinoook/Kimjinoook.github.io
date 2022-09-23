@@ -1,4 +1,13 @@
-# 패키지
+---
+layout: post
+title:  "13. 패키지"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## 1. 패키지란
 - 클래스의 묶음
 - **서로 관련된 클래스들끼리 묶어 효울적으로 관리**
