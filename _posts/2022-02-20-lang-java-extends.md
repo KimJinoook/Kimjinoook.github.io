@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "9. "
+title:  "9. 상속"
 subtitle:   ""
 categories: lang
 tags: java1
