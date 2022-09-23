@@ -1,7 +1,7 @@
 ---
 layout: tag-blog
-title: Statistics & R
-slug: r
+title: 자바 기본
+slug: java1
 category: dev
 menu: false
 order: 1
