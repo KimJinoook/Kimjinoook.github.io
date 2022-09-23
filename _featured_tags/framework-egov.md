@@ -1,5 +1,5 @@
 ---
-layout: tag-blog
+layout: list
 title: eGov
 slug: egov
 category: framework
