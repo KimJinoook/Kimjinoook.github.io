@@ -1,4 +1,13 @@
-# 클래스
+---
+layout: post
+title:  "7. 클래스"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## 1. 객체 지향 프로그래밍
 - 객체 (object)
   - 물건, 대상 등을 의미
