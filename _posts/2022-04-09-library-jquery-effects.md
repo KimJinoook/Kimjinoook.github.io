@@ -1,0 +1,393 @@
+---
+layout: post
+title:  "9. 효과 관련 메서드"
+subtitle:   ""
+categories: lang
+tags: jquery
+comments: false
+header-img: 
+---
+
+
+## 1. 기본 시각 효과
+![캡처](https://user-images.githubusercontent.com/99188096/165869352-003d35d9-40f4-4e0c-960f-2eee58ccff61.JPG)   
+
+- $(selector).method()
+- $(selector).method(speed)
+- $(selector).method(speed, callback)
+  - speed
+    - 효과를 진행할 속도를 지정
+    - 밀리 초 단위의 숫자 또는 문자열(slow, normal, fast)
+  - callback
+    - 효과를 모두 완료하고 실행할 함수   
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script>
+	$(function(){
+		$('button').first().click(function(){
+			$('.list1').toggle();
+		});
+		
+		$('button').eq(1).click(function(){
+			$('.list2').slideToggle(2000);
+		});
+		
+		$('button').last().click(function(){
+			$('.list3').fadeToggle('slow');
+		});
+	});
+
+
+</script>
+
+</head>
+<body>
+	<button>show Toggle</button>
+	<button>slide Toggle</button>
+	<button>fade Toggle</button>
+	<div class="list1">
+		<h1>제목1</h1>
+		<p>내용1입니다</p>
+	</div><br>
+	<div class="list2">
+		<h1>제목2</h1>
+		<p>내용2입니다</p>
+	</div><br>
+	<div class="list3">
+		<h1>제목3</h1>
+		<p>내용3입니다</p>
+	</div>
+</body>
+</html>
+```
+
+### show() / hide()
+- show()
+  - 대상이 되는 모든 엘리먼트를 보이도록 한다
+  - show(speed,[function])
+    - speed : speed 수치 동안 보이도록 한다
+    - function : speed의 수치가 끝났을 때, callback function 실행
+- hide()
+  - 대상이 되는 모든 엘리먼트를 보이지 않도록 한다
+  - hide(speed, [fn])   
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script>
+	$(function(){
+		$('img:first').show(3000);
+		
+		$('#btn1').click(function(){
+			$('img:eq(1)').show(2000,function(){
+				alert('show animation complete!');
+			});
+		});
+		$('#btn2').click(function(){
+			$('img:eq(1)').hide(2000,function(){
+				alert('hide animation complete!');
+			});
+		});
+	});
+</script>
+</head>
+<body>
+	<div>
+		<img src="../images/jQuery.jpg" style="display:none" alt="Hello, jQuery!">
+	</div>
+	<br />
+	<input id="btn1" type="button" value="보이기" />
+	<input id="btn2" type="button" value="숨기기" /><br /><br />
+	<img src="../images/dog.jpg" style="display:none" alt="강아지 이미지">
+</body>
+</html>
+```
+
+### toggle()
+- toggle()
+	 - 대상 엘리먼트가 화면에 보이는 경우 보이지 않게 만든다
+	 - 대상 엘리먼트가 화면에 보이지 않는 경우 보이게 만든다   
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script>
+	$(function(){
+		$(document).ready(function() {
+			$("button").click(function() {
+				$("img").toggle();
+			});
+		});
+	});
+</script>
+</head>
+<body>
+	<button>Toggle</button>
+	<p><img src="../images/jQuery.jpg" alt="Hello, jQuery!"></p>
+	<p><img src="../images/wood.JPG" alt="Hi~~" style="display:none"></p>
+</body>
+</html>
+```
+
+### slideDown / slideUp / slideToggle
+- slideDown(speed, [fn])
+	- 대상 엘리먼트의 style 속성값이 "display:none"인 경우
+	- 상단에서 하단으로 speed수치의 시간안에 서서히 보여지도록 한다
+- slideUp(speed, [fn])
+	- 대상 엘리먼트의 style 속성값이 "display:block"인 경우
+	- 상단 방향으로 speed 수치의 시간안에 서서히 사라지게 한다
+- slideToggle(speed, [fn])
+	- 대상 엘리먼트의 style 속성값이 "display:none"인 경우 slideDown 실행
+	- 대상 엘리먼트의 style 속성값이 "display:block"인 경우 slideUp 실행   
+
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script>
+	$(function(){
+		var bool=true;
+		$('.message').hide();
+		$('span.readmore').click(function() {
+			$('.message').slideToggle('slow');
+			if(bool){
+				$(this).text('Read Less...');
+				//bool=false;
+			}else{
+				$(this).text('Read More...');
+			//bool=true;
+			}
+		bool=!bool;
+		});
+	});
+</script>
+</head>
+<body>
+	<div>Styles make the formatting job much easier and efficient.</div>
+	<span class="readmore">Read More...</span>
+	<div class="message">
+		To give an attractive look to web sites, styles are heavily used.
+		JQuery is a powerful JavaScript library that allows us to add dynamic elements to our web sites. Not only it 
+		is easy to learn but easy to implement too. A person must have a good knowledge of HTML and CSS 
+		and a bit of Javascript. JQuery is an open source project that provides a wide range of features with 
+		cross platform compatiblity.
+	</div>
+</body>
+</html>
+```
+
+### fadeIn / fadeOut / fadeTo
+- fadeIn(speed, [fn])
+	- 대상 엘리먼트의 style 값이 display:none 인 경우 불투명도를 점차 높여서 보이도록 한다
+- fadeOut(speed, [fn])
+	- 대상 엘리먼트의 style 값이 display:block 인 경우 불투명도를 점차 낮춰서 보이지 않도록 한다
+- fadeTo(speed, opacity, [fn])
+	- 대상 엘리먼트의 불투명도를 정해진 시간동안 변하도록 한다
+	- opacity : 0~1, 0에 가까울수록 투명   
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script>
+	$(function(){
+		$("#div1 img").css("display","none");
+		$("#div1").click(function() {
+			$("#div1 span").hide();
+			$("#div1 img").fadeIn(3000);
+		});
+		$("#div2 span").css("display", "none");
+		$("#div2").click(function() {
+			$("#div2 img").fadeOut(3000, function() {
+				$("#div2 span").show();
+			});
+		});
+		
+		$("#div3 img").mouseenter(function() {
+			$("#div3 img").fadeTo("slow", 0.2);
+		});
+		$("#div3 img").mouseleave(function() {
+			$("#div3 img").fadeTo("slow", 1);
+		});
+	});
+</script>
+</head>
+<body>
+	<div id="div1">
+		<span>Click Me!</span>
+		<img src="../images/dog.jpg" alt="강아지 이미지">
+	</div> 
+	<div id="div2">
+		<span>Click Me!</span>
+		<img src="../images/dog.jpg" alt="강아지 이미지">
+	</div>
+	<div id="div3">
+		<img src="../images/dog.jpg" alt="강아지 이미지">
+	</div>
+</body>
+</html>
+```
+
+***
+
+## 2. 사용자 정의 효과
+- animate()
+	- 사용자 지정 효과를 생성
+	- 여러개의 애니메이션 효과를 동시 부여
+	- $(selector).animate(object)
+	- $(selector).animate(object, speed)
+	- $(selector).animate(object, speed, callback)
+		- object
+			- width, height
+			- opacity
+			- margin, padding
+			- left, right, top, bottom
+		- 대상 엘리먼트의 크기와 위치 색상등을 원하는 시간동한 변경할 수 있다
+		- 변경이 완료된 순간 event를 callback fn의 형태로 확인 가능   
+- jQuery의 효과메서드 사용 시
+	- 명령이 차례로 큐에 들어간다.
+	- 큐에 들어간 명령 순서대로 실행한다.
+	- 메서드 체이닝으로 메서드 연결 시
+		- 동시에 애니메이션이 실행되지 않는다
+		- 큐에들어간 순서대로 애니메이션이 하나가 끝난 후 다음으로 넘어가 실행   
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<style>
+	#div1 {
+		width: 70px; height: 70px;
+		background-color: skyblue;
+		position: relative;
+	}
+	#div2 {
+		width: 50px; height: 50px;
+		background-color: pink;
+	}
+	
+</style>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script>
+	$(function(){
+		$('#div1').hover(function () {
+			$(this).animate({
+				left:300, width: '140px', opacity:0.3
+			}, 'slow');
+		}, function () {
+			$(this).animate({
+				left:0, width: '70px', opacity:1
+			}, 'slow');
+		});
+		
+		$('#div2').click(function(){
+			$(this).animate({
+				width: '+=50px',
+				height: '+=50px'
+			},2000).animate({
+				width: '-=50px',
+				height: '-=50px'
+			},2000);
+		});
+	});
+</script>
+</head>
+<body>
+	<div id= 'div1'></div>
+	<div id= 'div2'></div>
+</body>
+</html>
+```
+
+***
+
+## 3. 애니메이션 정지
+- stop()
+	- 현재 진행중인 애니메이션 효과를 멈춤
+	- $(selector).stop()
+	- $(selector).stop(clearQueue)
+	- $(selector).stop(clearQueue, goToEnd)
+		- clearQueue
+			- true / false
+			- true 설정 시 큐의 내용을 제거
+		- goToEnd
+			- true / false
+			- true 설정 시 제자리에서 멈추는 것이 아니라, 지정한 최종 형태에서 멈춤
+- clearQueue()
+	- 큐의 내용을 제거
+- delay()
+	- 큐에 있는 명령을 잠시 중지
+	- $('div').delay(3000).animate()
+		- 3초 지연 후 animate메서드 실행   
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<style>
+	div { 
+		position: absolute;
+		background-color:pink; 
+		left: 0px; top:60px;
+		width: 50px; 
+		height: 50px; 
+		margin: 5px; 
+	}
+
+</style>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script>
+	$(function(){
+		$('#go').click(function(){
+			$('.block').animate({
+				left:'+=100px',
+				top:'+=100px'
+			},2000);
+		});
+		
+		$('#stop').click(function(){
+			$('.block').stop();
+		});
+		
+		$('#back').click(function(){
+			$('.block').animate({
+				left:'-=100px',
+				top:'-=100px'
+			},2000);
+		});
+	});
+</script>
+</head>
+<body>
+	<button id="go">Go</button> 
+	<button id="stop">STOP!</button>
+	<button id="back">Back</button>
+	<div class="block"></div>
+</body>
+</html>
+```

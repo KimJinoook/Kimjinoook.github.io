@@ -1,0 +1,246 @@
+---
+layout: post
+title:  "3. 기본메서드"
+subtitle:   ""
+categories: lang
+tags: jquery
+comments: false
+header-img: 
+---
+
+- val()
+- click()
+- on()
+- next()
+- text()
+- html()
+- each()
+
+## 1. val()
+- val()
+   - 요소의 value 속성 값을 문자열로 리턴
+   - input type = "text" value = "hi
+   - $("input").val() => hi
+- val(값)
+  - 요소에 입력값으로 받은 값을 적용
+  - $("#tx1").val("hello");
+  - document.getElementById("tx1").value = "hello";   
+
+## 2. on(), click()
+- on()
+	- 이벤트 연결 작업
+	- $("#btn").on("click",function);
+- jquery는 자주 사용하는 이벤트에 대해 단축메서드 지정
+- click()
+	- $("#btn").click(function);
+
+## 3. next(), text(), html()
+- next()
+  - 현재의 개체 요소와 형제 수준인 요소중 바로 다음에 나오는 개체를 얻어오는 메서드
+- text()
+  - 해당 개체가 가지고있는 컨텐츠를 텍스트로 반환
+  - <span\><b\>test</b\></span\> => text
+- html()
+  - 개체가 포함하고 있는 html 컨텐츠를 반환
+  - - <span\><b\>test</b\></span\> => <b\>text</b\>   
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function(){
+		$("#btn1").click(function(){
+			var sports = $('input[type=checkbox]:checked');
+			var result = "";
+			for(var i=0; i<sports.length; i++){
+				result += $(sports[i]).next().text()+" ";
+			}
+			$("#result").html(result);
+		});	
+	});
+</script>
+</head>
+<body>
+	<p>
+		스포츠 : <input id="c1" type="checkbox" /><span>농구</span>
+		<input id="c2" type="checkbox" /><span>배구</span>
+		<input id="c3" type="checkbox" /><span>축구</span>
+		<input id="c4" type="checkbox" /><span>야구</span>
+	</p>
+	<p><input id="btn1" type="button" value="선택" /></p>
+	<p>
+		당신이 선택하신 스포츠는 <span id="result"></span> 입니다.
+	</p>
+</body>
+</html>
+```
+
+## 4. each()
+- 배열과 객체를 순회할 목적의 메서드
+- 순차적으로 특정 함수 수행
+- 선택자에 의해 추출된 객체들에 대해 각각 지정한 함수 수행
+- for문 대체 가능
+- for문 이용시   
+
+```javascript
+var sports = $('input[type=checkbox]:checked');
+var result = "";
+for(var i=0; i<sports.length; i++){
+	result += $(sports[i]).next().text()+" ";
+}
+$("#result").html(result);
+```
+- each문 이용시   
+
+```javascript
+var result = "";
+$('input[type=checkbox]:checked').each(function(){
+	result += $(this).next().text()+" ";
+});
+$('#result').html(result);
+```
+
+### each() 메서드의 사용법
+- $.each(배열객체, function(1,item){});
+	- 자바스크립트 배열 관리
+	- 배열의 모든 요소에서 function을 수행
+	- index에는 배열의 인덱스 전달
+	- item에는 뱌열의 데이터 전달   
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function() {
+		var arr = [{name:'홍길동', id:'hong'},
+		{name:'김길동', id:'kim'},
+		{name:'이길동', id:'lee'}];
+		var str="";
+		
+		$.each(arr, function(index, item){
+			str+="<p>["+index+"]"+item.name+" - " +item['id']+"</p>";
+		});
+		$("#result").append("<hr>"+str);
+	});
+</script>
+</head>
+<body>
+	<div id="result"></div>
+</body>
+</html>
+```
+
+- $(selector).each(finction(index,item){});
+	- jQuery배열 관리
+	- 배열객체를 따로 만드는 것이 아니라, 선택자로 여러 개의 문서 객체를 선택할 때 생성
+	- 모든 selector에게 function을 수행   
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$('div').css('background','pink'); //모든 div태그에 동일한 스타일
+		
+		$('p').each(function(idx,item){
+			$(item).css('font-size',(idx+1*10)); //p태그 각각에 서로 다른 스타일
+		});
+	});
+</script>
+</head>
+<body>
+	<p>문단1</p>
+	<p>문단2</p>
+	<p>문단3</p>
+	
+	<div>div 태그 1</div>
+	<div>div 태그 2</div>
+	<div>div 태그 3</div>
+</body>
+</html>
+```
+```javascrtip
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function() {
+		alert($('p').html()); //첫번째 p태그의 값만 읽어온다
+		
+		//선택된 요소들 각각의 값을 모두 읽어올 때 each 이용
+		var str="";
+		$('p').each(function(idx,item){
+			str += idx+"번째 p태그 값 : "+$(this).html()+"\n";
+		});
+		alert(str);
+		
+		
+	});
+</script>
+</head>
+<body>
+	<p>one</p>
+	<div>
+		<p>two</p>
+	</div>
+	<p>three</p>
+</body>
+</html>
+```
+
+## 5. 기타
+### $.trim(str)
+- 입력값으로 받은 문자열의 앞, 뒤 공백 제거   
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script>
+	$(function(){
+		var str = "   hello,   jquery!!   ";
+		var rst = "brefor : "+str+"<br>";
+		rst +="길이 : "+str.length+"<br><br>";
+		rst += "after : "+$.trim(str)+"<br>";
+		rst += "trim 후 길이 : "+$.trim(str).length;
+		$('#result').html(rst);
+	});
+</script>
+</head>
+<body>
+	<div id='result'></div>
+
+</body>
+</html>
+```
+
+### map(callback)
+- jquery 개체 안에있는 요소들의 집합을 다른 집합으로 변경하여 옮긴다
+- var arr = $("div").map(function(){})
+- div의 요소들을 function을 통해 얻은 값으로 변경 후 arr 변수에 저장   
+
+```javascript
+var arr = $("div").map(function() {
+	return $(this).text().toUpperCase();
+});
+//div에 a~z까지의 알파벳이 기록되어있다면, 해당 메서드 사용 시
+//변수 arr에 A~Z까지의 알파벳 저장
+```

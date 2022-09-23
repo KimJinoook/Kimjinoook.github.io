@@ -1,0 +1,150 @@
+---
+layout: post
+title:  "5. css 관련 메서드"
+subtitle:   ""
+categories: lang
+tags: jquery
+comments: false
+header-img: 
+---
+
+![1](https://user-images.githubusercontent.com/99188096/165435978-46a23828-30e8-48a9-9fcb-97f1abca59f5.JPG)   
+![2](https://user-images.githubusercontent.com/99188096/165436000-ba8d9636-165c-432e-87e4-279f7afe75ac.JPG)   
+
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<style>
+	.winter { border:7px solid silver; }
+	.summer { border:7px solid lightblue; }
+</style>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function () {
+		$('span').css({background:'pink', color:'blue', "font-weight":'bold'});
+		
+		$('#img1').addClass('winter').css('width','200');
+		
+		$('button:eq(0)').click(function(){
+			$('#img1').toggleClass('summer');
+		});
+
+		$('button:eq(1)').click(function(){
+			$('#img1').removeClass('winter');
+		});
+	});
+</script>
+</head>
+<body>
+	<span>CSS 관련 메서드</span> <br /><br /> 
+	<div id="Mt">
+	<img id="img1" src="../images/magnum2.jpg" />
+	</div>
+	<button>토글</button>
+	<button>removeClass</button>
+
+</body>
+</html>
+```
+
+
+# Attribute 관련 메서드
+![attr](https://user-images.githubusercontent.com/99188096/165439681-8dd5bb57-7cd1-4b51-aa17-f4ab74e3068a.JPG)   
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<style>
+	.winter { border:7px solid silver; }
+	.summer { border:7px solid lightblue; }
+</style>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		alert($('a').attr('href')); //[1] get
+		
+		$('img:first').mouseover(function() {
+			$(this).attr("src", "../images/magnum2.jpg"); //[2] set
+		});
+		
+		$('img:first').mouseout(function() {
+			$(this).attr("src", "../images/magnum1.jpg");
+		});
+		
+		$('#btnRemove').click(function() {
+			$('img:eq(1)').removeAttr("src"); // src 속성 삭제
+		});
+	});
+</script>
+<style type="text/css">
+img{width:200px;}
+</style>
+</head>
+<body>
+	<a href="http://www.naver.com/">네이버</a><br /><br />
+	<img src="../images/magnum1.jpg" />
+	<img src="../images/dog.jpg" alt="강아지" />
+	<input id="btnRemove" type="button" value="src속성 제거" />
+
+</body>
+</html>
+```
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<!--  
+<style type="text/css">
+	img{width:200px;}
+</style>
+-->
+<style>
+	.winter { border:7px solid silver; }
+	.summer { border:7px solid lightblue; }
+</style>
+<script src = "../js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#photos img').attr({
+			border : '3px',
+			height : '100'
+		}).attr('title',function(idx){
+			return (idx+1)+"번째 이미지"
+		});
+		
+		/*
+		$('#photos img').attr('width',function(idx){
+			return (idx+1)*100;
+		});
+		*/
+		
+		$('#photos img').each(function(idx,item){
+			$(item).attr('width',(idx+1)*100);
+		})
+		
+	});
+</script>
+</head>
+<body>
+	<div id="photos">
+		<img src="../images/dog.jpg" />
+		<img src="../images/magnum1.jpg" />
+		<img src="../images/snow.jpg" />
+		<img src="../images/wood.JPG" />
+		<img src="../images/magnum2.jpg" />
+	</div>
+</body>
+</html>
+```
+
+
