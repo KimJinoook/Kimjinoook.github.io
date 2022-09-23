@@ -1,0 +1,216 @@
+---
+layout: post
+title:  "14. 자바빈"
+subtitle:   ""
+categories: lang
+tags: jsp
+comments: false
+header-img: 
+---
+
+- 프로그램을 단위별로 작성, 블럭처럼 필요시 필요한 모듈을 끼워 사용
+- 로직을 담고있는 자바 클래스, 자바로 작성되어진 컴포넌트
+- 목적
+  - jsp페이지가 화면 표출 부분과 로직들이 혼재, 복잡한 구성
+    - 복잡한 구성을 피하기 위해
+  - jsp페이지의 로직부분을 분리해 코드 재사용
+    - 프로그램 효율 증가
+- MVC
+  - model : 자바빈
+    - 프로그램 로직 보유, db 연동 작업 처리 
+  - view : jsp페이지
+  - controler : 서블릿   
+
+![캡처](https://user-images.githubusercontent.com/99188096/167990550-6e916cd9-234c-41ae-8014-e8af2ed653c8.PNG)   
+
+## 1. useBean
+- 자바빈 객체를 생성
+- <jsp:useBean id = "빈 이름" class = "자바빈 클래스 이름" scope = "범위"/\>   
+  - id : 생성될 자바빈 객체 이름 명시
+  - class : 객체가 생성될 자바빈 클래스명 기술
+    - 패키지명 포함 풀네임 
+  - scope : 자바빈의 유효 범위, 공유 범위 지정
+    - page(기본값), request, session, application   
+
+## 2. setProperty
+- 자바빈 객체의 프로퍼티 값 (멤버변수)를 저장하기 위해 사용
+- <jsp:setProperty name="빈 이름" property="프로퍼티 이름" value="저장할 값"/\>   
+  - name : 자바빈 객체 이름 명시
+  - property : 프로퍼티 명
+  - value : 저장할 값   
+- 프로퍼티가 많을 경우   
+- <jsp:useBean id="sb" class="study.javaBean.simpleBean" scope="page"\>
+  - <jsp:setProperty name = "sb" property="*"/\>   
+    - 모든 프로퍼티 값이 세팅
+    - 폼으로부터 넘어오는 파라미터 이름이 프로퍼티 이름과 동일해야 한다   
+
+
+### 자바빈 예
+#### vo    
+
+
+```java
+package com.herbmall.test;
+
+public class SimpleVO {
+	
+	//프로퍼티 - 자바빈에서의 멤버 변수
+	private String msg;
+	private String name;
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+}
+
+```
+
+#### useBeanTest.jsp     
+
+```html
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="useBean_ok.jsp" method="post" >
+		메시지 <input type="text" name="msg" size="20" maxlength="30"><br>
+		이름 <input type="text" name="name"><br>
+		<input type="submit" name="send" value="보내기">
+	</form>
+</body>
+</html>
+```
+
+#### useBeanTest_ok.jsp   
+
+```html
+<%@page import="com.herbmall.test.SimpleVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	request.setCharacterEncoding("utf-8");
+
+	//기존 방식
+	String msg = request.getParameter("msg");
+	String name = request.getParameter("name");
+	
+	SimpleVO vo = new SimpleVO();
+	vo.setMsg(msg);
+	vo.setName(name);
+%>
+	<h1>파라미터</h1>
+	<p>msg : <%=vo.getMsg() %></p>
+	<p>name : <%=vo.getName() %></p>
+	
+	
+	<!-- 자바빈 -->
+	<jsp:useBean id="simVo" class = "com.herbmall.test.SimpleVO" scope="page"></jsp:useBean>
+		<jsp:setProperty property="msg" name="simVo"/>
+		<jsp:setProperty property="name" name="simVo"/>
+	<p>자바빈 msg : <jsp:getProperty property="msg" name="simVo"/>
+	<p>자바빈 name : <jsp:getProperty property="name" name="simVo"/>
+	
+	
+	<!-- 자바빈 일괄 입력 -->
+	<jsp:useBean id="simVo2" class = "com.herbmall.test.SimpleVO" scope="page"></jsp:useBean>
+		<jsp:setProperty property="*" name="simVo2"/>
+	<p>자바빈2 msg : <jsp:getProperty property="msg" name="simVo2"/>
+	<p>자바빈2 name : <jsp:getProperty property="name" name="simVo2"/> 
+</body>
+</html>
+```
+
+***
+
+## 영역 테스트
+### page 영역 
+- 현재 페이지에서만 우지
+
+#### test.jsp   
+
+```html
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form name="frm1" method="post" action="scope1.jsp">
+		카운트 : <input type="text" name="count"><br>
+		<input type="submit" value="전송">
+	</form>
+
+</body>
+</html>
+```
+#### scope.jsp   
+
+```html
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<jsp:useBean id = "cvo" class = "com.herbmall.test.CounterVO" scope = "page"></jsp:useBean>
+		<jsp:setProperty property="count" name="cvo"/>
+	<h1>scope1.jsp 페이지</h1>
+	count : <jsp:getProperty property="count" name="cvo"/>
+	<hr>
+	<a href="result1.jsp">result1.jsp</a>
+</body>
+</html>
+```
+
+#### result.jsp   
+
+```html
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<jsp:useBean id="cvo" class="com.herbmall.test.CounterVO" scope="page"></jsp:useBean>
+	<h1>result1.jsp</h1>
+	count : <jsp:getProperty property="count" name="cvo"/>
+	<hr>
+	<a href="scope1.jsp">scope1.jsp로 이동</a>
+</body>
+</html>
+```
+
+- 각 scope를 page, request, session, application으로 변경 후 비교

@@ -1,0 +1,343 @@
+---
+layout: post
+title:  "5. 레이아웃매니저"
+subtitle:   ""
+categories: lang
+tags: java2
+comments: false
+header-img: 
+---
+
+## 1. 레이아웃 매니저란
+- 컨테이너에 포함된 컴포넌트들의 배치를 자동적으로 관리
+- 컨테이너의 크기가 변경될 경우, 컴포넌트의 재배치를 자동적으로 관리
+- 컨테이너당 하나의 레이아웃 매니저 설정 가능
+- 모든 컨테이너는 기본적으로 레이아웃 매니저가 지정되어있다
+- 종류
+  - BorderLayout - Window, Dialog, Frame의 기본 레이아웃
+  - FlowLayout - Panel, Applet의 기본 레이아웃
+  - GridLayout
+  - CardLayout   
+
+***
+
+## 2. Border Layout
+- 컨테이너를 North, South, East, West, Center 5개의 영역으로 나눈다
+- 각 영역에 하나의 컴포넌트만 배치 가능
+- 한 영역에 여러개의 컴포넌트 배치시, 마지막에 추가한 컴포넌트만 출력
+- 한 영역에 하나 이상의 컴포넌트를 넣으려면 Panel 이용
+- 생성자
+  - BorderLayout(int hdap, int vgap) : 각 영역 사이에 간격이 있는 레이아웃 생성
+  - hgap : 좌우간격, vgap : 상하간격
+  - BorderLayout() : 간격없는 레이아웃 생성   
+
+```java
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Frame;
+
+public class BorderTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("BorderLayout");
+		f.setSize(200,200);
+		
+		f.setLayout(new BorderLayout());
+		
+		//
+		Button btN = new Button("North");
+		Button btS = new Button("South");
+		Button btE = new Button("East");
+		Button btW = new Button("West");
+		Button btC = new Button("Center");
+		
+		f.add(btC,"Center");
+		f.add("North",btN);
+		f.add(btS,"South");
+		f.add(btE,BorderLayout.EAST);
+		f.add(btW,"West");
+		
+		f.setVisible(true);
+	}
+}
+```
+![border](https://user-images.githubusercontent.com/99188096/161694335-374c326e-d50e-44ca-8333-ed34b35e905c.PNG)   
+
+***
+
+## 3. FlowLayout
+- 컴포넌트들이 추가되는 순서에 따라 왼쪽에서 오른쪽으로 이어져나간다
+- 컴포넌트를 원래의 크기 그대로 배치한다
+- 공간이 부족하면 아랫줄에 추가된다
+- 생성자
+	- FlowLayout(int align, int hgap, int vgap)
+		- align : 정렬방법, 기본값 가운데정렬
+			- FlowLayout.LEFT, FlowLayout.CENTER, FlowLayout.Right
+		- gap : 컴포넌트 간격, 기본값 5픽셀   
+
+```java
+import java.awt.*;
+
+public class FlowLayout {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("FlowLayout");
+		f.setSize(250,100);
+		f.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
+		f.add(new Button("첫번째"));
+		f.add(new Button("두번째"));
+		f.add(new Button("세번째"));
+		f.add(new Button("네번째"));
+		f.add(new Button("다섯번째"));
+		
+		f.setVisible(true);
+
+	}
+
+}
+```
+![f](https://user-images.githubusercontent.com/99188096/161699094-6ef2b4a1-79d7-4551-a03e-fcff26607270.PNG)
+
+
+
+***
+
+## 4. GridLayout
+- 컨테이너를 테이블처럼 행과 열로 나누어 컴포넌트 배치
+- 컴포넌트들은 모두 같은 크기로 나누어진다
+- 컨테이너 크기를 변경하면 각 영역이 같은 비율로 변한다
+- 생성자
+	- GridLayout(int row, int col, imt hgap, int vgap)
+	- row : 행, col: 열, gap : 간격   
+
+```java
+import java.awt.Button;
+import java.awt.Frame;
+import java.awt.GridLayout;
+
+public class GridTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("grid test");
+		f.setSize(150,150);
+		
+		f.setLayout(new GridLayout(3,2)); //3행 2열
+		
+		f.add(new Button("1"));
+		f.add(new Button("2"));
+		f.add(new Button("3"));
+		f.add(new Button("4"));
+		f.add(new Button("5"));
+		f.add(new Button("6"));
+		
+		f.setVisible(true);
+
+	}
+
+}
+
+```
+
+![grid](https://user-images.githubusercontent.com/99188096/161697090-05a78be3-50db-49ef-a533-f7f232aa5eb5.PNG)   
+
+***
+
+## 5. CardLayout
+- 여러 화면을 슬라이드처럼 바꿔가며 보여줄 수 있다
+- 여러 컨테이너를 추가한 다음, 순서대로 또는 임의대로 컨테이너를 선택해 보여줄 수 있다
+- 설치프로그램과 같이 단계별로 화면이동하는 경우에 사용
+- 생성자
+	- CardLayout(int hgap, int vgap)   
+
+```java
+package com.awt.day2;
+
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.Label;
+import java.awt.Panel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+public class CartLayoutTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("CardLayout");
+		CardLayout cardLayout = new CardLayout(10,10);
+		f.setLayout(cardLayout);
+		
+		Panel p1 = new Panel();
+		p1.setBackground(Color.green);
+		p1.add(new Label("Card 1"));
+
+		Panel p2 = new Panel();
+		p2.setBackground(Color.orange);
+		p2.add(new Label("Card 2"));
+		
+		Panel p3 = new Panel();
+		p3.setBackground(Color.cyan);
+		p3.add(new Label("Card 3"));
+		
+		f.add(p1,"1");
+		f.add(p2,"2");
+		f.add(p3,"3");
+		
+		class Handler extends MouseAdapter{
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getModifiers()==e.BUTTON3_MASK) { 
+					cardLayout.previous(f); //우클릭시 이전으로
+				}else {
+					cardLayout.next(f); //좌클릭이나 휠 클릭 시 다음으로
+				}
+			}
+			
+		}
+		p1.addMouseListener(new Handler());
+		p2.addMouseListener(new Handler());
+		p3.addMouseListener(new Handler());
+		
+		f.setSize(200,200);
+		f.setVisible(true);
+		
+		//show(Container parent, String name)
+		cardLayout.show(f, "1"); //frame에 추가된 컴포넌트 중 이름이 "1"인 것을 보여준다
+	}
+}
+
+```
+![c1](https://user-images.githubusercontent.com/99188096/161701545-a96ca410-107c-42ea-a22a-b8723d7098c9.PNG)
+![c2](https://user-images.githubusercontent.com/99188096/161701557-06f6a3de-b32c-44ef-bb11-5d6bf39dda62.PNG)
+![c3](https://user-images.githubusercontent.com/99188096/161701564-16fef4b2-55ba-48ae-8c79-7f2bb382273e.PNG)   
+
+***
+
+## 6. Inset
+- 프레임이나 판넬의 레이아웃은 가장자리 여백이 없다
+- 그리드 레이아웃등의 간격을 주어도 안쪽 여백만 생기며, 가장자리는 여백이 생기지 않는다
+- Frame이나 Panel 클래스를 상속받는 사용자정의 클래스 생성
+	- getInsets() 메서드를 오버라이딩 하여 가장자리 여백 설정   
+
+```java
+package com.awt.day2;
+
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Panel;
+
+class PracPanel extends Panel{
+
+	@Override
+	public Insets getInsets() {
+		// TODO Auto-generated method stub
+		return new Insets(15,15,15,15);
+	}
+	
+}
+class PracGrid extends Frame{
+	public PracGrid(){
+		super();
+	}
+	public Insets getInsets() {
+		// TODO Auto-generated method stub
+		return new Insets(30,45,30,45);
+	}
+}
+
+public class insets{
+
+
+	public static void main(String[] args) {
+		PracGrid f = new PracGrid();
+		f.setSize(400,400);
+		PracPanel p1 = new PracPanel();
+		p1.setBackground(Color.pink);
+		f.add(p1,"Center");
+		PracPanel p2 = new PracPanel();
+		p2.setBackground(Color.cyan);
+		f.add(p2,"East");
+		p1.setLayout(new GridLayout(2,2,15,15));
+		p2.setLayout(new GridLayout(1,2,15,15));
+		
+		Button bt1 = new Button("버튼1");	
+		Button bt2 = new Button("버튼2");	
+		Button bt3 = new Button("버튼3");	
+		Button bt4 = new Button("버튼4");	
+		Button bt5 = new Button("버튼5");	
+		Button bt6 = new Button("버튼6");	
+		
+		p1.add(bt1);
+		p1.add(bt2);
+		p1.add(bt3);
+		p1.add(bt4);
+		p2.add(bt5);
+		p2.add(bt6);
+		
+		f.setVisible(true);
+
+	}
+
+}
+
+```
+
+![inset](https://user-images.githubusercontent.com/99188096/161873563-857f72f0-ad18-464c-8f8a-1084e6edbdae.PNG)
+
+
+***
+
+## 활용
+### Border, Grid 이용
+```java
+package com.awt.day2;
+
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.TextField;
+
+public class Calc {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("계산기");
+		TextField tf = new TextField("0");
+		tf.setEditable(false);
+		
+		f.setSize(300,200);
+		f.add(tf,"North");
+		
+		Panel plNum = new Panel();
+		String[] numArr = {
+				"7","8","9","/","CE",
+				"4","5","6","*","BS",
+				"1","2","3","-","1/x",
+				"0","+/-",".","+","="
+		};
+		Button[] btNums = new Button[numArr.length];
+		plNum.setLayout(new GridLayout(4,5,4,4));
+		plNum.setBackground(Color.LIGHT_GRAY);
+		f.add(plNum,"Center");
+		
+		for(int i=0; i<numArr.length; i++) {
+			btNums[i] = new Button(numArr[i]);
+			btNums[i].setForeground(Color.blue);
+			plNum.add(btNums[i]);
+		}
+		f.setResizable(false);
+		f.setVisible(true);
+	}
+
+}
+
+```
+![calc](https://user-images.githubusercontent.com/99188096/161704222-a3aa31d9-cc34-4986-bceb-e2b75e6de91d.PNG)
+
+

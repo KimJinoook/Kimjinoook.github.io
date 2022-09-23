@@ -1,0 +1,676 @@
+---
+layout: post
+title:  "6. 이벤트처리"
+subtitle:   ""
+categories: lang
+tags: java2
+comments: false
+header-img: 
+---
+
+- 이벤트 소스 (Event Source)
+  - 이벤트가 발생한 컴포넌트
+  - 사용자가 버튼을 눌렀을 때 이벤트가 잘생
+  - 버튼은 이벤트의 이벤트소스
+- 이벤트 핸들러 (Event Handler)
+  - 이벤트가 발생했을 때 실행될 코드를 구현해놓은 클래스
+- 이벤트 리스너 Event Listner)
+  - 이벤트를 감지하고 처리
+  - 이벤트 핸들러와 이벤트 소스를 연결
+- 이벤트 처리 (Event Handling)
+  - 이벤트에 대한 수행코드를 작성하여 이벤트소스에 이벤트 리스너로 등록하는 것
+
+- [이벤트참고](https://kimjinoook.github.io/todayLearn/java2/6.awt4ex)   
+
+***
+
+## 1. 이벤트 처리방법
+- 이벤트 메서드 중 필요한 것을 찾는다
+  > windowClosing(WindowEvent e)   
+- 선택한 메서드가 속해있는 인터페이스를 구현하는 클래스를 작성한다
+  > class EventHandler implements WindowListener{   
+  > public void windowClosing(WindowEvent e) {   
+  > 코드작성   
+  > }   
+- 위에서 구현한 클래스의 인스터느를 생성해서 이벤트 소스에 리스너로 등록한다
+  > f.addWindowListener(new EventHandler());   
+
+### 예시1
+```java
+package com.awt.day3;
+
+import java.awt.Frame;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
+public class EventTest1 extends Frame {
+	public EventTest1() {
+		super("Event test");
+		
+		this.setSize(300,200);
+		this.setVisible(true);
+		
+		//3. 이벤트연결
+		this.addWindowListener(new EventHandler());
+	}
+  //2. 필요한 메서드가 있는 클래스 구현
+	class EventHandler implements WindowListener{
+
+		@Override
+		public void windowOpened(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override //1. 필요한 메서드, 닫기버튼 클릭시 닫힘
+		public void windowClosing(WindowEvent e) {
+			e.getWindow().dispose();
+			System.exit(0);
+			
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowActivated(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+
+	public static void main(String[] args) {
+		EventTest1 f = new EventTest1();
+
+	}
+
+}
+
+```
+### 예시2
+```java
+import java.awt.Button;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Label;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class ButtonActionEvent extends Frame {
+
+	private Button bt;
+	private TextField tf;
+	private Label lbResult;
+	
+	public ButtonActionEvent() {
+		super("버튼 클릭 연습");
+		this.setLayout(new FlowLayout());
+		bt=new Button("확인");
+		tf = new TextField(20);
+		lbResult = new Label("여기에 결과가 출력됩니다.");
+		
+		this.add(tf);
+		this.add(bt);
+		this.add(lbResult);
+		this.setSize(300,200);
+		this.setVisible(true);
+		
+		
+		//이벤트연결
+		/*
+		 * 이벤트 소스 - Button
+		 * 리스너 - ActionListener
+		 */
+		 //3. 리스너로 연결
+		bt.addActionListener(new EventHandler());
+
+	}
+	//2 해당 클래스 구현
+	class EventHandler implements ActionListener{
+
+		@Override //1. 필요한 메서드
+		public void actionPerformed(ActionEvent e) {
+			String cmd = e.getActionCommand();
+			
+			lbResult.setText(tf.getText() + ", "+ cmd + "버튼클릭됨");
+			
+		}
+		
+	}
+	
+	
+	public static void main(String[] args) {
+		ButtonActionEvent f = new ButtonActionEvent();
+
+	}
+
+}
+
+```
+![bt1](https://user-images.githubusercontent.com/99188096/161875580-363e6e7f-a9be-4aa5-8fee-4d223aa3ccf5.PNG)
+![bt2](https://user-images.githubusercontent.com/99188096/161875584-fbab5649-1306-476d-996d-32d855ed4e6c.PNG)   
+
+***
+
+## 2. Adapter 클래스
+- 이벤트 핸들러를 작성할 때, 해당 리스너에 정의된 모든 추상메서드를 구현해야함을 개선
+- 이벤트 처리에 필요한 메서드만 작성하기 위함
+- 이벤트 리스너를 직접 구현하는 대신 Adapter클래스를 상속받아 원하는 메서드만 오버라이딩
+- 위 예시1은 윈도우리스너를 구현하여, 메서드를 모두 오버라이딩
+- Adapter 클래스 이용 시   
+
+```java
+package com.awt.day3;
+
+import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+public class EventTest2 extends Frame {
+	public EventTest2() {
+		super("Event test");
+		
+		this.setSize(300,200);
+		this.setVisible(true);
+		
+		//이벤트연결
+		this.addWindowListener(new EventHandler());
+	}
+	class EventHandler extends WindowAdapter{
+
+		public void windowClosing(WindowEvent e) {
+			e.getWindow().dispose();
+			System.exit(0);
+			
+		}
+	}
+
+	public static void main(String[] args) {
+		EventTest2 f = new EventTest2();
+
+	}
+
+}
+
+```
+***
+
+## 3. 이벤트핸들러 작성방법
+- 내부클래스로 이벤트핸들러를 구성하는 경우
+- 익명클래스로 이벤트핸들러를 구성하는 경우
+- 이벤트소스를 가진 클래스가 핸들러가 되는경우
+- 외부클래스로 별도의 이벤트핸들러를 구성하는 경우
+
+### a. 내부클래스로 이벤트핸들러를 구성하는 경우   
+```java
+package com.test;
+
+import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+public class test extends Frame {
+	
+	public test() {
+		super();
+		addWindowListener(new EventHandler());
+	}
+	
+	class EventHandler extends WindowAdapter{
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			System.exit(0);
+		}
+		
+	}
+
+	public static void main(String[] args) {
+		test f = new test();
+		f.setSize(300,300);
+		f.setVisible(true);
+		
+	}
+}
+
+```
+### b. 익명클래스로 이벤트핸들러를 구성하는 경우   
+```java
+package com.test;
+
+import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+public class test extends Frame {
+	
+	public test() {
+		super();
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
+	}
+	
+
+	public static void main(String[] args) {
+		test f = new test();
+		f.setSize(300,300);
+		f.setVisible(true);
+		
+	}
+}
+
+```
+### c. 이벤트소스를 가진 클래스가 핸들러가 되는경우  
+```java
+package com.test;
+
+import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
+public class test extends Frame implements WindowListener {
+	
+	public test() {
+		super();
+		addWindowListener(this);
+	}
+	
+	@Override
+	public void windowClosing(WindowEvent e) {
+		System.exit(0);
+		
+	}
+	
+
+	public static void main(String[] args) {
+		test f = new test();
+		f.setSize(300,300);
+		f.setVisible(true);
+		
+	}
+}
+
+```
+### d. 외부클래스로 별도의 이벤트핸들러를 구성하는 경우  
+```java
+package com.test;
+
+import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+//외부클래스
+class EventHandler extends WindowAdapter{
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		System.exit(0);
+	}
+	
+}
+
+
+public class test {
+
+	public static void main(String[] args) {
+		Frame f = new Frame();
+		f.setSize(300,300);
+		f.setVisible(true);
+		f.addWindowListener(new EventHandler());
+	}
+	
+
+	
+}
+
+```
+
+***
+
+## 4. 예시
+### 카드레이아웃 이동
+```java
+import java.awt.Button;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Label;
+import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class ActionCardTest extends Frame implements ActionListener {
+	Button btFirst, btPrev, btNext, btLast;
+	Panel plCard1,plCard2,plCard3,plCard4,plCard5;
+	Panel buttons, slide;
+	CardLayout cardlayout;
+	
+	public ActionCardTest() {
+		super();
+		init();
+		addEvent();
+	}
+	
+
+	private void addEvent() {
+		btFirst.addActionListener(this);
+		btPrev.addActionListener(this);
+		btLast.addActionListener(this);
+		btNext.addActionListener(this);
+		
+	}
+
+
+	private void init() {
+		setSize(300,300);
+		slide = new Panel();
+		cardlayout = new CardLayout();
+		slide.setLayout(cardlayout);
+		buttons = new Panel();
+		buttons.setLayout(new FlowLayout());
+		btFirst = new Button("<<");
+		btPrev = new Button("<");
+		btNext = new Button(">");
+		btLast = new Button(">>");
+		buttons.add(btFirst);
+		buttons.add(btPrev);
+		buttons.add(btNext);
+		buttons.add(btLast);
+		
+		plCard1 = new Panel();
+		plCard1.setBackground(Color.green);
+		plCard1.add(new Label("첫번째 페이지"));
+		plCard2 = new Panel();
+		plCard2.setBackground(Color.orange);
+		plCard2.add(new Label("두번째 페이지"));
+		plCard3 = new Panel();
+		plCard3.setBackground(Color.cyan);
+		plCard3.add(new Label("세번째 페이지"));
+		plCard4 = new Panel();
+		plCard4.setBackground(Color.pink);
+		plCard4.add(new Label("네번째 페이지"));
+		plCard5 = new Panel();
+		plCard5.setBackground(Color.yellow);
+		plCard5.add(new Label("다섯번째 페이지"));
+		
+		slide.add(plCard1,"1");
+		slide.add(plCard2,"2");
+		slide.add(plCard3,"3");
+		slide.add(plCard4,"4");
+		slide.add(plCard5,"5");
+		
+		add(slide);
+		add(buttons,"South");
+		
+		cardlayout.show(slide, "1");
+	}
+
+
+	public static void main(String[] args) {
+		ActionCardTest f = new ActionCardTest();
+		f.setVisible(true);
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==btFirst)	cardlayout.first(slide);
+		if(e.getSource()==btPrev)	cardlayout.previous(slide);
+		if(e.getSource()==btNext)	cardlayout.next(slide);
+		if(e.getSource()==btLast)	cardlayout.last(slide);	
+	}
+}
+
+```
+- 버튼 클릭시 레이아웃 이동   
+![c1](https://user-images.githubusercontent.com/99188096/161919826-ba89f7e7-54a4-4bdc-8027-fff5576c6246.PNG)
+![c5](https://user-images.githubusercontent.com/99188096/161919829-acbd9b36-54f4-462f-bf07-7018da42889d.PNG)   
+
+***
+### Checkbox Event Test
+```java
+package com.awt.day3;
+
+import java.awt.Button;
+import java.awt.Checkbox;
+import java.awt.CheckboxGroup;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Label;
+import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+class Frame43 extends Frame{
+	Panel p1,p2;
+	Label lb1,lb2,lb3,lb4;
+	CheckboxGroup group;
+	Checkbox c1,c2,c3,c4,c5,c6,c7,c8;
+	Button bt;
+	float cnt = 0;
+	
+	public Frame43() {
+		super("CheckboxEventTest");
+		init();
+		addEvent();
+	}
+
+	private void addEvent() {
+		bt.addActionListener(new EventHandler());
+		this.addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+
+		});
+	}
+	class EventHandler implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			cnt = 0;
+			if(c1.getState()==true) cnt+=12.5;
+			if(c2.getState()==true) cnt+=12.5;
+			if(c3.getState()==true) cnt+=12.5;
+			if(c4.getState()==true) cnt+=12.5;
+			if(c7.getState()==true) cnt+=50;
+			lb4.setText("");
+			lb4.setText("*결과 : 당신의 점수는 "+cnt+"점 입니다.");
+				
+		}
+	}
+	private void init() {
+		setSize(500,400);
+		setVisible(true);
+		lb1 = new Label("1. 다음중 ActionEvent의 actionPerformed메서드가 호출되는 경우는? (모두 고르세요)");
+		c1 = new Checkbox("Button을 눌렀을 때");
+		c2 = new Checkbox("TextFiled에서 Enter키를 눌렀을 때");
+		c3 = new Checkbox("MenuItem을 클릭했을 때");
+		c4 = new Checkbox("List에서 더블클릭으로 item을 선택했을 때");
+		lb2 = new Label("");
+		lb3 = new Label("2. Frame의 기본 LayoutManager는? (하나만 고르세요.)");
+		group = new CheckboxGroup();
+		c5 = new Checkbox("FlowLayout",group,false);
+		c6 = new Checkbox("GridLayout",group,false);
+		c7 = new Checkbox("BorderLayout",group,false);
+		c8 = new Checkbox("CardLayout",group,false);
+		
+		p1 = new Panel();
+		p1.setLayout(new GridLayout(11,1));
+		p1.add(lb1);
+		p1.add(c1);
+		p1.add(c2);
+		p1.add(c3);
+		p1.add(c4);
+		p1.add(lb2);
+		p1.add(lb3);
+		p1.add(c5);
+		p1.add(c6);
+		p1.add(c7);
+		p1.add(c8);
+		add(p1);
+		
+		bt = new Button("이 버튼을 누르시면 결과를 알 수 있습니다.");
+		lb4 = new Label("");
+		p2 = new Panel();
+		p2.setLayout(new GridLayout(2,1));
+		p2.add(bt);
+		p2.add(lb4);
+		add(p2,"South");
+
+	}
+}
+public class Prac_18_43 {
+
+	public static void main(String[] args) {
+		Frame43 f = new Frame43();
+
+	}
+
+}
+
+```
+![te1](https://user-images.githubusercontent.com/99188096/161921095-f9da8ff2-7f54-4893-bfab-bf30b69f4515.PNG)
+![te2](https://user-images.githubusercontent.com/99188096/161921099-41df8289-465e-4d5d-9fda-edbb6d598e77.PNG)   
+
+
+***
+### 덧셈 test
+```java
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Label;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+class Frame46 extends Frame{
+	Label lb1,lb2,lb3;
+	TextField tf1,tf2,tf3;
+	Button bt1, bt2, bt3;
+	
+	public Frame46() {
+		super("덧셈");
+		init();
+		addEvent();
+	}
+
+	private void init() {
+		lb1 = new Label("첫번째 숫자 : ",Label.LEFT);
+		lb2 = new Label("두번째 숫자 : ",Label.LEFT);
+		lb3 = new Label("결과 : ",Label.LEFT);
+		tf1 = new TextField();
+		tf2 = new TextField();
+		tf3 = new TextField();
+		tf3.setEditable(false);
+		bt1 = new Button("더하기");
+		bt2 = new Button("화면지우기");
+		setSize(300,250);
+		setLayout(new GridLayout(4,2,10,10));
+		setBackground(Color.pink);
+		
+		add(lb1);
+		add(tf1);
+		add(lb2);
+		add(tf2);
+		add(lb3);
+		add(tf3);
+		add(bt1);
+		add(bt2);
+		setVisible(true);
+		
+	}
+
+	private void addEvent() {
+		bt1.addActionListener(new EventHandler());
+		bt2.addActionListener(new EventHandler());
+		addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+			
+		});
+	}
+	class EventHandler implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e)  {
+			if(e.getSource()==bt2) {
+				tf1.setText("");
+				tf2.setText("");
+				tf3.setText("");
+			}
+			if(e.getSource()==bt1) {
+				String rst = "";
+				try {
+					String s1 = tf1.getText();
+					String s2 = tf2.getText();
+					float f1 = Float.parseFloat(s1);
+					float f2 = Float.parseFloat(s2);
+					rst = Float.toString(f1+f2);
+					System.out.println("1");
+				}catch(NumberFormatException a)  {
+					rst = "숫자를 입력하세요";
+				}
+				tf3.setText(rst);
+			}
+			
+		}
+		
+	}
+}
+
+public class Prac_18_46 {
+
+	public static void main(String[] args) {
+		Frame46 f = new Frame46();
+
+	}
+
+}
+
+```
+
+![d1](https://user-images.githubusercontent.com/99188096/161921431-78804728-1faa-4e0d-a219-9e5d8e5f4105.PNG)
+![d2](https://user-images.githubusercontent.com/99188096/161921433-3e4fb77f-1d4b-48ec-8887-306f3e1b4b75.PNG)
+

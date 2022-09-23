@@ -1,0 +1,823 @@
+---
+layout: post
+title:  "1. JDBC"
+subtitle:   ""
+categories: lang
+tags: java2
+comments: false
+header-img: 
+---
+
+- 자바 프로그램과 데이터베이스를 연결하는 프로그래밍 방식
+- java.sql
+- java프로그램은 JDBC를 통해 데이터베이스에 연결
+  - 데이터를 검색, 입력, 수정, 삭제 가능
+- 드라이버 설치(ojdbc8.jar)
+  - C:\app\Administrator\product\18.0.0\dbhomeXE\jdbc\lib\ojdbc8.jar 복사
+  - c:\java\jdk1.8.0_65\jre\lib\ext 붙여넣기
+    - 외부 jar 저장 경로
+- 환경변수
+  - classpath
+    - C:\Java\jdk1.8.0_321\jre\lib\ext\ojdbc8.jar 추가
+    - 추가 후
+      - %classpath%;.;C:\Java\jdk1.8.0_321\jre\lib\ext\ojdbc8.jar
+- 이클립스 사용 시
+  - build path 라이브러리에 ojdbc8.jar 추가
+![buildpath1](https://user-images.githubusercontent.com/99188096/160969575-38e10e38-5998-4fd9-806e-4d5bb0682358.jpg)   
+
+- 설정 정보확인
+  - 오라클 host명 확인
+  - C:\app\EZEN\product\18.0.0\dbhomeXE\network\admin\tnsnames.ora
+  - ![tnsname](https://user-images.githubusercontent.com/99188096/160970788-39baeb57-bef6-429f-a408-df815830c304.PNG)
+
+  - C:\app\EZEN\product\18.0.0\dbhomeXE\network\admin\listener.ora
+  - ![listener](https://user-images.githubusercontent.com/99188096/160970937-94099905-8703-4dbb-a03a-9c0b53f24495.PNG)
+  - 자바 소스에서 호스트명을 일치시켜야 한다   
+  > String url = "jdbc:oracle:thin:@\<HOST\>:\<PORT\>:\<SID\>"   
+  > String url = "jdbc:oracle:thin:@DESKTOP-56VTHAK:1521:xe";   
+
+
+
+
+## 1. jdbc 프로그래밍 순서
+- 순서
+	- 드라이버 로딩
+	- 연결을 위한 connection객체 생성
+	- sql문을 처리하기 위한 prepareStatement 객체 생성
+	- 실행
+	- 자원해제
+- 데이터베이스와 연결하는 드라이버 클래스 찾기
+  -  Class.forName("oracle.jdbc.driver.OracleDriver");
+- 드라이버 클래스를 통해 데이터베이스 서버와 연결하는 connection 객체 생성
+  - String url="jdbc:oracle:thin:@localhost:1521:xe";
+  - String id="hr", pwd="hr123";
+  - Connection con = DriverManager.getConnection(url, id, pwd);
+- 작업을 처리할 statement, preparedStatement, CallableStatement객체 생성
+  - Statement stmt = con.createStatement();
+  - 또는 PreparedStatement pstmt = con.prepareStatement("쿼리문")
+- Statement, PreparedStatement를 통해 쿼리문 전송
+  - insert,update,delete 문인 경우
+    - int cnt = stmt.exeuteUpdate()
+  - select문인 경우
+    - resultSet rs = stmt.executeQuery()
+    - resultSet의 논리적 커러슬 이동시키며 각 컬럼의 데이터를 꺼내온다
+    - bollean b = rs.next()
+      - 커서 이동, 커서가 위치한 지점에 레코드가 있으면 true
+    - 커서는 맨 처음에 첫 번째 행의 직전에 위치하고 있다가 next()호출시 다음 행 이동
+- ResultSet 객체를 통한 쿼리결과 처리
+- 접속 종료
+  - rs.close(); stmt.close(); con.close();
+  - null 체크해서 close(), finally블럭에서 구현
+
+- rs.get자료형(컬럼명 또는 컬럼인덱스) 메서드
+	- 데이터를 꺼내오는 메서드
+	- get 뒤에는 컬럼의 데이터 유형에 맞는 자료형 기재
+	- number인 경우 re.getint(1);
+	- varchar2인 경우 rs.getString(2);
+	- date 인 경우 rs.getDate("regdate");
+
+
+#### insert 예시   
+
+```java
+package com.jdbc.day1;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Scanner;
+
+public class insertTest1 {
+
+	public static void main(String[] args) {
+		// insert
+		Scanner sc = new Scanner(System.in);
+		System.out.println("이름, 전화번호 입력!");
+		String name = sc.nextLine();
+		String tel = sc.nextLine();
+		
+		Connection con = null;
+		PreparedStatement ps = null;
+		
+		
+		try {
+			//1 드라이버 로딩
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			System.out.println("드라이버 로딩 성공");
+			
+			//2 데이터베이스 서버에 연결하기 위한 connection 객체 생성
+			String url = "jdbc:oracle:thin:@DESKTOP-56VTHAK:1521:xe";
+			String user = "javauser", pwd = "javauser123";
+			con = DriverManager.getConnection(url, user, pwd);
+			System.out.println("db연결 성공");
+			
+			//3 sql문을 처리하기 위한 PreparedStatement 객체 생성
+			String sql = "insert into person(no, name, tel)\r\n"
+					+ "values(person_seq.nextval, ?,?)";
+			ps=con.prepareStatement(sql);
+			
+			//in parameter setting
+			ps.setString(1,name);
+			ps.setString(2,tel);
+			
+			//4 실행
+			int cnt = ps.executeUpdate();
+			System.out.println("처리된 행의 개수 : " + cnt);
+			
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+		
+			//5 자원해제(접속종료)
+			try {
+				if(ps!=null) ps.close();
+				if(con!=null) con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+
+```
+
+#### select 예시   
+
+```java
+package com.jdbc.day1;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
+
+public class selectTest1 {
+
+	public static void main(String[] args) {
+		//select
+		
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			//1 드라이버로딩
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			System.out.println("드라이버 로딩 성공");
+			
+			
+			//2 연걸을 위한 connection객체 생성
+			String url="jdbc:oracle:thin:@DESKTOP-56VTHAK:1521:xe";
+			String user="javauser",pwd="javauser123";
+			con= DriverManager.getConnection(url,user,pwd);
+			System.out.println("db연결 성공");
+			
+			//3 sql문 처리를 위한 PreparedStatement 객체 생성
+			String sql = "select * from person order by no desc";
+			ps = con.prepareStatement(sql);
+			
+			//4 실행
+			//[1] select => executeQuery()
+			//[2] intsert, update, delete => executeUpdate()
+			
+			 rs = ps.executeQuery();
+			 
+			 while(rs.next()) {
+				 int no = rs.getInt(1);
+				 String name = rs.getString("name");
+				 String tel = rs.getString("tel");
+				 Date regdate = rs.getDate("regdate");
+				 Timestamp regdate2 = rs.getTimestamp(4);
+				 
+				 System.out.print(no + "\t");
+				 System.out.print(name + "\t");
+				 System.out.print(tel + "\t");
+				 System.out.print(regdate + "\t");
+				 System.out.println(regdate2 + "\n");
+				 
+				 
+			 }
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs!=null) rs.close();
+				if(ps!=null) ps.close();
+				if(con!=null) con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+/*
+7	
+김길동	
+010-800-9000	
+2022-03-31	
+2022-03-31 16:14:36.0
+*/
+
+```
+
+#### Statement 사용 예시
+```java
+package com.jdbc.day1;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+public class StatementTest {
+
+	public static void main(String[] args) {
+		// insert
+		Scanner sc = new Scanner(System.in);
+		System.out.println("이름, 전화번호 입력!");
+		String name = sc.nextLine();
+		String tel = sc.nextLine();
+		
+		Connection con = null;
+		Statement ps = null;
+		
+		//1 드라이버 로딩
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			System.out.println("드라이버 로딩 성공");
+			
+			//2 데이터베이스 서버에 연결하기 위한 connection 객체 생성
+			String url = "jdbc:oracle:thin:@localhost:1521:xe";
+			String user = "javauser", pwd = "javauser123";
+			con = DriverManager.getConnection(url, user, pwd);
+			System.out.println("db연결 성공");
+			
+			//3 sql문을 처리하기 위한 Statement 객체 생성
+			ps=con.createStatement();
+			
+			String sql = "insert into person(no, name, tel)\r\n"
+					+ "values(person_seq.nextval,'"+name+"','"+tel+"')";
+			
+	
+			
+			//4 실행
+			int cnt = ps.executeUpdate(sql);
+			System.out.println("처리된 행의 개수 : " + cnt);
+			
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			
+			//5 자원해제(접속종료)
+			try {
+				if(ps!=null) ps.close();
+				if(con!=null) con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+```
+
+***
+
+## 2. ResultSet 의 커서 이동
+- 기존 커서는 next()메서드를 통해 다음 행으로 이동, 되돌아 오는 것이 불가
+- 커서를 자유롭게 이동시키기 위한 설정   
+```java
+Statement st=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+	ResultSet.CONCUR_READ_ONLY);
+```
+- rs.afterLast() : rs를 마지막 행의 바로 뒤에 위치
+	- rs.previous()
+- rs.beforeFirst() : 첫번째 행의 직전에 위치
+	- rs.next()
+- rs.first() : 첫번째 행에 위치
+- rs.last() : 마지막 행에 위치
+- rs.absolute(n) : n번째 행으로 이동
+- rs.getRow() : 실체 커서가 위치한 곳의 행 번호 리턴   
+
+```java
+package com.jdbc.day1;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+
+public class ReverseSelect {
+
+	public static void main(String[] args) {
+		// ResultSet 커서를 자유롭게 이동시키기 위한 설정
+		
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+		
+		//1
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			System.out.println("로딩성공");
+			
+			//2
+			String url="jdbc:oracle:thin:@localhost:1521:xe";
+			String user="javauser",pwd = "javauser123";
+			con=DriverManager.getConnection(url,user,pwd);
+			System.out.println("연결성공");
+			
+			//3 ps
+			String sql = "select * from person order by no";
+			ps = con.prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE,
+						ResultSet.CONCUR_READ_ONLY);
+			
+			rs = ps.executeQuery();
+			rs.afterLast(); //rs를 마지막행의 바로 뒤에 위치시킨다
+			
+			while(rs.previous()) {
+				int no = rs.getInt(1);
+				String name = rs.getString(2);
+				String tel = rs.getString(3);
+				Timestamp regdate = rs.getTimestamp(4);
+				
+				System.out.println(no + " " + name + " " + tel + " " + regdate);
+			}
+			
+			rs.absolute(2);
+			System.out.println(rs.getInt(1) + " " + rs.getString(2));
+		} catch (ClassNotFoundException e) {
+			
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				if(rs!=null) rs.close();
+				if(ps!=null) ps.close();
+				if(con!=null) con.close();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+```
+
+
+***
+
+## 3. execute()메서드
+- 모든 sql문장을 실행시킨다
+- select문이면 true
+- select문이 아니면 false 리턴   
+
+#### execute 활용 create
+
+```java
+package com.jdbc.day2;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class ExecuteTest {
+	public static void main (String[] args) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		
+		try {
+			//드라이버 로딩
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			System.out.println("로딩 성공");
+			
+			
+			//connection
+			String url = "jdbc:oracle:thin:@DESKTOP-56VTHAK:1521:xe";
+			String user = "javauser";
+			String pwd = "javauser123";
+			con = DriverManager.getConnection(url,user,pwd);
+			System.out.println("db연결성공");
+			
+			//ps
+			String sql = "create table pd2"
+					+"("
+					+"no number primary key,"
+					+"pdName varchar2(50) not null,"
+					+"price number null,"
+					+"regdate date default sysdate"
+					+")";
+			ps = con.prepareStatement(sql);
+			
+			//4 실행
+			boolean bool = ps.execute();
+			/*
+			 * 모든 sql문장을 실행시킨다
+			 * select문이면 true, select 문이 아니면 false를 리턴
+			 */
+			System.out.println("bool = "+bool);
+			
+			//sequence 생성 sql문
+			sql = "create sequence pd2_seq"
+					+ " start with 1"
+					+ " increment by 1"
+					+ " nocache";
+			ps = con.prepareStatement(sql);
+			
+			//실행
+			bool = ps.execute();
+			System.out.println("bool = "+bool);
+			
+			System.out.println("pd2테이블 생성 성공");
+			
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				if(ps!=null) ps.close();
+				if(con!=null) con.close();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+```
+
+#### execute 활용 insert   
+```java
+package com.jdbc.day2;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Scanner;
+
+public class ExecuteInsert {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("상품명, 가격 입력!");
+		String pdName = sc.nextLine();
+		int price = sc.nextInt();
+		
+		
+		Connection con = null;
+		PreparedStatement ps = null;
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			System.out.println("로딩성공");
+			
+			String url = "jdbc:oracle:thin:@localhost:1521:xe";
+			String user = "javauser";
+			String pwd = "javauser123";
+			con = DriverManager.getConnection(url,user,pwd);
+			System.out.println("접속성공");
+			
+			
+			String sql = "insert into pd2(no,pdname, price)\r\n"
+					+ "values (pd2_seq.nextval,?,?)";
+			ps = con.prepareStatement(sql);
+			
+			ps.setString(1,pdName);
+			ps.setInt(2, price);
+			
+			boolean bool = ps.execute();
+			System.out.println(bool);
+			
+			if(!bool) { //select 문이 아니면
+				int cnt = ps.getUpdateCount();
+				System.out.println("처리된 행의 개수 : "+cnt);
+			}
+			
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				if(ps!=null) ps.close();
+				if(con!=null) con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+}
+```
+#### excute 활용 select
+```java
+package com.jdbc.day2;
+
+import java.sql.Timestamp;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class ExecuteSelect {
+
+	public static void main(String[] args) {
+		
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			System.out.println("로딩성공");
+			
+			
+			String url = "jdbc:oracle:thin:@localhost:1521:xe";
+			String user = "javauser";
+			String pwd = "javauser123";
+			con = DriverManager.getConnection(url,user,pwd);
+			System.out.println("연결성공");
+			
+			String sql = "select * from pd2";
+			ps = con.prepareStatement(sql);
+			
+			boolean bool = ps.execute();
+			
+			if(bool) {
+				rs= ps.getResultSet();
+				
+				while(rs.next()) {
+					int no = rs.getInt(1);
+					String pdname = rs.getString(2);
+					int price = rs.getInt(3);
+					Timestamp regdate = rs.getTimestamp(4);
+					
+					System.out.println(no+ " " +pdname+ " " + price + " " +regdate);
+					
+				}
+				
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(rs!=null) rs.close();
+				if(ps!=null) ps.close();
+				if(con!=null) con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+```
+
+## 4. 프로시저 이용
+- CallableStatement 이용   
+- 오라클 : exec 프로시저명
+- 자바 : call 프로시저명   
+
+
+
+```java
+package com.jdbc.day2;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Scanner;
+
+public class ProcedureTest1 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("이름, 전화번호");
+		String name = sc.nextLine();
+		String tel = sc.nextLine();
+		
+		Connection con = null;
+		CallableStatement cs = null;
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			System.out.println("로딩 성공");
+			
+			
+			String url = "jdbc:oracle:thin:@localhost:1521:xe";
+			String user = "javauser";
+			String pwd = "javauser123";
+			con = DriverManager.getConnection(url, user, pwd);
+			System.out.println("접속 성공");
+			
+			String sql = "call personinsert(?, ?)";
+			cs = con.prepareCall(sql);
+			
+			cs.setString(1, name);
+			cs.setString(2, tel);
+			
+			
+			boolean bool = cs.execute();
+			System.out.println("실행결과 : "+bool);
+			
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if(cs!=null) cs.close();
+				if(con!=null) con.close();
+			
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+}
+```
+#### in,out 이 있는 프로시저
+- registerOutParameter 이용 out 받아오기   
+
+```java
+/* 프로시저 내용
+create or replace procedure infoProf_proc
+	(v_profno in professor.profno%type,
+	v_name out professor.name%type,
+	v_pay out professor.pay%type)
+is
+begin
+	select name, pay into v_name, v_pay
+	from professor
+	where profno=v_profno;
+end;
+*/
+
+
+public class ProcedureTest2 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner (System.in);
+		System.out.println("교수번호 입력");
+		int profno = sc.nextInt();
+		
+		Connection con = null;
+		CallableStatement cs = null;
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			System.out.println("로딩 성공");
+			
+			String url = "jdbc:oracle:thin:@localhost:1521:xe";
+			String user = "javauser";
+			String pwd = "javauser123";
+			con = DriverManager.getConnection(url, user, pwd);
+			System.out.println("연결 성공");
+			
+			
+			String sql = "call infoprof_proc(?,?,?)";
+			cs=con.prepareCall(sql);
+			
+			cs.setInt(1, profno);
+			cs.registerOutParameter(2,oracle.jdbc.OracleTypes.VARCHAR);
+			cs.registerOutParameter(3,oracle.jdbc.OracleTypes.NUMBER);
+			
+			boolean bool = cs.execute();
+			System.out.println("bool = "+bool);
+			
+			String name = cs.getString(2);
+			int pay = cs.getInt(3);
+			System.out.println("이름 : " + name + ",급여 : "+pay);
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if(cs!=null) cs.close();
+				if(con!=null) con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+}
+```
+
+#### 커서가 있는 프로시저
+
+```java
+package com.jdbc.day2;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+
+public class ProcedureTest3 {
+
+	public static void main(String[] args) {
+		/*
+		 create or replace procedure personList
+		(personCursor out SYS_REFCURSOR)
+		is
+		begin
+		OPEN personCursor For
+		select no,name,tel,regdate from person
+		order by no desc;
+		end;
+		 */
+		
+		Connection con = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			System.out.println("로딩 성공");
+			
+			String url = "jdbc:oracle:thin:@localhost:1521:xe";
+			String user = "javauser";
+			String pwd = "javauser123";
+			con = DriverManager.getConnection(url, user, pwd);
+			System.out.println("연결 성공");
+			
+			String sql = "call personlist(?)";
+			cs = con.prepareCall(sql);
+			cs.registerOutParameter(1, oracle.jdbc.OracleTypes.CURSOR);
+			
+			boolean bool = cs.execute();
+			System.out.println(bool);
+			
+			rs=(ResultSet) cs.getObject(1);
+			while(rs.next()) {
+				int no = rs.getInt(1);
+				String name = rs.getString(2);
+				String tel = rs.getString(3);
+				Timestamp regdate = rs.getTimestamp(4);
+				
+				System.out.println(no + " " + name + " " + tel + " " + regdate);
+			}
+			
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs!=null) rs.close();
+				if(cs!=null) cs.close();
+				if(con!=null) con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+```

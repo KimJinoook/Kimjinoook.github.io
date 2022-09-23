@@ -1,0 +1,464 @@
+---
+layout: post
+title:  "4. 복수행 함수"
+subtitle:   ""
+categories: lang
+tags: sql
+comments: false
+header-img: 
+---
+
+- 한꺼번에 여러 건의 데이터가 함수로 입력
+- null값의 포함여부가 중요하다
+  - 기본은 null값을 제외한 결과 도출
+  - 인자로 \*입력 시 null값 포함
+
+***
+
+## 1. 기본함수
+- count
+  - 입력되는 데이터의 총 개수 리턴
+  - count(컬럼명) : 컬럼의 null 미포함 데이터수 리턴
+  - count(\*) : 컬럼의 null 포함 데이터수 리턴
+- sum
+  - 입력된 데이터의 합계 값 리턴
+  - null값 미포함
+  - 문자, 날짜 연산 불가
+- avg
+  - 입력된 데이터의 평균 리턴
+  - 문자, 날짜 연산 불가
+  - 기본적으로 null데이터 미포함
+    - 16으로 나누어야 하는데 null 미포함으로 10으로 나누는 경우가 생김
+    - nvl 이용
+    - 0 입력으로 null 수 포함
+- max/min
+  - 최대값, 최소값 리턴
+  - 문자, 날짜 연산 가능
+- stddev : 표준편차 리턴
+- variance : 분산 리턴   
+
+```sql
+--avg 확인
+select count(bonus),count(*), sum(bonus), avg(bonus), avg(nvl(bonus,0)) from professor;
+
+
+COUNT(BONUS)   COUNT(*) SUM(BONUS) AVG(BONUS) AVG(NVL(BONUS,0))
+------------ ---------- ---------- ---------- -----------------
+          11         18        810 73.6363636                45
+```
+
+***
+
+## 2. GROUP BY
+- 테이블 전체가 아닌, 특정 범위에서 데이터 집계   
+
+```sql
+select deptno, avg(nvl(pay,0)) from professor group by deptno;
+
+    DEPTNO AVG(NVL(PAY,0))
+---------- ---------------
+       203             500
+       101             400
+       103      383.333333
+       202             285
+       301          258.75
+       201             450
+       102      363.333333
+```
+
+***
+
+## 3. HAVING
+- group by절에 의한 결과에 대해 조건을 정의
+- group by절의 결과를 제한하기 위해 사용
+- where절은 그룹함수를 비교조건으로 쓸 수 없다
+  - 때문에 having 절 사용   
+
+```sql
+-- 직업별 합계
+select job, sum(sal) from emp group by job;
+
+JOB         SUM(SAL)
+--------- ----------
+CLERK           4150
+SALESMAN        5600
+ANALYST         6000
+MANAGER         8275
+PRESIDENT       5000
+
+
+-- 직업별 합계 중 5000 이상만, having 이용
+select job, sum(sal) from emp group by job having sum(sal) >= 5000;
+
+JOB         SUM(SAL)
+--------- ----------
+SALESMAN        5600
+ANALYST         6000
+MANAGER         8275
+PRESIDENT       5000
+
+
+-- 입사일 조건 이전 사원 중 직업별 합계, 그중 5000 이상
+select job, sum(sal) from emp  where hiredate < '1982-01-01' group by job having sum(sal)>=5000  order by job  ;
+
+JOB         SUM(SAL)
+--------- ----------
+MANAGER         8275
+PRESIDENT       5000
+SALESMAN        5600
+
+```
+
+### select 문 작성(실행) 순서
+- 5. select
+- 1. from
+- 2. where
+- 3. group by
+- 4. having
+- 6. order by
+- group by에서는 별칭을 못쓰고 order by에서는 별칭을 쓸 수 있는 이유
+
+***
+
+## 4. ROLLUP
+- 주어진 데이터들의 소계를 리턴
+- group by 절에 주어진 조건으로 연산
+- group by rollup(a, b)
+  - a별 모든 b의 소계
+- n개의 컬럼 입력 시
+  - rollup : n+1 종류의 소계
+  - cube : 2^n 종류의 소계
+- rollup(a,b,c,d)   
+
+```sql
+select deptno, position, count(*), sum(pay) from professor group by rollup(deptno, position);
+
+    DEPTNO POSITION                         COUNT(*)   SUM(PAY)
+---------- ------------------------------ ---------- ----------
+       101 전임강사                                1        270
+       101 정교수                                  1        550
+       101 조교수                                  1        380
+       101                                         3       1200
+       
+       102 전임강사                                1        250
+       102 정교수                                  1        490
+       102 조교수                                  1        350
+       102                                         3       1090
+       
+       103 전임강사                                1        290
+       103 정교수                                  1        530
+       103 조교수                                  1        330
+       103                                         3       1150
+       
+       201 정교수                                  1        570
+       201 조교수                                  1        330
+       201                                         2        900
+       
+       202 전임강사                                1        260
+       202 조교수                                  1        310
+       202                                         2        570
+       
+       203 정교수                                  1        500
+       203                                         1        500
+       
+       301 전임강사                                2        450
+       301 조교수                                  2        585
+       301                                         4       1035
+                                                  18       6445
+
+```
+- group by a,b,c
+- a,b,c
+- rollup 추가
+- a,b
+- a
+- 전체
+
+***
+
+## 5. cube
+- group by 항목들간 다차원적인 소계 계산
+- 모든 경우의 수에 대한 소계 산출
+- a,b,c 컬럼 입력 시
+  - 8가지 조합의 소계
+- n개의 컬럼 입력 시
+  - rollup : n+1 종류의 소계
+  - cube : 2^n 종류의 소계   
+
+```sql
+select deptno, position, count(*), sum(pay) from professor group by cube(deptno, position) order by deptno;
+
+    DEPTNO POSITION                         COUNT(*)   SUM(PAY)
+---------- ------------------------------ ---------- ----------
+       101 전임강사                                1        270
+       101 정교수                                  1        550
+       101 조교수                                  1        380
+       101                                         3       1200
+       
+       102 전임강사                                1        250
+       102 정교수                                  1        490
+       102 조교수                                  1        350
+       102                                         3       1090
+       
+       103 전임강사                                1        290
+       103 정교수                                  1        530
+       103 조교수                                  1        330
+       103                                         3       1150
+       
+       201 정교수                                  1        570
+       201 조교수                                  1        330
+       201                                         2        900
+       
+       202 전임강사                                1        260
+       202 조교수                                  1        310
+       202                                         2        570
+       
+       203 정교수                                  1        500
+       203                                         1        500
+       
+       301 전임강사                                2        450
+       301 조교수                                  2        585
+       301                                         4       1035
+       
+           전임강사                                6       1520
+           정교수                                  5       2640
+           조교수                                  7       2285
+                                                  18       6445
+```
+- group by a,b,c
+- a,b,c
+- cube 추가
+- a,b
+- a,c
+- b,c
+- a
+- b
+- c
+- 전체
+
+***
+
+## 6. GROUPING
+- 소계에 대한 요약정보를 줄 때 사용
+- 해당컬럼이 그루핑 작업에 사용되었으면 0, 사용되지 않았으면 1을 리턴
+- rollup이나 cube에 의해 소계가 계산된 결과
+  - grouping(expr) = 1   
+
+```sql
+select deptno, avg(nvl(pay,0)), grouping(deptno)
+from professor
+group by rollup(deptno)
+order by deptno;
+
+    DEPTNO AVG(NVL(PAY,0)) GROUPING(DEPTNO)
+---------- --------------- ----------------
+       101             400                0
+       102      363.333333                0
+       103      383.333333                0
+       201             450                0
+       202             285                0
+       203             500                0
+       301          258.75                0
+                358.055556                1
+```
+- decode와 이용
+  - 소계를 나타내는 필드에 원하는 문자열 지정   
+
+- group by 컬럼이 1개인 경우   
+
+```sql
+select decode(grouping(deptno),1,'합계',deptno) 학과,
+round(avg(nvl(pay,0))) 평균급여, grouping(deptno)
+from professor
+group by rollup(deptno)
+order by deptno;
+
+학과                                             평균급여 GROUPING(DEPTNO)
+---------------------------------------- ---------- ----------------
+101                                             400                0
+102                                             363                0
+103                                             383                0
+201                                             450                0
+202                                             285                0
+203                                             500                0
+301                                             259                0
+합계                                            358                1
+```
+
+- group by 컬럼이 2개일 경우   
+
+```sql
+select 
+  decode(grouping(deptno),1,'[전체]',deptno) 학과,
+  decode(grouping(position),1,decode(grouping(deptno),1,'[소계]','[학과별 소계]'),position) 학과,
+  round(avg(nvl(pay,0))) 평균급여, grouping(deptno), grouping(position)
+from professor
+group by rollup(deptno, position)
+order by deptno, position;
+
+학과                                       학과                                   평균급여
+---------------------------------------- ------------------------------ ----------
+103                                      [학과별 소계]                         383
+201                                      정교수                                570
+201                                      조교수                                330
+201                                      [학과별 소계]                         450
+202                                      전임강사                              260
+202                                      조교수                                310
+202                                      [학과별 소계]                         285
+203                                      정교수                                500
+203                                      [학과별 소계]                         500
+301                                      전임강사                              225
+301                                      조교수                                293
+301                                      [학과별 소계]                         259
+[전체]                                   [소계]                                358
+```
+
+```sql
+select
+  decode(grouping(deptno),1,decode(grouping(position),1,'[전체]','[직급별 소계]'),deptno) 학과, 
+  decode(grouping(position),1,decode(grouping(deptno),1,'[소계]','[학과별 소계]'),position) 직급,
+  round(avg(nvl(pay,0))),
+  grouping(deptno), grouping(position)
+from professor
+group by cube(deptno, position)
+order by deptno, position;
+
+
+학과                                       직급                             ROUND(AVG(NVL(PAY,0)))
+---------------------------------------- ------------------------------ ----------------------
+101                                      전임강사                                          270
+101                                      정교수                                            550
+101                                      조교수                                            380
+101                                      [학과별 소계]                                     400
+102                                      전임강사                                          250
+102                                      정교수                                            490
+102                                      조교수                                            350
+102                                      [학과별 소계]                                     363
+
+[직급별 소계]                            전임강사                                          253
+[직급별 소계]                            정교수                                            528
+[직급별 소계]                            조교수                                            326
+[전체]                                   [소계]                                            358
+```
+
+***
+
+## 7. GROUPING SETS
+- 그루핑 조건이 여러 개일 경우 유용
+- 학년별 인원수 합계, 학과별 인원수 합계를 구해야 하는 경우
+  - 기존에는 별도로 구한 후 union으로 연산
+  - grouping sets 이용 시 cube를 사용한 집계에서 원하는 집계만 수행 가능
+
+- 기존   
+
+```sql
+select grade, count(*) from student group by grade
+union
+select deptno1, count(*) from student group by deptno1;
+
+     GRADE   COUNT(*)
+---------- ----------
+         1          6
+         2          5
+         3          5
+         4          5
+       101          4
+       102          4
+       103          2
+       201          6
+       202          2
+       301          2
+```
+- grouping sets 이용   
+
+```sql
+select grade, deptno1, count(*) from student
+group by grouping sets(grade, deptno1)
+order by grade, deptno1;
+
+     GRADE    DEPTNO1   COUNT(*)
+---------- ---------- ----------
+         1                     6
+         2                     5
+         3                     5
+         4                     5
+                  101          4
+                  102          4
+                  103          2
+                  201          6
+                  202          2
+                  301          2
+```
+
+- 컬럼이 3개 이상인 경우 원하는 형태로 괄호로 묶을 수 있다   
+
+```sql
+select city, department_name, job_id, avg(nvl(salary,0)) 
+from emp_details_view 
+group by grouping sets( (city, department_name), (city, job_id),(department_name, job_id))
+order by city, department_name, job_id;
+
+CITY                           DEPARTMENT_NAME                JOB_ID     AVG(NVL(SALARY,0))
+------------------------------ ------------------------------ ---------- ------------------
+London                         Human Resources                                         6500
+London                                                        HR_REP                   6500
+Munich                         Public Relations                                       10000
+Munich                                                        PR_REP                  10000
+Oxford                         Sales                                             8955.88235
+Oxford                                                        SA_MAN                  12200
+Oxford                                                        SA_REP             8396.55172
+Seattle                        Accounting                                             10154
+Seattle                        Administration                                          4400
+Seattle                        Executive                                         19333.3333
+Seattle                        Finance                                           8601.33333
+
+CITY                           DEPARTMENT_NAME                JOB_ID     AVG(NVL(SALARY,0))
+------------------------------ ------------------------------ ---------- ------------------
+Seattle                        Purchasing                                              4150
+Seattle                                                       AC_ACCOUNT               8300
+Seattle                                                       AC_MGR                  12008
+Seattle                                                       AD_ASST                  4400
+Seattle                                                       AD_PRES                 24000
+Seattle                                                       AD_VP                   17000
+Seattle                                                       FI_ACCOUNT               7920
+Seattle                                                       FI_MGR                  12008
+Seattle                                                       PU_CLERK                 2780
+Seattle                                                       PU_MAN                  11000
+South San Francisco            Shipping                                          3475.55556
+
+CITY                           DEPARTMENT_NAME                JOB_ID     AVG(NVL(SALARY,0))
+------------------------------ ------------------------------ ---------- ------------------
+South San Francisco                                           SH_CLERK                 3215
+South San Francisco                                           ST_CLERK                 2785
+South San Francisco                                           ST_MAN                   7280
+Southlake                      IT                                                      5760
+Southlake                                                     IT_PROG                  5760
+Toronto                        Marketing                                               9500
+Toronto                                                       MK_MAN                  13000
+Toronto                                                       MK_REP                   6000
+                               Accounting                     AC_ACCOUNT               8300
+                               Accounting                     AC_MGR                  12008
+                               Administration                 AD_ASST                  4400
+
+CITY                           DEPARTMENT_NAME                JOB_ID     AVG(NVL(SALARY,0))
+------------------------------ ------------------------------ ---------- ------------------
+                               Executive                      AD_PRES                 24000
+                               Executive                      AD_VP                   17000
+                               Finance                        FI_ACCOUNT               7920
+                               Finance                        FI_MGR                  12008
+                               Human Resources                HR_REP                   6500
+                               IT                             IT_PROG                  5760
+                               Marketing                      MK_MAN                  13000
+                               Marketing                      MK_REP                   6000
+                               Public Relations               PR_REP                  10000
+                               Purchasing                     PU_CLERK                 2780
+                               Purchasing                     PU_MAN                  11000
+
+CITY                           DEPARTMENT_NAME                JOB_ID     AVG(NVL(SALARY,0))
+------------------------------ ------------------------------ ---------- ------------------
+                               Sales                          SA_MAN                  12200
+                               Sales                          SA_REP             8396.55172
+                               Shipping                       SH_CLERK                 3215
+                               Shipping                       ST_CLERK                 2785
+                               Shipping                       ST_MAN                   7280
+```

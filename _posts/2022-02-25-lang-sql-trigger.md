@@ -1,0 +1,108 @@
+---
+layout: post
+title:  "14. 트리거"
+subtitle:   ""
+categories: lang
+tags: sql
+comments: false
+header-img: 
+---
+
+## 1. 트리거 (Trigger)란
+- 서브프로그램 단위의 하나
+- 특정 사건이 발생될 때마다 자동으로 해당 PL/SQL블록이 실행
+- 데이터베이스 내 오브젝트로 저장되어 관리
+- 사용자가 지정해서 실행 불가
+  - 생성시 정의한 특정 사건에 의해서만 묵시적으로 자동실행   
+
+- 트리거 유형
+  - DML 트리거
+    - 실행
+      - brfore trigger
+        - dml이벤트를 trigger하기 전에 trigger 본문을 실행
+      - after trigger
+        - dml이벤트를 trigger한 후에 trigger 본문 실행
+      - instead of trigger
+        - trigger문 대신 trigger본문 실행, 다른 방법으로 수정 불가능한 뷰에 이용
+    - 영향
+      - 문장 트리거
+        - 영향을 받는 행이 없더라도 트리거가 한번은 실행
+      - 행 트리거
+        - 테이블이 트리거 이벤트의 영향을 받을 때마다 실행
+        - 영향을 받는 행이 없을 경우 실행하지 않는다
+        - 생성시 for each row 구절 사용
+        - 두개의 데이터 구조를 생성하고 채운다
+          - old : 트리거가 처리한 레코드의 원래 값
+          - new : 새 값을 포함
+          - 이를 이용 변경전과 후의 데이터 조작 가능
+  - DML이 아닌 트리거
+    - DDL이벤트 트리거
+      - DML과 거의 동일하지만 트리거를 활용하여 DDL 작업
+    - 데이터베이스 이벤트 트리거
+      - 데이터베이스 내에서 생기는 일들을 관리하기 위한 트리거
+        - user 이벤트 트리거
+          - 사용자가 발생시키는 작업에 트리거 생성
+          - create, alter, drop
+          - 로그온, 로그오프
+        - 시스템 이벤트 트리거
+          - 데이터베이스 전체에 영향을 주는 작업에 트리거 생성
+          - 데이터베이스 종료 또는 시작
+          - 특정 오류   
+
+- 트리거 구조
+  - 실행 시점 (Timing)
+    - before : 이벤트 발생 전
+    - after : 이벤트 발생 후
+  - 실행 사건 (Event)
+    - DML이벤트
+    - DDL이벤트
+    - 데이터베이스이벤트
+  - 트리거와 관련된 테이블, 뷰, 스키마, 데이터베이스
+  - 트리거 몸체부(body)
+
+## 2. 트리거의 사용
+- on : 트리거의 대상
+- for each row : 트리거를 행 레벨 트리거로 명시하는 절   
+
+
+```sql
+create or replace trigger 트리거 이름
+        트리거 실행시점 [before/after]
+        이벤트 [insert | update | delete]
+        on {테이블이름 | 뷰이름 | 스키마 | 데이터베이스}
+  [for each row]
+begin
+  트리거 몸체
+end;  
+```
+#### 문장레벨 트리거
+```sql
+create or replace trigger tr_dept_insert
+after insert on dept
+begin
+    dbms_output.put_line('정장적으로 입력되었습니다.');
+end;
+
+select * from user_triggers;
+select * from dept;
+
+insert into dept(deptno, dname, loc)
+values(51,'test1','seoul');
+```
+
+#### 행레벨 트리거   
+
+```sql
+create or replace trigger tr_code_check
+before insert on t_order
+for each row --행레벨 트리거
+begin
+    if :new.ord_code != 'C100' then
+        raise_application_error(-20010,'제품코드가 c100이 아님');
+    end if
+end;
+
+-- t_order테이블에 값 입력 시, 체크하여 ord_code 가 c100이 아니면 에러
+```
+
+

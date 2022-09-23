@@ -1,0 +1,485 @@
+---
+layout: post
+title:  "2. DAO/DTO"
+subtitle:   ""
+categories: lang
+tags: java2
+comments: false
+header-img: 
+---
+
+- DAO (Date Access Object)
+  - 데이터베이스 작업을 전담하는 객체
+  - 데이터베이스와 연계하여 처리할 프로그램을 정규화해 둔 클래스
+  - 입력, 수정, 삭제, 검색등의 작업을 미리 캡슐화
+  - CRUD
+    - C : create, insert
+    - R : read, select
+    - U : update
+    - D : delete
+- DTO (Data Tranfer Object)
+  - 객체를 표현한 한 단위
+  - 데이터를 전달하는 단위
+  - 데이터를 하나의 객체로 관리할 목적으로 만들어 둔 클래스의 객체
+  - 데이터베이스의 table과 거의 동일한 필드를 갖는다
+
+## 예시1 (book)
+- DBManager
+  - 데이터베이스 로딩, 접속, 접속해제 모듈화
+- BookDTO
+  - book테이블 표현, get,set
+- BookDAO
+  - 데이터베이스 작업 클래스
+  - insert, delete, 프로시저 등 실행
+- BookManager
+  - 자바 내 클래스 모듈화
+- BookConsole
+  - 메인 클래스
+
+### DBManager
+- 매번 반복 사용되는 클래스
+- static 설정
+- 연결 정보 Connection 리턴
+- dbclose 오버로딩메서드
+  - rs,ps,con,stmt 등 사용 정보에 따라 상황별로 오버로딩   
+
+
+```java
+package book;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class DBManager {
+	static {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			System.out.println("로딩성공");
+		}catch(ClassNotFoundException e) {
+			System.out.println("로딩실패");
+			e.printStackTrace();
+			
+		} 
+	}//DB매니저 호출 시 자동 드라이버 로딩
+	
+	public static Connection getConnection() throws SQLException{
+		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		String user = "hr";
+		String pwd = "hr123";
+		
+		Connection con = DriverManager.getConnection(url, user, pwd);
+		System.out.println("연결 성공");
+		return con;
+		
+	}// Connection 리턴
+	
+	public static void dbClose(ResultSet rs, PreparedStatement ps, Connection con) throws SQLException {
+		if(rs!=null) rs.close();
+		if(ps!=null) ps.close();
+		if(con!=null) con.close();
+	}
+	public static void dbClose(PreparedStatement ps, Connection con) throws SQLException {
+		if(ps!=null) ps.close();
+		if(con!=null) con.close();
+	}
+}
+```
+
+### BookDTO
+- book 테이블 표현
+- get,set 메서드   
+
+
+```java
+package book;
+
+import java.sql.Timestamp;
+
+public class BookDTO {
+	private int no;
+	private String title;
+	private int price;
+	private String publisher;
+	private Timestamp joindate;
+	
+	public BookDTO() {
+		super();
+	}
+	public BookDTO(int no, String title, int price, String publisher, Timestamp joindate) {
+		super();
+		this.no = no;
+		this.title = title;
+		this.price = price;
+		this.publisher = publisher;
+		this.joindate = joindate;
+	}
+	
+	public int getNo() {
+		return no;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public String getPublisher() {
+		return publisher;
+	}
+	public Timestamp getJoindate() {
+		return joindate;
+	}
+	
+	public void setNo(int no) {
+		this.no = no;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+	public void setJoindate(Timestamp joindate) {
+		this.joindate = joindate;
+	}
+	
+	public String toString() {
+		return "BookDTO [no="+no+", title="+title+", price="+price
+				+", publisher="+publisher+", joindate="+joindate+"]";
+	}
+		
+}
+
+```
+
+### BookDAO
+- db작업 클래스
+- insert, delete, 프로시저 등   
+
+```java
+package book;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+
+public class BookDAO {
+	public int insertBook(BookDTO dto) throws SQLException{
+		Connection con = null;
+		PreparedStatement ps = null;
+		int cnt=0;
+		
+		try {
+			con = DBManager.getConnection();
+			
+			String sql = "insert into book values"
+					+"(book_seq.nextval,?,?,?,sysdate)";
+			ps = con.prepareStatement(sql);
+			ps.setString(1, dto.getTitle());
+			ps.setInt(2, dto.getPrice());
+			ps.setString(3, dto.getPublisher());
+			
+			cnt = ps.executeUpdate();
+			System.out.println(cnt+"행 입력");
+		} finally {
+			DBManager.dbClose(ps, con);
+		}
+		return cnt;
+	}//insert
+	
+	public int updateBook(BookDTO dto) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int cnt=0;
+		
+		try {
+			con = DBManager.getConnection();
+			
+			String sql = "update book\r\n"
+					+ "set title = ?, price = ?, publisher = ?\r\n"
+					+ "where no = ?";
+			ps = con.prepareStatement(sql);
+			ps.setString(1, dto.getTitle());
+			ps.setInt(2, dto.getPrice());
+			ps.setString(3,dto.getPublisher());
+			ps.setInt(4,dto.getNo());
+			
+			cnt = ps.executeUpdate();
+			System.out.println(cnt+"행 수정");
+		} finally {
+			DBManager.dbClose(ps, con);
+		}
+		return cnt;
+	}//update
+	
+	public int deleteBook(int no) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int cnt=0;
+		
+		try {
+			con = DBManager.getConnection();
+			
+			String sql = "delete from book where no = ?";
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, no);
+			
+			cnt = ps.executeUpdate();
+			System.out.println(cnt+"행 수정");
+		} finally {
+			DBManager.dbClose(ps, con);
+		}
+		return cnt;
+	}//delete
+	
+	public ArrayList<BookDTO> selectBook() throws SQLException{
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs=null;
+		ArrayList<BookDTO> list = new ArrayList<BookDTO>();
+		
+		try {
+			con = DBManager.getConnection();
+			
+			String sql = "select * from book order by no";
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				int no = rs.getInt(1);
+				String title = rs.getString(2);
+				int price = rs.getInt(3);
+				String publisher = rs.getString(4);
+				Timestamp joindate = rs.getTimestamp(5);
+				
+				BookDTO dto = new BookDTO(no,title,price,publisher,joindate);
+				list.add(dto);
+			}
+			System.out.println("전체 데이터 수 = "+list.size());
+		} finally {
+			DBManager.dbClose(rs, ps, con);
+		}
+		return list;
+	}//select
+	
+	public ArrayList<BookDTO> searchBook(int no) throws SQLException{
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs=null;
+		ArrayList<BookDTO> list = new ArrayList<BookDTO>();
+		
+		try {
+			con = DBManager.getConnection();
+			
+			String sql = "select * from book where no = ?";
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, no);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				int wno = rs.getInt(1);
+				String title = rs.getString(2);
+				int price = rs.getInt(3);
+				String publisher = rs.getString(4);
+				Timestamp joindate = rs.getTimestamp(5);
+				
+				BookDTO dto = new BookDTO(wno,title,price,publisher,joindate);
+				list.add(dto);
+			}
+			System.out.println("검색 데이터 수 = "+list.size());
+		} finally {
+			DBManager.dbClose(rs, ps, con);
+		}
+		return list;
+	}
+}
+
+```
+
+### BookManager
+- 메인 클래스에서 사용할 메서드들의 모듈화
+- 메뉴불러오기, 테이블 행별로 받아올 리스트등 정의   
+
+```java
+package book;
+
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class BookManager {
+	public static final int FIND=1;
+	public static final int ALL=2;
+	private BookDAO bookDao;
+	private Scanner sc = new Scanner(System.in);
+	
+	public BookManager() {
+		bookDao = new BookDAO();
+	}
+	
+	public void mainMenu() {
+		System.out.println("\n--------main menu-----------");
+		System.out.println("1.등록, 2.수정, 3.삭제, 4.검색, 5.전체조회, 6.종료");
+		System.out.println("------------------------------");
+		System.out.println("번호 입력");
+	}
+	
+	public void insert() {
+		System.out.println("책 제목 입력");
+		String title = sc.nextLine();
+		System.out.println("책 가격 입력");
+		int price = sc.nextInt();
+		sc.nextLine();
+		System.out.println("출판사 입력");
+		String publisher = sc.nextLine();
+		BookDTO dto = new BookDTO();
+		dto.setTitle(title);
+		dto.setPrice(price);
+		dto.setPublisher(publisher);
+		try {
+			int cnt = bookDao.insertBook(dto);
+			if(cnt>0) System.out.println("입력성공");
+			else System.out.println("입력실패");
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}//insert
+	
+	public void delete() {
+		System.out.println("삭제할 번호 입력");
+		int no = sc.nextInt();
+		sc.nextLine();
+		try {
+			int cnt = bookDao.deleteBook(no);
+			if(cnt>0) System.out.println("삭제성공");
+			else System.out.println("삭제실패");
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}//delete
+	
+	public void update() {
+		System.out.println("수정할 번호 입력");
+		int no = sc.nextInt();
+		sc.nextLine();
+		System.out.println("수정 제목 입력");
+		String title = sc.nextLine();
+		System.out.println("수정 가격 입력");
+		int price = sc.nextInt();
+		sc.nextLine();
+		System.out.println("수정 출판사 입력");
+		String publisher = sc.nextLine();
+		
+		BookDTO dto = new BookDTO();
+		dto.setNo(no);
+		dto.setTitle(title);
+		dto.setPrice(price);
+		dto.setPublisher(publisher);
+		try {
+			int cnt = bookDao.updateBook(dto);
+			if(cnt>0) System.out.println("입력성공");
+			else System.out.println("입력실패");
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}//update
+	
+	public void select(int n) {
+		ArrayList<BookDTO> list = null;
+		if(n == this.ALL) {
+			try {
+				list = bookDao.selectBook();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}else if(n == this.FIND) {
+			try {
+				System.out.println("검색 번호 입력");
+				int no = sc.nextInt();
+				sc.nextLine();
+				list = bookDao.searchBook(no);
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		if (list == null || list.isEmpty()) {
+			System.out.println("정보 없음");
+			return;
+		}
+		System.out.println("----------책 목록----------");
+		System.out.println("번호\t제목\t가격\t출판사\t등록일");
+		for(int i=0 ; i<list.size();i++) {
+			BookDTO dto = list.get(i);
+			int no = dto.getNo();
+			String title = dto.getTitle();
+			int price = dto.getPrice();
+			String publisher = dto.getPublisher();
+			Timestamp joindate = dto.getJoindate();
+			
+			System.out.println(no+"\t"+title+"\t"+price+"\t"+publisher+"\t"+joindate);
+		}
+	}
+}
+
+```
+
+### BookConsole
+- 프로그램을 실행할 메인 클래스   
+
+```java
+package book;
+
+import java.util.Scanner;
+
+public class BookConsole {
+
+	public static void main(String[] args) {
+		BookManager bm = new BookManager();
+		
+		Scanner sc = new Scanner(System.in);
+		
+		while(true) {
+			bm.mainMenu();
+			String no = sc.nextLine();
+			
+			switch(no) {
+			case "1" :
+				bm.insert();
+				break;
+			case "2" :
+				bm.update();
+				break;
+			case "3" :
+				bm.delete();
+				break;
+			case "4" :
+				bm.select(BookManager.FIND);
+				break;
+			case "5" :
+				bm.select(BookManager.ALL);
+				break;
+			case "6" :
+				System.out.println("종료합니다");
+				System.exit(0);
+			default :
+				System.out.println("잘못선택");
+				continue;
+			}
+		}
+
+	}
+
+}
+
+```

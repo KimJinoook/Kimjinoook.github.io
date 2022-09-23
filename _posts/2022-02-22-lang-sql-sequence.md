@@ -1,0 +1,243 @@
+---
+layout: post
+title:  "10. 시퀸스, 인덱스, 뷰"
+subtitle:   ""
+categories: lang
+tags: sql
+comments: false
+header-img: 
+---
+
+## 1. SEQUENCE
+- 연속적인 숫자를 생성해내는 객체
+- 기본키가 각각의 입력되는 row를 식별할 수 있기만 하면 된다고 할 때
+  - 시퀀스에 의해 생성된 값 아용
+- 테이블의 기본키 값을 생성하기 위해 사용되는 독립적인 객체
+- 테이블에 종속되지 않는다
+  - 하나의 시퀀스를 여러개의 테이블에 동시에 사용 가능   
+
+```sql
+create sequence "스키마명.시퀀스명"
+  minvalue -- 시작숫자
+  maxvalue -- 끝 숫자
+  increment by -- 증가 단위
+  start with -- 시퀀스 생성이 시작되는 값
+  nocache
+  noorder -- order 요청되는 순서대로 값을 생성
+  nocycle; -- cycle 최대치에 다다랐을 때 초기값부터 다시 시작할 지
+  
+  
+ 
+--시퀀스 생성
+create sequence pd_temp1_seq
+increment by 1
+start with 50 --50부터 시작해서 1씩 증가
+nocache;
+
+--이용
+insert into pd_temp1(no,pdname,price,regdate)
+values(pd_temp1_seq.nextval, '컴퓨터',1200000,sysdate);
+
+        NO PDNAME                                                  PRICE REGDATE          
+---------- -------------------------------------------------- ---------- -----------------
+        50 컴퓨터                                                1200000 22/03/28 10:01:32
+```
+
+- 생성한 시퀀스 확인
+  > select * from user_sequences;   
+
+
+- 의사컬럼
+  - nextval : 다음에 생성될 시퀀스를 가지고 있다
+  - currval : 현재 시퀀스 값을 가지고 있다   
+  > select pd_temp1_seq.currval from dual;   
+  > select pd_temp1_seq.nextval from dual;   
+
+  - nextval 조회할 때마다 시퀀스 번호가 증가
+
+
+***
+
+## 2. INDEX
+- 테이블의 데이터를 빨리 찾기 위한 꼬리표
+- 인덱스가 없다면 특정한 값을 찾기 위해 모든 데이터 페이지를 검색해야 한다
+  - table full scan
+- index seek
+  - 오라클은 모든 페이지를 검색하지 않고 인덱스 페이지를 찾아 쉽게 데이터를 가져온다
+
+### 생성
+- 인덱스의 생성
+  - 컬럼을 지정하여 만들 수 있다
+    - 테이블의 생성과 동시에 생성은 불가
+  - 테이블과 별도의 오브젝트로써 테이블과 동등한 레벨의 객체
+  - 한 테이블에 여러개의 인덱스 생성 가능
+  > create (unique) index 인덱스명 on 테이블명(컬럼1,~);   
+
+```sql
+create unique index idx_pd2_pdcode
+on pd2(pdcode); --단일인덱스
+
+create index idx_pd2_pdname
+on pd2(pdname);
+
+create index idx_pd2_regdate_company
+on pd2(regdate,company); --복합인덱스
+
+
+--인덱스 조회
+select * from user_indexes
+where table_name = 'PD2';
+
+
+--인덱스를 이용한 조회
+select * from pd2
+where pdcode='B01';
+```
+
+### 종류
+- 유일성 여부에 따라
+  - 단일 인덱스 : 인덱스가 한개의 컬럼에 있을 경우
+  - 복합 인덱스 : 인덱스가 두개 이상의 컬럼에 있을 경우
+    - where 절에 사용되는 컬럼 순으로 인덱스 구성
+- 구성 컬럼 개수에 따라
+  - unique 인덱스 : unique 옵션이 주어지는 것
+    - 해당 컬럼에 입력되는 값은 유일해야 한다
+    - unique나 기본키 생성시 unique 인덱스 자동 생성
+  - non unique 인덱스 : unique옵션이 주어지지 않은 것
+- 인덱스 생성자에 따라
+  - 수동 인덱스 : create index문을 사용하여 생성
+  - 자동 인덱스 : unique키나 기본키 생성에 따라 자동으로 생성   
+
+### 가이드라인
+- 데이터 변경이 일어나면 오라클이 인덱스 정보를 자동으로 변경
+  - 인덱스가 너무 많으면 성능 문제 발생
+- 인덱스를 통한 검색
+  - 인덱스 정보를 검색 후 검색 된 인덱스가 가리키는 데이터 조회
+- 가이드라인
+  - **자주 조회되는 컬럼을** 인덱스 컬럼으로 선택
+  - 외래키가 있는 컬럼에 생성
+    - 조인의 속도 향상
+  - 테이블 전체 row가 적은 경우 인덱스 불필요
+  - 복합 인덱스 구성 시 컬럼의 순서
+    - where 절에서 좀더 자주 사용되는 컬럼을 먼저 오게 한다
+  - long, long raw 타입 컬럼은 인덱스 불가
+  - 삽입, 갱신, 삭제가 빈번한 테이블에는 인덱스를 많이 만들지 않는다
+***
+
+## 3. VIEW
+- 테이블에 있는 데이터를 보여주는 형식을 정의하는 select 문장의 덩어리
+- 실제로 **데이터는 가지고 있지 않다**
+  - 뷰를 통해 데이터 조회 가능
+  - 데이터 입력 수정 삭제 가능
+  - **가상의 논리적인 테이블**
+- 이미 존재하는 테이블에서 원하는 데이터만 가져온다
+  - 미리 원하는 컬럼만 모아 가상적으로 만든 테이블
+- **필요성**
+  - 보안성
+    - 사용자들에게 테이블 엑세스 권한 제거
+      - 뷰를 통해 테이블 데이터 엑세스
+    - 숨기고싶은 컬럼을 숨기며, 원하는 컬럼만 보여줄 수 있다
+  - 편의성
+    - 복잡한 조회문장을 입력하지 않아도 된다
+    - 조인과 같은 문장을 작성하지 않고, 뷰를 통해 수월하게 질의
+    - 네트웍 트래픽을 줄일 수 있다
+- 종류
+  - read only 뷰 : 조회만 가능   
+    > create (or replace) view (스키마이름.)뷰이름 as select 문장 with read only;   
+  - updatable 뷰 : insert,update,delete 가능   
+    > create (or replace) view (스키마이름.)뷰이름 as select 문장;   
+  - 테이블 개수에 따라
+    - 단일 뷰
+    - 조인 뷰
+
+```sql
+--뷰 생성
+create or replace view v_employees
+as
+select e.employee_id, e.first_name || '-' || e.last_name 이름,
+       e.hire_date, e.department_id, d.department_name,
+       e.salary + e.salary*nvl(e.commission_pct,0) 급여
+from employees e left join departments d
+on e.department_id = d.department_id;
+
+--뷰 조회
+select * from v_employees;
+
+
+--뷰 생성
+create or replace view v_gogak_info
+as
+select gno 고객번호, gname 이름,
+        case when substr(jumin,7,1) in (1,3) then '남'
+             else '여'
+             end 성별,
+        extract(year from(sysdate)) - 
+        (substr(jumin,1,2) + case when substr(jumin,7,1) in (1,2) then 1900
+                                  else 2000
+                                  end) +1 나이
+from gogak;
+
+select * from v_gogak_info;
+
+
+--뷰 이용 조회
+select * from v_gogak_info
+where 성별='여' and trunc(나이,-1) in(20,30);
+```
+
+- 뷰를 이용한 데이터 수정   
+
+```sql
+--수정 가능 뷰
+create or replace view v_emp
+as
+select ename,job,hiredate
+from emp
+where deptno in (20,30)
+with read only;
+
+
+--읽기 전용 뷰
+create or replace view v_emp_readonly
+as
+select ename,job,hiredate
+from emp
+where deptno in (20,30)
+with read only;
+
+
+update v_emp_readonly
+set ename = 'SMITH2'
+where ename = 'SMITH'; --읽기전용 뷰 수정 불가 / SQL 오류: ORA-42399: 읽기 전용 뷰에서는 DML 작업을 수행할 수 없습니다.
+
+
+update v_emp
+set ename = 'ALLEN2'
+where ename = 'ALLEN'; -- 뷰에서 수정 시 원본데이터 수정
+-- 뷰를 통해 입력할 경우, 뷰에 없는 컬럼은 null을 허용하거나 default 값이 있어야 한다
+```
+
+- 뷰의 범위를 벗어나는 데이터 수정
+  - 기본적으로 수정은 가능하나 조회는 불가
+  - 수정을 허용하지 않을 경우
+    - with check option   
+
+```sql
+insert into v_emp2(empno,ename,job,hiredate)
+values(9999,'홍길동','CLERK',sysdate); -- 기본적으로 뷰의 범위를 벗어나도 입력 가능
+
+
+create or replace view v_emp_2
+as
+select empno,ename,job,hiredate
+from emp
+where deptno in (20,30)
+with check option; --뷰의 범위를 벗어날 경우 수정 불가 옵션
+
+insert into v_emp_2(empno,ename,job,hiredate)
+values(9999,'홍길동','CLERK',sysdate); --error / ORA-01402: 뷰의 WITH CHECK OPTION의 조건에 위배 됩니다
+
+
+
+
+```

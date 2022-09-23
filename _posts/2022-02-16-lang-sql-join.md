@@ -1,0 +1,287 @@
+---
+layout: post
+title:  "5. 조인"
+subtitle:   ""
+categories: lang
+tags: sql
+comments: false
+header-img: 
+---
+
+## 1. Join
+- 각각의 테이블에 분리되어있는 연관성 있는 데이터들을 연결하거나 조합하는 일련의 작업들
+- 사용자가 필요한 정보만 가져와 가상의 테이블 간 공통된 열을  기준으로 검색
+- 오라클용 join : 오라클 제품에서 사용되는 join
+- 표준(ANSI) join : 모든 제품들에서 공통적으로 사용가능한 join
+- 종류
+  - 내부 조인 (inner join)
+  - 외부 조인 (outer join)
+  - 셀프 조인 (self join)
+  - cross 조인
+
+***
+
+## 2. Inner Join
+- 내부 join 
+- 등가 join
+- where 절에 기술되는 join조건
+  - **양쪽 테이블에 같은 조건이 존재할 경우의 값만 가져온다**
+- equal 연산자 사용
+  - equi join 이라고도 한다
+- 오라클 구문
+  - from a, b where a.1 = b.1;
+- ANSI 구문
+  - from a inner join b on a.1 = b.1;   
+  - inner 는 생략 가능
+  - from a join b on a.1 = b.1;   
+
+
+
+```sql
+-- 오라클 구문
+select s.name, s.profno, p.name
+from student s, professor p
+where s.profno = p.profno;
+
+-- ANSI 구문
+select s.name, s.profno, p.name
+from student s inner join professor p
+on s.profno = p.profno;
+
+--inner는 생략 가능
+select s.name, s.profno, p.name
+from student s join professor p
+on s.profno = p.profno;
+
+NAME           PROFNO NAME      
+---------- ---------- ----------
+김진욱           2001 양선희    
+안광훈           4002 최슬기   
+
+-- student의 데이터 20건
+-- professor의 데이터 18건
+-- join 결과 데이터 15건
+-- profno의 데이터가 null일 경우 데이터를 가져오지 않는다
+-- 내부조인의 특징 : 양쪽 테이블 모두 데이터가 있는 것만 출력
+```
+
+- where에 검색조건이 붙는 경우    
+
+```sql
+--오라클 구문
+select s.*, d.dname
+from student s, department d
+where s.deptno1 = d.deptno
+and s.grade = 4;
+
+--ANSI 구분
+select s.*, d.dname
+from student s join department d
+on s.deptno1 = d.deptno
+and s.grade = 4;
+-- 또는
+select s.*, d.dname
+from student s join department d
+on s.deptno1 = d.deptno
+where s.grade = 4;
+```
+
+- 3개 이상의 테이블 조인
+  - 첫 테이블과 두번째 테이블의 조건으로 조인을 수행
+  - 결과 값을 가지고 세번째 테이블과의 조건으로 조인을 수행   
+
+```sql
+-- 오라클 구문
+select s.name, d.dname, p.name
+from student s, department d, professor p
+where s.deptno1 = d.deptno
+and s.profno = p.profno;
+
+--ANSI 구문
+select s.name, d.dname, p.name
+from student s join department d
+on s.deptno1 = d.deptno
+join professor p
+on s.profno = p.profno;
+
+NAME           PROFNO NAME      
+---------- ---------- ----------
+서진수           1001 조인형    
+서재수           2001 양선희    
+이미경           3002 나한열 
+```
+
+***
+
+## 3. Outer Join
+- 한쪽테이블에 데이터가 있고 다른쪽은 데이터가 없는 경우
+  - 데이터가 있는 쪽 테이블의 내용을 전부 출력
+- db성능에 나쁜 영향을 끼칠 수 있다
+  - 인덱스를 쓰지 않고 full scan을 하기 때문
+- 오라클 구문
+  - from a, b where a.1=b.1(+)
+    - b의 null데이터 출력
+    - a의 모든 데이터 출력
+    - 데이터가 없는쪽에 +기호 표시
+- ANSI 구문
+  - from a left outer join b on a.1=b.1   
+  - outer는 생략 가능   
+  - from a left join b on a.1=b.1   
+
+
+
+```sql
+--오라클 구문
+select s.name, p.name
+from student s, professor p
+where s.profno = p.profno(+);
+
+--표준 구문
+select s.name, p.name
+from student s left outer join professor p
+on s.profno = p.profno;
+
+--outer 생략 가능
+select s.name, p.name
+from student s left join professor p
+on s.profno = p.profno;
+
+NAME       NAME      
+---------- ----------    
+노정호     허은      
+이윤나               
+
+
+--오라클 구문
+select s.name, p.name
+from student s, professor p
+where s.profno(+) = p.profno;
+
+--표준 구문
+select s.name, p.name
+from student s right outer join professor p
+on s.profno = p.profno;
+
+NAME       NAME      
+---------- ----------
+노정호     허은      
+           차범철    
+
+
+-- 오라클 구문
+select s.name, p.name
+from student s, professor p
+where s.profno(+) = p.profno
+union
+select s.name, p.name
+from student s, professor p
+where s.profno = p.profno(+);
+
+-- 표준 구문
+select s.name, p.name
+from student s full outer join professor p
+on s.profno = p.profno;
+
+NAME       NAME      
+---------- ----------
+김진욱     양선희     
+허우                 
+           차범철  
+```
+
+***
+
+## 4. SELF Join
+- 원하는 데이터가 하나의 테이블에 다 들어있을 경우 사용
+- 하나의 테이블을 메모리상 별칭을 두개로 하여 가상으로 2개의 테이블로 만들어 작업 수행   
+
+```sql
+select * from dept2;
+
+DCODE  DNAME                PDEPT  AREA                          
+------ -------------------- ------ ------------------------------
+0001   사장실                      포항본사                      
+1000   경영지원부           0001   서울지사                      
+1001   재무관리팀           1000   서울지사 
+
+/*
+dcode는 dname의 부서 번호
+pdept는 상위 부서 번호
+경영지원부의 상위부서 사장실
+재무관리팀의 상위부서 경영지원부
+이를 표현하고 싶을 때
+*/
+
+--오라클 구문
+select a.dname 부서명, b.dname 상위부서명
+from dept2 a, dept2 b
+where a.dcode = b.pdept;
+
+--표준 구문
+select a.dname 부서명, b.dname 상위부서명
+from dept2 a join dept2 b
+on a.pdept = b.dcode;
+
+부서명                  상위부서명               
+-------------------- --------------------
+경영지원부           사장실              
+기술부               사장실              
+영업부               사장실 
+
+-- 사장실은 상위부서가 없어 출력되지 않는다
+-- 사장실까지 출력하려면 outer join 이용
+
+--오라클 구문
+select a.dname 부서명, b.dname 상위부서명
+from dept2 a, dept2 b
+where a.pdept = b.dcode(+);
+
+--표준 구문
+select a.dname 부서명, b.dname 상위부서명
+from dept2 a left outer join dept2 b
+on a.pdept = b.dcode;
+
+부서명                  상위부서명               
+-------------------- --------------------
+사장실
+경영지원부           사장실              
+기술부               사장실              
+영업부               사장실 
+```
+***
+
+## 5. Cross Join
+- 조인조건이 없는 경우 두 테이블의 데이터를 곱한 개수만큼 데이터가 출력된다
+- a테이블 데이터 10건, b테이블 데이터 4건
+  - 조인 테이블 데이터 40건
+- 오라클 구문
+  - from a, b
+- ANSI 구문
+  - from a cross join b   
+
+```sql
+--오라클 구문
+select e.*, d.*
+from emp e, dept d
+order by empno, d.deptno;
+
+--표준 구문
+select e.*, d.*
+from emp e cross join dept d
+order by empno, d.deptno;
+
+ENAME          DEPTNO
+---------- ----------
+SMITH              10
+SMITH              20
+SMITH              30
+SMITH              40
+ALLEN              10
+ALLEN              20
+ALLEN              30
+ALLEN              40
+
+--emp 데이터 14건
+--dept 데이터 4건
+--emp 각 4개씩 14*4건의 데이터 출력
+```

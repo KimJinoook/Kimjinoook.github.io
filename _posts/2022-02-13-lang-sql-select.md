@@ -1,0 +1,224 @@
+---
+layout: post
+title:  "2. SELECT - 데이터 조회하기"
+subtitle:   ""
+categories: lang
+tags: sql
+comments: false
+header-img: 
+---
+
+## 0. DESC
+- 특정 테이블에 어떤 컬럼이 있는지 조회   
+
+```sql
+desc tablename;
+```
+
+## 1. SELECT
+> select (컬럼명 또는 표현식) from (테이블명, 뷰명);   
+
+- 모든 컬럼 조회하기
+  - select * from emp;
+- 원하는 컬럼만 조회하기
+  - select empno, ename from emp;
+  - emp의 empno, ename 두 컬럼 조회
+- 표현식 사용하여 출력
+  - 컬럼 이름 이외에 출력하기를 원하는 내용 추가
+  - select 컬럼명, '출력문구' from 테이블명;
+- 컬럼 별칭 사용하여 출력
+  - 컬럼명을 별칭으로 변경하여 출력
+  - select 컬럼명 as "별칭" from 테이블명;
+  - select 컬럼명 as 별칭 from 테이블명;
+  - select 컬럼명 "별칭" from 테이블명;
+  - select 컬럼명 별칭 from 테이블명;
+  - 별칭에 공백 혹은 특수기호가 있을 시 큰따옴표 필수
+## 2. distinct
+  - 중복된 값 제거후 출력
+  - select distinct 컬럼명 from 테이블명;
+  - 1개의 키워드로 모든 컬럼 적용   
+
+```sql
+select deptno1 from student;
+101
+102
+103
+201
+202
+101
+102
+202
+
+select distinct deptno1 from student;
+101
+103
+202
+301
+201
+102
+```
+
+## 3. 연결연산자
+- 서로 다른 컬럼을 연결하여 출력
+- 문자열 연결 가능
+- select 컬럼명 || '문자열' || 컬럼명 from 테이블명;   
+
+```sql
+select name, height from student;
+서진수	180
+서재수	172
+이미경	168
+
+select name || '의 키는 ' || height || 'cm, 몸무게는 '|| weight || 'kg 입니다' from student;
+서진수의 키는 180cm, 몸무게는 72kg 입니다
+서재수의 키는 172cm, 몸무게는 64kg 입니다
+이미경의 키는 168cm, 몸무게는 52kg 입니다
+
+```
+
+## 4. 산술연산자
+- dual 테이블 이용
+  - 연산을 위해 사용하는 가상 테이블   
+
+```sql
+select 100*0.3 from dual;
+30
+
+select ename, sal, sal+100 from emp;
+
+ENAME             SAL    SAL+100
+---------- ---------- ----------
+SMITH             800        900
+ALLEN            1600       1700
+WARD             1250       1350
+
+```
+
+## 5. where
+- 원하는 조건만 조회
+> select 칼럼명 from 테이블명 where 조건;   
+
+```sql
+select ename, sal, deptno from emp where deptno = 10;
+ENAME             SAL     DEPTNO
+---------- ---------- ----------
+CLARK            2450         10
+KING             5000         10
+MILLER           1300         10
+```
+- 조건연산자
+  - between a and b : a와 b사이 범위 값
+  - in(a,b,c) : a거나 b거나 c인 조건
+  - is null / is not null
+    - null : 0이나 공백이 아닌, 데이터가 없는 것
+  - a and b : a와 b를 모두 만족하는 값
+  - a or b : a나 b 둘중 하나라도 만족하는 값
+  - not a : a가 아닌 모든 조건
+  - like : 특정 조건을 만족하는 값
+    - % : 글자수 제한없고 아무 글자나 가능
+    - _ : 글자수는 한글자, 아무 글자나 가능   
+
+```sql
+select name from student where name like '김%';
+NAME      
+----------
+김재수
+김신영
+김진욱
+김문호
+김주현
+
+select name from student where name like '김_욱';
+NAME      
+----------
+김진욱
+```
+- 검색하고자 하는 문자에 %이나 언더바가 포함될 경우
+  - escape문자를 표시   
+
+```java
+select employee_id, job_id from employees where job_id like '%PR*_%' escape '*';
+
+EMPLOYEE_ID JOB_ID    
+----------- ----------
+        204 PR_REP 
+```
+
+## 6. order by
+- 출력결과를 정렬
+- asc : 오름차순, 기본값
+- desc : 내림차순
+- sql문의 가장 마지막에 입력
+- 데이터가 많을수록 정렬 시 DBMS에 부담이 간다   
+> select~ from ~ order by 컬럼명 혹은 컬럼번호 asc or desc;   
+
+```sql
+select name, height, weight from student where grade = 1 order by height asc, 3 desc;
+--키를 오름차순 정렬, 같은키가 있을경우 3번컬럼인 몸무게를 내림차순으로 정렬
+
+NAME           HEIGHT     WEIGHT
+---------- ---------- ----------
+이윤나            162         48
+허우              163         51
+인영민            173         69
+안은수            175         63
+김주현            179         81
+
+```
+
+## 7. 집합연산자
+- 기존 연산자
+  - 하나의 데이터들끼리 연산
+- 집합 연산자
+  - 여러건의 데이터의 집합을 연산
+  - union
+    - 두 집합을 더해서 결과 출력
+    - 중복 값 제거하고 정렬
+  - union all
+    - 두 집합을 더해서 결과 출력
+    - 중복 제거x, 정렬x
+  - intersect
+    - 교집합 결과를 출력, 정렬
+  - minus
+    - 차집합 결과를 출력, 정렬
+    - 쿼리의 순서가 중요하다
+- 주의사항
+  - 두 집합의 select절에 오는 컬럼의 개수가 동일해야 한다
+  - 두 집합의 select절에 오는 컬럼의 데이터형이 동일해야 한다   
+
+```sql
+--set1 : aaa,aaa,bbb
+--set2 : bbb,ccc,ccc
+
+select id1, name1 from set1 union select id2, name2 from set2;
+       ID1 NAME1     
+---------- ----------
+         1 AAA       
+         2 BBB       
+         3 CCC
+         
+select id1, name1 from set1 union all select id2, name2 from set2;
+       ID1 NAME1     
+---------- ----------
+         1 AAA       
+         1 AAA       
+         2 BBB       
+         2 BBB       
+         3 CCC       
+         3 CCC
+         
+select id1, name1 from set1 intersect select id2, name2 from set2;
+       ID1 NAME1     
+---------- ----------
+         2 BBB
+
+select id1, name1 from set1 minus select id2, name2 from set2;
+       ID1 NAME1     
+---------- ----------
+         1 AAA
+         
+select id2, name2 from set2 minus select id1, name1 from set1;
+       ID2 NAME2     
+---------- ----------
+         3 CCC
+```

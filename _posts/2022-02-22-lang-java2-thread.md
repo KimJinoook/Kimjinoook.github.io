@@ -1,0 +1,480 @@
+---
+layout: post
+title:  "11. 쓰레드"
+subtitle:   ""
+categories: lang
+tags: java2
+comments: false
+header-img: 
+---
+
+## 1. 쓰레드란
+- 할당된 메모리공간을 기반으로 실행중에 있는 프로그램
+- 프로그램을 실행하면 os로부터 메모리를 할당받아 프로세스가 된다
+- 프로그램을 수행하는데 필요한 데이터와 메모리등의 자원과 쓰레드로 구성
+- 쓰레드
+  - 프로세스 내에서 실제로 작업을 수행
+  - 별도의 실행흐름
+  - 모든 프로세스에는 최소 하나 이상의 쓰레드가 존재
+  - 둘 이상의 쓰레드를 가진 프로세스 : 멀티쓰레드 프로세스
+- 멀티 태스킹
+  - 여러 개의 프로세스가 동시에 실행되는 것처럼 보이는 것
+- 멀티 쓰레딩
+  - 하나의 프로세스 내에서 여러 쓰레드가 동시에 작업 수행
+- 싱글 쓰레드
+  - 실행 흐름이 하나밖에 없으므로 한번에 하나의 작업밖에 하지 못한다
+- 멀티 쓰레드
+  - 하나의 응용프로그램에 두개 이상의 쓰레드가 동시에 실행될 수 있다
+  - 두개의 작업을 병렬적으로 처리
+  - 계산작업, 스풀링 등
+  - 장점
+    - CPU 사용률 향상
+    - 자원사용 효율성
+    - 사용자에 대한 응답성 향상
+    - 작업이 분리되어 코드가 간결
+  - 단점
+    - 여러 쓰레드가 같은 프로세스 내에서 자원 공유
+      - 동기화, 교착상태 문제 고려
+      - (두 쓰레드가 같은 자원을 사용하려 기다리느라 진행이 멈춘 상태)   
+
+```java
+public class ThreadMain {
+
+	public static void main(String[] args) {
+		System.out.println("main메서드");
+		Thread th = Thread.currentThread(); //현재 실행중인 쓰레드의 참조를 반환
+		System.out.println("현재 실행중인 스레드 : "+ th.getName()); //쓰레드의 이름을 반환
+		
+		int cnt = Thread.activeCount();
+		System.out.println("실행중인 스레드 개수 : "+ cnt);
+		
+		Thread.currentThread().setName("Prime");
+		System.out.println("변경된 스레드 이름 : "+Thread.currentThread().getName());
+
+	}
+
+}
+/*
+main메서드
+현재 실행중인 스레드 : main
+실행중인 스레드 개수 : 1
+변경된 스레드 이름 : Prime
+*/
+```
+***
+
+## 2. 쓰레드의 구현과 실행
+- Thread클래스 상속   
+```java
+class ThreadTest extends Thread{
+  public void run(){
+    작업내용
+  }
+}
+```   
+> ThreadTest t = new ThreadTest();   
+> t.start();
+
+
+- Runnable 인터페이스 구현
+  - 스레드 클레스가 상속해야할 또 다른 클래스가 존재하는 경우 사용   
+
+```java
+class ThreadTest implements Runnable{
+  public void run(){
+    작업내용
+  }
+}
+```   
+> ThreadTest r = new ThreadTest();   
+> Thread t = new Thread(r);   
+> t.start();   
+
+```java
+package com.thread.day1;
+
+public class ThreadTest1 {
+
+	public static void main(String[] args) {
+		MyThread1 th1 = new MyThread1("상속스레드");
+		MyRunnable1 r = new MyRunnable1();
+		Thread th2 = new Thread(r);
+		th2.setName("구현스레드");
+		
+		th1.start();
+		th2.start();
+		
+		System.out.println("main스레드 종료");
+
+	}
+
+}
+
+class MyThread1 extends Thread{
+	MyThread1(String name){
+		super(name);
+	}
+
+	public void run() {
+		for (int i = 0; i<5 ; i++) {
+			System.out.println(Thread.currentThread().getName());
+		}
+	}
+}
+
+
+class MyRunnable1 implements Runnable{
+	public void run() {
+		for (int i = 0; i<5 ; i++) {
+			System.out.println(Thread.currentThread().getName());
+		}
+	}
+}
+/*
+결과는 매번 달라지며 스레드의 우선순위가 같아 동시에 처리
+*/
+```
+
+- run() 메서드 직접호출
+	- 단순한 메서드 호출일 뿐, 쓰레드의 생성으로 이어지지 않는다
+	- 쓰레드는 자신만의 메모리 공간을 할당받아 별도의 실행흐름을 형성
+- start() 메서드
+	- 메모리 공간의 할당 등 쓰레드의 실행 기반을 마련
+	- run 메서드를 대힌 호출해준다   
+
+***
+
+## 3. 쓰레드의 메모리 구성
+- 쓰레드 : 별도의 실행흐름 형성
+	- main메서드와 다른 실행흐름을 형성하기 위해 별도의 스택이 할당되어야 한다   
+
+![캡처](https://user-images.githubusercontent.com/99188096/163298347-5b48c11e-35d5-4565-b77b-8fc459bd2bc1.PNG)   
+
+- **모든 쓰레드는 자신의 스택을 할당받는다**
+- **힙과 메서드 영역은 모든 쓰레드가 공유한다**
+- 힙 영역의 공유
+	- 모든 쓰레드가 동일한 힙 영역 접근 가능
+	- A쓰레드가 만든 인스턴스의 주소값을 알면 B쓰레드에서 접근 가능   
+
+```java
+package com.thread.day1;
+
+import javax.swing.JOptionPane;
+
+public class ThreadTest3 {
+
+	public static void main(String[] args) {
+		MyThread2 th = new MyThread2();
+		th.start();
+		
+		String str = JOptionPane.showInputDialog("값 입력");
+		System.out.println(str);
+
+	}
+
+}
+
+class MyThread2 extends Thread{
+	public void run() {
+		for(int i=10 ; i>0;i--) {
+			System.out.println(i);
+			try {
+				Thread.sleep(1000); //지정된 시간동안 쓰레드를 일시정지시킨다
+				
+			}catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+/*
+값을 입력받는동안 MyThread의 for문은 계속 실행되고있다
+*/
+```
+
+***
+
+## 4. 싱글쓰레드와 멀티쓰레드
+- 하나의 쓰레드로 두개의 작업을 수행한 시간과 두개의 쓰레드로 두개의 작업을 수행한 시간은 거의 같다
+	- 쓰레드 간의 작업전환에 시간이 걸리기 때문
+	- 작업을 전환할 때는 현재 진행중인 작업의 상태 등의 정보를 저장하고 읽어오는데 시간이 소요된다   
+
+- CPU이외의 자원을 사용하는 경우
+	- 멀티쓰레드가 효율적
+	- 데이터입력받는 작업, 네트워크 작업, 외부기기 입출력 작업등의 병렬 처리 필요
+	- 싱글쓰레드일 경우 작업하나가 끝날 때까지 기다려야한다
+
+***
+
+## 5. 쓰레드의 우선순위
+- 쓰레드
+	- 우선순위(priority) 멤버변수를 가지고있다
+	- 우선순위의 값에 따라 쓰레드가 얻는 실행시간이 달라진다
+	- 작업의 중요도에 따라 쓰레드의 우선순위를 지정
+		- 특정 쓰레드가 더 많은 작업시간을 갖게 할 수 있다
+- 쓰레드의 우선순위는 쓰레드를 생성한 쓰레드로부터 상속받는다
+	- main메서드를 수행하는 쓰레드의 우선순위 5
+	- main메서드 내에서 생성하는 쓰레드의 우선순위는 자동적으로 5   
+
+
+```java
+package com.thread.day1;
+
+public class PriorityTest {
+	static long starttime=0;
+	public static void main(String[] args) {
+		starttime = System.currentTimeMillis();
+		MyThread4 th = new MyThread4();
+		MyRunnable3 r = new MyRunnable3();
+		Thread th2 = new Thread(r);
+		
+		System.out.println("th 우선순위 : " + th.getPriority());
+		System.out.println("th2 우선순위 : " + th2.getPriority());
+		
+		th.setPriority(1);
+		th2.setPriority(10);
+		
+		th.start();
+		th2.start();
+
+	}
+
+}
+
+class MyThread4 extends Thread{
+	public void run() {
+		for(int i=0 ; i<10000 ; i++) {
+			System.out.print("1");
+		}
+		System.out.println("\n\n Mythread4 소요시간 : "+(System.currentTimeMillis()-PriorityTest.starttime)+"\n");
+	}
+}
+class MyRunnable3 implements Runnable{
+	public void run() {
+		for(int i=0 ; i<10000 ; i++) {
+			System.out.print("2");
+		}
+		System.out.println("\n\n MytRunnable3 소요시간 : "+(System.currentTimeMillis()-PriorityTest.starttime)+"\n");
+	}
+}
+
+```
+
+## 6. 데몬쓰레드 (daemon thread)
+- 다른 일반 쓰레드의 작업을 돕는 보조적인 역할을 수행
+- 일반 쓰레드가 모두 종료되면 데몬쓰레드는 강제적으로 자동 종료
+- 가비지 컬렉터, 워드프로세서의 자동저장, 화면 갱신 등
+- setDaemon(boolean on)은 반드시 start()를 호출하기 전 실행되어야 한다   
+
+```java
+package com.thread.day1;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.swing.JOptionPane;
+
+public class Prac_21_33 {
+
+	public static void main(String[] args) {
+		Prac33Thread1 th = new Prac33Thread1();
+		Prac33Thread2 r = new Prac33Thread2();
+		Thread th2 = new Thread(r);
+		th2.setDaemon(true); // 
+		th2.start();
+		th.start();
+		
+		System.out.println("main 쓰레드 종료!");
+
+	}
+
+}
+
+class Prac33Thread1 extends Thread{
+	public void run() {
+		String snum = JOptionPane.showInputDialog("정수 입력");
+		int num = Integer.parseInt(snum);
+		int sum = 0;
+		for(int i=1; i<=num; i++) {
+			sum += i;
+		}
+		System.out.println("입력한 값 까지의 합 : "+sum);
+		
+	}
+}
+
+class Prac33Thread2 implements Runnable{
+	public void run() {
+		Date d = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a");
+		String str = sdf.format(d);
+		for(;;) {
+			System.out.println("현재시간 : "+str);
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+```
+
+## 7. 스케줄링과 관련된 메서드
+![캡처](https://user-images.githubusercontent.com/99188096/163310701-734affa5-c3df-4b16-afc0-9f59acff7229.JPG)
+
+
+### join()
+- 지정된 시간동안 쓰레드가 실행되도록 한다
+- 지정된 시간이 지나거나 작업이 종료되면 join()을 호출한 쓰레드로 다시 돌아와 실행을 계속한다   
+
+```java
+package com.thread.day1;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.swing.JOptionPane;
+
+public class Prac_21_33 {
+
+	public static void main(String[] args) {
+		Prac33Thread1 th = new Prac33Thread1();
+		Prac33Thread2 r = new Prac33Thread2();
+		Thread th2 = new Thread(r);
+		th2.setDaemon(true); // 
+
+		th.start();
+		
+		try {
+			th.join();
+		}catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		th2.start();
+		
+		System.out.println("main 쓰레드 종료!");
+
+	}
+
+}
+
+class Prac33Thread1 extends Thread{
+	public void run() {
+		String snum = JOptionPane.showInputDialog("정수 입력");
+		int num = Integer.parseInt(snum);
+		int sum = 0;
+		for(int i=1; i<=num; i++) {
+			sum += i;
+		}
+		System.out.println("입력한 값 까지의 합 : "+sum);
+		
+	}
+}
+
+class Prac33Thread2 implements Runnable{
+	public void run() {
+		Date d = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss a");
+		String str = sdf.format(d);
+		for(;;) {
+			System.out.println("현재시간 : "+str);
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+```
+
+### start, stop (interrupted)
+```java
+package com.thread.day1;
+
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class LifeCycleTest extends Frame implements ActionListener, Runnable {
+
+	private int x=30, y=100;
+	private Button btStart, btStop;
+	private Panel pl;
+	private Thread th;
+	
+	public LifeCycleTest() {
+		super("쓰레드 라이프 사이클");
+		setSize(500,300);
+		
+		pl = new Panel();
+		add(pl,"South");
+		pl.add(btStart = new Button("시작"));
+		pl.add(btStop = new Button("중지"));
+		
+		btStart.addActionListener(this);
+		btStop.addActionListener(this);
+	}
+	
+	@Override
+	public void paint(Graphics g) {
+		g.setColor(Color.orange);
+		g.fillOval(x, y, 70, 70);
+	}
+
+	public static void main(String[] args) {
+		LifeCycleTest f = new LifeCycleTest();
+		f.setVisible(true);
+
+	}
+	public void run() {
+		System.out.println("width : "+this.getWidth());
+		while(true) {
+			if(x>this.getWidth()) {
+				x=0;
+			}
+			x+=5;
+			repaint();
+			
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				break;
+			}
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==btStart) {
+			th=new Thread(this);
+			th.start();
+		}else if(e.getSource()==btStop) {
+			th.interrupt();  //th.stop();
+		}
+		
+	}
+
+}
+
+```
+
+***
+
+## 8. 쓰레드의 상태
+- Runnable
+	- 모든 실행의 준비를 마치고, 스케줄러에 의해 선택되어 실행되기를 기다리는 상태
+- Blocked
+	- 실행중인 쓰레드가 sleep, join메서드를 호출할 때
+	- CPU의 할당이 필요치 않는 입출력 연산을 할 때
+	- CPU를 다른 쓰레드에게 양보하고 본인은 Blocked 상태가 된다
+- Terminated
+	- run 메서드의 실행이 완료되어 run메서드를 빠져나왔을 때
+	- 쓰레드의 실행을 위해 할당받은 메모리를 비롯, 쓰레드 관련 정보가 완전히 사라지는 상태

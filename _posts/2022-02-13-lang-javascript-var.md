@@ -1,0 +1,263 @@
+---
+layout: post
+title:  "2. 변수와 자료형"
+subtitle:   ""
+categories: lang
+tags: javascript
+comments: false
+header-img: 
+---
+
+## 1. 변수란
+### 변수의 선언
+- 변수의 선언   
+  > var 변수명;   
+- 선언과 동시에 초기화
+  > var 변수명 = 값;   
+- 변수의 선언 없이 필요한 곳에서 바로 사용 가능   
+  > 변수명 = 값;   
+- 변수를 선언하고 값을 할당하지 않으면 기본적으로 undefined 라는 초기값을 가진다
+- 변수의 자료형을 정의하지 않아도, 코드를 실행할 때 자동으로 결정
+- 변수의 타입은 typeof 예약어로 확인 가능   
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+
+	<script type="text/javascript">
+		//변수의 타입(종류)을 정의하지 않아도 코드를 실행할 때 자동으로 타입이 결정된다
+		var a;
+		a=10;
+		document.write("a="+a+"<br>");
+		document.write("a length: "+a.length+"<br>");
+		document.write("type: "+typeof a+"<br><br>");
+		
+		a='hello';
+		document.write("a="+a+"<br>");
+		document.write("a length: "+a.length+"<br>");
+		document.write("type: "+typeof a+"<br><br>");
+		
+		a=false;
+		document.write("a="+a+"<br>");
+		document.write("a length: "+a.length+"<br>");
+		document.write("type: "+typeof a+"<br><br>");
+		
+		b=3.14; //변수를 선언할 필요없이 필요한곳에서 바로 사용하도 된다
+		document.write("b= "+b+"<br>");
+		
+	</script>
+	
+</head>
+<body>
+
+</body>
+</html>
+<!-- 
+a=10
+a length: undefined
+type: number
+
+a=hello
+a length: 5
+type: string
+
+a=false
+a length: undefined
+type: boolean
+
+b= 3.14
+-->
+```
+
+### 변수의 범위
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+	<script type="text/javascript">
+		var v_global="전역변수";
+		
+		function f_vari(){
+			var v_local="지역변수";
+			document.write("함수 안 v_global="+v_global+"<br>");
+			document.write("함수 안 v_local="+v_local+"<br>");
+		}
+		
+		f_vari();
+		
+		document.write("함수 밖 v_global="+v_global+"<br>");
+		document.write("함수 밖 v_local="+v_local+"<br>");//error
+	
+	</script>
+
+</head>
+<body>
+
+</body>
+</html>
+```
+- 함수내에서 선언한 변수는 함수를 빠져나가면 소멸된다
+
+***
+
+## 2. 자료형
+- 특징
+  - 느슨한 자료형 체크
+    - 미리 변수의 자료형을 지정하지 않는다
+    - 변수를 지정하고 원하는 값을 할당만 하면 된다
+  - 자바의 경우
+    - 미리 자료형을 지정한다
+    - int 변수명 등
+- 기본형
+  - number
+    - 따옴표 없이 표기한 숫자
+    - var a = 10;
+  - string
+    - 문자열, 따옴표로 묶어 나타낸다
+    - 숫자도 따옴표로 묶으면 문자형이 된다
+    - 
+  - boolean
+    - 논리형, 참 거짓
+  - undefined
+    - 자료형을 지정하지 않았을 때의 유형
+  - null
+    - 값이 유효하지 않을 때의 유형
+- 복합형(참조형)
+  - array
+    - 배열, 하나의 변수에 여러 값을 저장
+  - object
+    - 객체, 함수와 속성이 함께 포함된 유형   
+
+### 변수 사용 예
+#### 나이 계산 
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>age</title>
+    <link rel="stylesheet" href="css/age.css"
+</head>
+<body>
+    <button class="btn" onclick="calc()">나이 계산</button>
+    <div id="result" class="show">(결과값 표시)</div>
+    <script>
+        function calc() {
+        var currentYear = 2020;  //올해 년도를 저장을 변수 currentYear에 저장함.
+        //사용자로부터 입력을 받은 값으로 변수 birthYear에 저장함.
+        var birthYear = prompt("태어난 년도를 입력하세요.","YYYY");
+        //변수 age를 0으로 초기화
+        var age = 0;
+        //실제 나이를 구하기 위한 코드
+        age = currentYear - birthYear + 1;
+        //document는 현재 웹브라우저의 페이지를 의미하고, querySelector()는
+        //id가 result인 웹 요소(div)를 의미한다.innerHTML은 대입한 값으로 
+        //html문서에 대체하시오.
+        document.querySelector("#result").innerHTML = "당신의 나이는" + age + "세입니다.";
+    }
+    </script>
+</body>
+
+</html>
+```
+
+![캡처](https://user-images.githubusercontent.com/99188096/162602705-09490128-0b00-4ab1-b605-3b73f5c4ca91.PNG)   
+![캡처2](https://user-images.githubusercontent.com/99188096/162602710-eb08d9ac-e474-43fb-9521-2dc28958958d.PNG)   
+![캡처3](https://user-images.githubusercontent.com/99188096/162602712-1468083d-3408-4aa4-a2b6-f6c83e5a314d.PNG)   
+
+
+#### 글자색 바꾸기
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글자색 바꾸기</title>
+    <link rel="stylesheet" href="css/text-color.css">
+</head>
+<body>
+    <h1 id="heading">안녕 자바스크립트</h1>
+    <p id="text">위의 텍스트를 클릭해 보세요.</p>
+    <script>
+          //heading변수를 선언하고 h1태그를 저장한 꼴이 되었다.
+    var heading = document.querySelector("#heading");
+    //h1태그를 클릭을 하면 글자색깔을 red로 설정하시오.
+    heading.onclick = function() {
+        heading.style.color = "red";
+    }
+    </script>
+</body>
+</html>
+```
+
+![캡처](https://user-images.githubusercontent.com/99188096/162602907-6efafc30-1a43-4555-93d1-71d8ed0d6daa.PNG)   
+![캡처2](https://user-images.githubusercontent.com/99188096/162602910-05f1a096-35ef-44d0-9e74-15139136ce1b.PNG)
+
+
+
+### 시간표시
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-size: 2em;
+            text-align:center;
+
+        }
+    </style>
+</head>
+<body>
+    <script>
+        var now = new Date();
+        var disp = now.toLocaleTimeString();
+        document.write("현재 시각 : " + disp);
+    </script>
+    
+</body>
+</html>
+```
+
+![캡처3](https://user-images.githubusercontent.com/99188096/162602932-77919d70-6bb5-4e4e-8453-77b265161dff.PNG)   
+
+### 배열
+- 하나의 변수에 여러 값 저장
+- 배열의 인덱스는 0부터 시작
+- 배열에 있는 값을 가져오려면 배열 이름과 대괄호 안에 인덱스 사용
+- 선언
+  > var 변수명 = [값1,값2,값3...];   
+- 호출
+  - 값 1
+    > 변수명[0]   
+  - 값 2
+    > 변수명[1]   
+
+
+### 객체
+- java의 키와 밸류와 비슷하다
+- 여러 자료를 중괄호로 묶은 것
+- 키와 밸류의 쌍으로 여러 저장   
+
+```javascript
+var name = {
+  firstName : "jinook",
+  lastName : "Kim",
+  age : "29",
+  address : "seoul"
+}
+```
+
+

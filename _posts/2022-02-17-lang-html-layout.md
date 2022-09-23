@@ -1,0 +1,489 @@
+---
+layout: post
+title:  "6. 레이아웃"
+subtitle:   ""
+categories: lang
+tags: html
+comments: false
+header-img: 
+---
+
+## 1. 레이아웃 구성 방법
+- position 값을 활용한 레이아웃 구성
+  - position 값과 상하촤주 값을 활용하여 요소 위치를 조절
+  - 동적으로 변화하는 디자인이나 특정 위치의 좌표값을 지정해주고자 할 때 주로 이용
+  - 자바스크립트 등을 이용하여 요소의 위치가 변화할 때 사용
+  - 특정 요소가 다른 요소의 간섭 없이 일정 위치에 자리잡아야 할 때 사용
+- float을 이용한 상대위치를 사용하는 방법
+  - float과 clear 속성을 활용하여 상대적 위치를 조절
+  - 콘텐츠가 유동적이어도 문제가 없어 일반적으로 사용되는 기법
+  - 특정 좌표값을 사용하는 것이 아니기 때문에 동적으로 위치를 변화시키거나 요소 겹침을 사용하기는 어렵다   
+
+***
+
+## 2. CSS 초기화
+- 요소의 기본 스타일 값은 브라우저의 종류나 버전별로 차이가 있다
+- css를 초기화 하여, 이후 적용할 스타일들이 제대로 적용되게 한다   
+
+```html
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,input,textarea,p,blockquote,th,td { 
+  margin:0;
+  padding:0;
+}
+table {
+  border-collapse:collapse;
+}
+img { 
+  border:0;
+}
+ol,ul {
+  list-style:none;
+}
+caption,em,strong,th {
+  font-style:normal;
+  font-weight:normal;
+}
+caption,th {
+  text-align:left;
+}
+
+```   
+
+***
+
+## 3. float 속성을 사용한 레이아웃 구성
+- 자손 float 속성을 적용하면 부모의 overflow 속성에 hidden 키워드 적용   
+
+### body
+
+```html
+<body>
+  <header id="header"><h1>Header</h1></header>
+  <nav id="navigation"><h1>Navigation</h1></nav>
+  <div id="wrap">
+    <aside id="aside">
+      <h1>Aside</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
+    </aside>
+    <section id="section">
+      <article>
+        <h1>Section</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </article>
+    </section>
+  </div>
+  <footer id="footer"><h1>Footer</h1></footer>
+```   
+![캡처](https://user-images.githubusercontent.com/99188096/167284535-f9d24357-6c49-41d0-a17f-5e1ee025e5b8.PNG)   
+
+### wrap태그의 float
+- wrap 태그 내부 영역은 aside와 section로 구분
+- 각각의 태그에 width 적용, float 적용   
+
+```html
+<style>
+/* body 태그를 중앙 정렬 */
+body {
+  width: 960px;
+  margin: 0 auto; 
+}
+#aside {
+  width: 200px;
+  float: left;
+}
+#section {
+  width: 760px;
+  float: left;
+}
+</style>
+
+```
+
+![캡처](https://user-images.githubusercontent.com/99188096/167284631-46866351-a0a9-4d08-8e72-810e80dc9bf8.PNG)   
+
+### footer 태그의 위치 조절
+- footer 태그가 section 태그 바로 밑에 위치해 있다
+  - section태그가 float : left 이기 때문
+- section태그의 부모인 wrap 태그에 overflow : hidden 속성 적용
+- footer태그에 clear:both 을 적용해도 같은 기능 수행   
+
+```html
+<style>
+/* body 태그를 중앙 정렬합니다. */
+body {
+  width: 960px;
+  margin: 0 auto; 
+}
+#aside {
+  width: 200px;
+  float: left;
+}
+#section {
+  width: 760px;
+  float: left;
+}
+#wrap { overflow: hidden; }
+</style>
+```
+![캡처](https://user-images.githubusercontent.com/99188096/167284722-5a77e70a-2091-4680-9ae0-a073ff172337.PNG)   
+
+***
+
+## 4. 레이아웃 예제 1   
+
+![캡처](https://user-images.githubusercontent.com/99188096/167285246-48fbf382-547b-4311-a0b2-93a4096e4abb.PNG)   
+
+```html
+<head>
+  <title></title>
+  <style>
+    <!-- 초기화 시작 -->
+    body{
+     margin: 0;
+      padding: 0;
+    }
+      /* HTML5 display-role reset for older browsers */
+      article, aside, footer, header, hgroup, nav, section {
+      display: block;
+    }
+    body {
+      font-family:Dotum, 'Times New Roman',serif;
+    }
+    ol, ul {
+      list-style: none;
+    }
+    table { border-collapse: collapse;}
+    img{ border:0; }
+    a{ text-decoration: none; }
+    <!-- 초기화 끝 -->
+    
+    body {
+      background-image: url("background.png");
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-size: 100%;}
+    #wrapper {
+      width: 90%;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+      background: white;}
+    #topbanner {
+      height:195px;
+      background-image: url("topbg3.png");
+      background-repeat: no-repeat; }
+    nav {
+      background: #C51A3A;
+      height: 50px;
+      overflow: hidden; }
+    nav ul {
+      float: left;
+      margin: 15px 0; }
+    nav ul li {
+      float: left;
+      margin: 0 15px; }
+    nav ul li a, nav ul li a:visited {
+      padding: 15px 10px; /* 패딩을 이용해 메뉴 항목의 공간 마련*/
+      font-weight: 600; /* 글자를 약간 진하게 (400:보통, 900: 진함) */
+      color: white; /* 글자색 */
+      text-shadow: 0 0.5px 0.5px red; /* 글자에 그림자 효과 추가 */ }
+    nav ul li a:hover {
+      color: red; /* 글자색*/
+      background-color: white; /* 배경색*/
+      text-shadow: 0 0.5px 1px white; /* 글자에 그림자 효과 추가*/
+      border-radius: 10px 10px 0 0; /* 윗부분만 둥글게 처리*/}
+    #shop {
+      float: left;
+      width: 40%;
+      margin: 1.5%;}
+    #intro {
+      float: left;
+      width: 50%;
+      margin-top: 25px;
+      padding: 10px;}
+    #customer {
+      clear: both;
+      float: left;
+      width: 23%;
+      margin-left: 1.7%; 
+    }
+    #main_section{
+      float: left;
+      width: 75%;}
+    footer {
+      clear: both;
+      height: 50px;
+      border-top: 1px solid #ccc;}
+    .sub {
+      float: left;
+      border: 1px dotted #2a2399;
+      width: 30.6%;
+      border-radius:10px;
+      height: 200px; 
+      margin-bottom: 15px; /* 아래쪽 마진*/
+      margin-left: 1.9%;}
+    #shop img{ width: 100%;}
+    #intro>h1 { /* #intro 영역에 있는 자식 요소 <h1>에만 적용*/
+      font-weight: 600;
+      font-size: 1.2em;
+      margin: 15px 0;
+    }
+    #intro>p { /* #intro 영역에 있는 자식 요소 <p>에만 적용*/
+      font-weight: bold;
+      font-size: 1.2em;
+      font-family: "바탕";
+      color: #F30;}
+    #customer h1 {
+      background: #E66C6D;
+      color:white;
+      font-size: 1.2em;
+      padding: 10px;}
+    #customer ul{
+      list-style-type: square;
+    }
+    #customer ul li{
+      line-height: 25px;
+      font-size: 0.9em;}
+    #choice1 {
+      background-image: url("bg1.png");
+      background-size:contain;
+      background-repeat:no-repeat;}
+    #choice2 {
+      background-image: url("bg2.png");
+      background-size:contain;
+      background-repeat:no-repeat;}
+    #choice3 {
+      background-image: url("bg3.png");
+      background-size:contain;
+      background-repeat:no-repeat;}
+    .sub hgroup{
+      background-color: rgba(255,255,255,0.6);
+      margin-top: 120px; 
+      text-align: right;
+      width: 95%; /* 너비*/
+    }
+    .sub hgroup h1 {
+      color: #936; /* 글자색*/
+      font-weight: 600; /* 약간 진하게*/
+      font-family: "바탕"; /* 글꼴*/
+      font-size: 1.5em; /* 글자 크기*/}
+    .sub hgroup h2 {
+      color: #06F; /* 글자색*/
+      font-weight: 600; /* 약간 진하게*/
+      font-family: "바탕"; /* 글꼴*/
+      font-size: 1em; /* 글자 크기*/}
+    footer ul { margin: 0;}
+    footer ul li a {
+      float: left; /* 항목을 왼쪽부터 배치 */
+      font-size: 0.8em; /* 글자 크기 */
+      padding: 15px 5px; /* 패딩 */
+      color: #222; /* 글자색 */
+    }
+    footer p {
+      float: right;
+      color:#222;
+      font-size: 0.8em;
+      padding: 0;
+      margin:17px;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <header id="topbanner"></header>
+    <!-- 사이트 로고 -->
+    <nav>
+      <!-- 사이트 메인 메뉴 -->
+      <ul>
+        <li><a href="#">꽃다발</a></li>
+        <li><a href="#">꽃바구니</a></li>
+        <li><a href="#">화환</a></li>
+        <li><a href="#">화분</a></li>
+      </ul>
+    </nav>
+    <!-- 컨텐츠 -->
+    <div id="content">
+      <div id="shop">
+        <!-- 꽃집 사진 -->
+        <img src="shop.png" alt="꽃집 전경">
+    </div>
+    <div id="intro">
+      <!-- 꽃집 소개 -->
+      <h1>향기나는 꽃집입니다</h1>
+      <p>향기나는 꽃집은 식물과 함께하는 건강한 삶, 꽃으로 전하는 사랑이야기, 그리고
+      꽃으로 힐링하는 치유의 삶의
+      메신저가 되겠습니다.</p>
+    </div>
+    <!-- <hr> -->
+      <aside id="customer">
+        <!-- 고객 상담 정보 -->
+        <h1>고객 상담 안내</h1>
+        <ul id="contact">
+          <li><b>전화</b> 031-858-5277</li>
+          <li><b>팩스</b> 031-858-5270</li>
+          <li><b>운영시간</b> 오전9~오후6시 점심:12~1시</li>
+        </ul>
+      </aside>
+      <section id="main_section">
+        <article id="choice1" class="sub">
+          <!-- 추천제품1 -->
+          <hgroup>
+            <h1>꽃다발</h1>
+            <h2>말괄량이</h2>
+          </hgroup>
+        </article>
+        <article id="choice2" class="sub">
+          <!-- 추천제품2 -->
+          <hgroup>
+            <h1>꽃바구니</h1>
+            <h2>장미 100송이</h2>
+          </hgroup>
+        </article>
+        <article id="choice3" class="sub">
+          <!-- 추천제품3 -->
+          <hgroup>
+            <h1>화환</h1>
+            <h2>근조 화환</h2>
+          </hgroup>
+        </article>
+      </section>
+    </div>
+    <!-- <hr> -->
+    <footer>
+      <ul>
+        <li><a href="#">홈</a></li>
+        <li><a href="#">회사소개</a></li>
+        <li><a href="#">이용약관</a></li>
+        <li><a href="#">개인정보취급방침</a></li>
+      </ul>
+      <p>Copyright 2013</p>
+    </footer>
+  </div>
+</body>
+```
+
+## 5 레이아웃 예제 2   
+![캡처](https://user-images.githubusercontent.com/99188096/167285828-061ac9d7-e2ba-4a74-83c3-cb5a905310d8.PNG)   
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <style type="text/css">
+    body {
+      font-family: dotum;
+      color: #666;
+    }
+    form {
+      width: 500px;
+      position: relative;
+    }
+    fieldset {
+      width: 90%;
+      padding: 0;
+      margin: 0 auto;
+      border: 0;
+      border-bottom: 2px solid #7AA3EB;
+    }
+    legend{
+      font-weight: bold;
+      color: #7AA3EB;
+      padding: 10px 0;
+    }
+    strong {
+      color: #CD1076;
+    }
+    label {
+      font-size: 0.75em;
+    }
+    p {
+      /*clear: both;*/
+      border-bottom: 1px solid #eee;
+      padding: 5px 0;
+      margin: 0;
+      /*overflow: auto;*/
+    }
+    strong.notice {
+      border: 0;
+      position: absolute;
+      top: 1.5em;
+      right: 3em;
+      font-size: 0.7em;
+      letter-spacing: -1px;
+    }
+    p.firstP {
+      border-top: 2px solid #7AA3EB;
+    }
+    .label{
+      width: 20%;
+      float: left;
+      text-align: right;
+      padding: 3px 10px 0 0;
+      /*clear: left;*/
+      font-size: 0.75em;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="password"]{
+      width: 35%;
+      height: 1.1em;
+      font-size: 0.75em;
+      border: 1px solid #DCDDE3; 
+    }
+    input[type="submit"]{
+      padding: 2px 10px;
+      font-weight: bold;
+      color: #CD1076; 
+    }
+    textarea{
+      width: 70%;
+      border: 1px solid #DCDDE3; 
+    }
+    .submitBtn{
+      border: 0; 
+      text-align: center;
+    }
+  </style>
+
+  <title>회원가입</title>
+</head>
+<body>
+  <form action="" id="sample">
+    <fieldset>
+      <legend>회원가입</legend>
+      <strong class="notice">붉은색 강조 문항은 필수 입력 문항입니다.</strong>
+      <p class="firstP">
+        <label for="uName" class="label"><strong>이 름</strong></label><input type="text" id="uName" />
+      </p>
+      <p>
+        <label for="uId" class="label"><strong>아이디</strong></label><input type="text" id="uId" />
+      </p>
+      <p>
+        <label for="uPass" class="label"><strong>비밀번호</strong></label><input type="password" id="uPass" />
+      </p>
+      <p>
+        <label for="cPass" class="label"><strong>비밀번호확인</strong></label><input type="password" id="cPass"/>
+      </p>
+      <p>
+        <label for="eMail" class="label">E-mail</label><input type="text" id="eMail" />
+      </p>
+      <p>
+        <span class="label">해당 직군</span>
+        <label><input type="radio" name="motive" /> 디자이너</label>
+        <label><input type="radio" name="motive" /> 퍼블리셔</label>
+        <label><input type="radio" name="motive" /> 프로그래머</label>
+        <label><input type="radio" name="motive" /> 기획자</label>
+      </p>
+      <p>
+        <span class="label">인사말</span>
+        <textarea cols="30" rows="10"></textarea>
+      </p>
+      <p class="submitBtn">
+        <input type="submit" value="등록" />
+      </p>
+    </fieldset>
+  </form>
+</body>
+</html>
+    
+```

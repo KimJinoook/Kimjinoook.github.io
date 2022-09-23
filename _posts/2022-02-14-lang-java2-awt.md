@@ -1,0 +1,865 @@
+---
+layout: post
+title:  "3. AWT"
+subtitle:   ""
+categories: lang
+tags: java2
+comments: false
+header-img: 
+---
+
+## 1. AWT란
+- Abstract Window Toolkit
+- window 프로그래밍 (GUI프로그래밍)을 하기 위한 도구
+- GUI 어플리케이션의 개발에 필요한 여려 패키지와 클래스의 집합으로 구성
+- GUT(Graphic User Interface)
+  - 사용자가 그래픽을 통해 하드웨어와 상호작용하는 환경
+- 해당 OS의 컴포넌트 사용
+  - GUI의 외양이 실행되는 OS마다 달라질 수 있다
+  - OS들이 공통적으로 갖고있는 컴포넌트만으로 구성
+    - GUI 컴포넌트의 수가 제한적
+    - 자바로 구현한 컴포넌트보다 속도가 더 빠르다
+- Swing
+  - AWT를 확장한 것
+  - AWT와는 달리 순수한 자바로 이루어져 있다
+    - 더 다양한 기능의 컴포넌트 제공
+
+#### AWT 컴포넌트의 상속계층도
+- Component 클래스
+  - 메뉴와 관련된 컴포넌트를 제외한 모든 컴포넌트의 조상
+  - 스크롤바, 버튼 등 화면을 구성하는데 사용되는 클래스
+- MenuComponent 클래스
+  - 메뉴와 관련된 컴포넌트
+
+### 컨테이너
+- Component의 상속클래스 중 Container와 그 상속클래스
+- 다른 컴포넌트들을 포함할 수 있다 (button, label)
+- 컨테이너가 컨테이너를 포함할 수 있다
+- 여러 오버로딩된 add메서드들이 정의되어있다
+- 독립적인 컨테이너
+  - 독립적으로 사용될 수 있으며, 다른 컴포넌트나 종속적인 컨테이너 포함 가능
+  - Frame
+    - 가장 일반적인 컨테이너
+    - 윈도우와 모양이 같다
+    - titlebar, 조절버튼, 닫기버튼
+    - 메뉴추가 가능
+  - Window
+    - frame의 조상
+    - 경계선, titlebar, 크기 조절버튼, 닫기버튼이 없다
+    - 메뉴 추가 불가
+    - 컴포넌트를 담을 수 있는 평면 공간만을 가진다
+  - Dialog
+    - frame처럼 titlebar, 닫기버튼을 갖고있지만 메뉴는 가질 수 없다
+    - 기본적으로 크기 변경 불가
+    - 메세지 출력 혹은 응답받을 때 사용
+- 종속적인 컨테이너
+  - 독립적으로 사용될 수 없으며, 다른 컨테이너에 포함되어야 한다
+  - Panel
+    - 평면공간으로 frame과 같이 여러 컴포넌트를 담을 수 있다
+  - ScroolPane
+    - panel과 같은 평면공간
+    - 단 하나의 컴포넌트만 포함 가능
+    - 자신보다 큰 컴포넌트가 포함되면 자동으로 스크롤바가 나타난다
+
+
+## 2. AWT의 주요 컴포넌트
+
+### frame
+- 생성자 : Frame(String title)
+- 메서드
+	- getTitle, setTitle
+	- getState, setState
+	- setResiable
+```java
+import java.awt.Frame;
+public class FrameTest1 {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("login");
+
+		f.setSize(300,200);
+		f.setVisible(true);
+	}
+}
+
+```
+
+![frame](https://user-images.githubusercontent.com/99188096/161506303-eec89586-de4a-458d-a5cb-577c46f408ed.PNG)   
+
+***
+### button
+- 사용자가 클릭했을 때, 어떤 작업이 수행되도록 할때 사용
+- 생성자 : Button(String label)
+- 메서드 : getLabel, setLabel   
+
+
+```java
+public class ButtonTest2 {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("Test");
+		f.setLayout(null); // 레이아웃 매니저의 설정을 해제
+		f.setSize(300,200);
+		
+		Button bt = new Button("확인");
+		bt.setSize(100,50);
+		bt.setLocation(100,75);
+		
+		f.add(bt);
+		f.setVisible(true);
+	}
+}
+```
+
+![button](https://user-images.githubusercontent.com/99188096/161506470-f7a6ea8d-c141-4b29-abbd-aed375b88132.PNG)   
+
+***
+### Choice
+- 여러 item의 목록을 보여주고 한가지를 선택
+- 기존 GUI : 콤보박스, drop-down listbox
+- 메서드 : add, remove, removeAll, insert, getItem, getItemCount, getSelectedIndex, getSelectedItem   
+
+```java
+import java.awt.Choice;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+
+public class ChoiceTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("choice test");
+		f.setSize(300,200);
+		f.setLayout(new FlowLayout()); //컴포넌트들을 가운데정렬하며 추가
+		
+		Choice ch = new Choice();
+		ch.add("java");
+		ch.add("oracle");
+		ch.add("spring");
+
+		f.add(ch);
+		f.setVisible(true);
+	}
+}
+```
+![choice](https://user-images.githubusercontent.com/99188096/161507871-7c5bcc24-76a8-4b6d-a6c2-f371fcc8b218.png)    
+
+
+***
+### List
+- 목록에서 원하는 항목을 선택할 수 있도록 할때 사용
+- 처음부터 모든 item 목록을 보여준다
+- 목록의 item 중복 선택 가능
+- 생성자
+	- List(int rows, boolean multipleMode)
+		- multiple true 일 시 중복 선택 가능
+	- List(int rows)
+		- multipled은 false, 중복선택 불가
+	- List()
+		- rows는 기본값인 4로 지정   
+
+```java
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.List;
+
+public class ListTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("List Test");
+		f.setSize(300,200);
+		f.setLayout(new FlowLayout());
+		
+		List list = new List(4);
+		list.add("java");
+		list.add("jsp");
+		list.add("oracle");
+		list.add("html");
+		list.add("Spring"); //4 밑으론 스크롤바 생성
+		
+		f.add(list);
+		
+		
+		List list2 = new List(5, true); //다중선택
+		list2.add("a");
+		list2.add("b");
+		list2.add("c");
+		list2.add("d");
+		list2.add("e");
+		
+		f.add(list2);
+		f.setVisible(true);
+	}
+
+}
+```
+![list](https://user-images.githubusercontent.com/99188096/161509665-9658dcbe-6399-4e2c-8e4a-2b2a1f9f767a.PNG)   
+
+***
+### Label, TextField
+- Label
+	- 화면에 글자를 표시, 설명이나 메세지를 출력하는데 주로 사용
+	- 생성자 : Label(String text, int alignment)
+		- alignment
+			- Label.LEFT(기본값), Lable.CENTER, Label.RIGHT
+- TextField
+	- 사용자로부터 값을 입력받을 수 있는 컴포넌트
+	- 편집 가능, 한줄만 입력 가능
+	- 생성자 : TextField(String text, int col)
+		- col : 입력받을 글자 수   
+
+```java
+package com.awt.day1;
+
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Label;
+import java.awt.TextField;
+
+public class LabelTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("laberTest");
+		f.setSize(400,200);
+		f.setLayout(new FlowLayout());
+		
+		Label lb1 = new Label("ID : ");
+		Label lb2 = new Label("PW : ", Label.RIGHT);
+		
+		TextField tfID = new TextField(10);
+		TextField tfPW = new TextField(10);
+		tfPW.setEchoChar('*'); //입력값 대신 *이 보이도록 한다
+		
+		f.add(lb1);
+		f.add(tfID);
+		f.add(lb2);
+		f.add(tfPW);
+		f.setVisible(true);
+		
+
+	}
+
+}
+
+```
+![lbl](https://user-images.githubusercontent.com/99188096/161656521-f37a255a-5802-40fd-9442-cf26a53e6e3a.PNG)   
+
+***
+### Checkbox
+- Checkbox
+	- boolean과 같이 true/false 또는 on/off와 같은 둘중 한 값을 가질 수 있는 컴포넌트
+- CheckboxGroup
+	- 여러 값들 중 한가지를 선택할 수 있는 radio button을 만들 수 있다
+- 생성자
+	- Checkbox(String text, boolean state)
+		- state : true 일 시 선택된 상태로 생성, 기본값 false
+	- Checkbox(String text, CheckboxGroup group, boolean state)
+		- group 객체를 참조   
+
+```java
+package com.awt.day2;
+
+import java.awt.Checkbox;
+import java.awt.CheckboxGroup;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Label;
+
+public class CheckboxTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("Checkbox");
+		f.setSize(300,300);
+		f.setLayout(new FlowLayout());
+		
+		Label lb1 = new Label("관심분야");
+		Checkbox ch1 = new Checkbox("news", true); //선택된 상태로 생성
+		Checkbox ch2 = new Checkbox("sprots");
+		Checkbox ch3 = new Checkbox("movies");
+		Checkbox ch4 = new Checkbox("music");
+		
+		Label lb2 = new Label("성별");
+		CheckboxGroup group = new CheckboxGroup();
+		Checkbox ckGender1 = new Checkbox("남자", group, false);
+		Checkbox ckGender2 = new Checkbox("여자", group, false);
+		
+		f.add(lb1);
+		f.add(ch1);
+		f.add(ch2);
+		f.add(ch3);
+		f.add(ch4);
+		f.add(lb2);
+		f.add(ckGender1);
+		f.add(ckGender2);
+		f.setVisible(true);
+
+	}
+
+}
+
+```
+![ck1](https://user-images.githubusercontent.com/99188096/161657238-897787fd-4d3b-486f-b769-8facdd185942.PNG)
+![ck2](https://user-images.githubusercontent.com/99188096/161657246-2b1ceedc-383b-4016-b403-5cad13ee4b97.PNG)   
+
+
+***
+
+### TextArea
+- 여러줄의 text를 입력하거나 보여줄 수 있는 편집가능한 컴포넌트
+- 생성자
+	- TextArea(String text, int row, int col, int scrollbar)
+		- scrollbar : 스크롤바의 종류와 사용여부 지정
+		- TextArea.SCROLLBARS_BOTH (기본값)
+		- TextArea.SCROLLBARS_NONE
+		- TextArea.SCROLLBARS_HORIZONTAL_ONLY
+		- TextArea.SCROLLBARS_VERTICAL_ONLY   
+
+```java
+package com.awt.day2;
+
+import java.awt.Checkbox;
+import java.awt.CheckboxGroup;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Label;
+import java.awt.TextArea;
+
+public class TextAreaTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("Checkbox");
+		f.setSize(330,500);
+		f.setLayout(new FlowLayout());
+
+		TextArea ta = new TextArea(5,20);
+		TextArea ta2 = new TextArea("텍스트 작성", 4, 30);
+		f.add(ta2);
+		f.add(ta);
+		ta2.selectAll(); //탭으로 포커스를 이동해 선택 시 text 전체가 선택되도록 한다
+		
+		
+		
+		f.setVisible(true);
+
+	}
+
+}
+```
+
+![ta](https://user-images.githubusercontent.com/99188096/161658398-8afcfee4-d62b-4766-83fc-d1e02a499d7f.PNG)   
+
+
+***
+
+### ScrollBar
+- 스크롤바 생성 컴포넌트
+- 주로 볼륨설정, 속도조절, 색상 선택 등
+- 생성자
+	- Scrollbar(int orientation, int init, int buttonSize, int min, int max)
+	- orientation : 스크롤바 종류 지정
+		- Scrollbar.VERTICAL, Scrollbar.HORIZONTAL
+	- init : 스크롤바 초기 값
+	- buttinSize : 스크롤 버튼의 크기
+	- min : 스클로바가 가질 수 있는 최소값
+	- max : 스크롤바가 가질 수 있는 최대값   
+
+```java
+package com.awt.day2;
+
+import java.awt.Frame;
+import java.awt.Scrollbar;
+
+public class ScrollbarTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("Scrollbar");
+		f.setSize(300,200);
+		f.setLayout(null);
+		
+		//Scrollbar(int orientation, int init, int buttonSize, int min, int max)
+		
+		Scrollbar hor = new Scrollbar(Scrollbar.HORIZONTAL, 0, 50, 0, 100);
+		hor.setSize(100,15);
+		hor.setLocation(60,30);
+		
+		Scrollbar ver = new Scrollbar(Scrollbar.VERTICAL, 50,20,0,100);
+		ver.setSize(15,100);
+		ver.setLocation(30,30);
+		
+		f.add(hor);
+		f.add(ver);
+		f.setVisible(true);
+
+	}
+
+}
+
+```
+![scro](https://user-images.githubusercontent.com/99188096/161659117-f6dd0729-ebad-437b-a2fb-5c605d129ae8.PNG)   
+
+***
+
+### Canvas
+- 빈 평면 공간을 제공하는 컴포넌트
+- 그림을 그리거나 이미지를 위한 공간으로 사용
+- 글자를 적을 수 도 있다
+- 메서드
+	- setBackground(int color)
+	- setBounds(inx x, int y, int width, int height)   
+
+```java
+package com.awt.day2;
+
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Frame;
+
+public class canvastest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("Scrollbar");
+		f.setSize(300,500);
+		f.setLayout(null);
+		
+		Canvas c = new Canvas();
+		c.setBackground(Color.PINK);
+		c.setBounds(50,200,150,100);
+		
+		f.add(c);
+		f.setVisible(true);
+	}
+
+}
+
+```
+
+![ca](https://user-images.githubusercontent.com/99188096/161659447-7548e464-836b-4595-8f34-8b46099d4acc.PNG)   
+
+***
+
+### Panel
+- frame과 같이 다른 컴포넌트를 자신의 영역 내에 포함시킬 수 있는 컨테이너
+- 동시에 패널 자신이 다른 컨테이너에 포함될 수 있다
+- 패널이 패널에 포함되는 것도 가능하다
+- frame과 달리 titlebar나 버튼도 없고 단지 비어있는 평면공간만 갖는다
+- 생성자
+	- public Panel()
+	- public Panel(LayoutManager layout)   
+
+```java
+package com.awt.day2;
+
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Panel;
+
+public class PanelTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("panelTest");
+		f.setSize(300,200);
+		f.setLayout(new FlowLayout());
+		
+		Panel p = new Panel();
+		//패널은 기본적으로 flowlayout 사용
+		p.setBackground(Color.GREEN);
+		p.setSize(100,100);
+		p.setLocation(50,50);
+		
+		Button bt = new Button("OK");
+		
+		p.add(bt);
+		f.add(p);
+		f.setVisible(true);
+
+	}
+
+}
+
+```
+![panel](https://user-images.githubusercontent.com/99188096/161662701-9cc49ece-6a37-4363-86d4-e0cebe611b9a.PNG)   
+
+***
+
+### ScrollPane
+- 단 하나의 컴포넌트만 포함할 수 있는 컨테이너
+- 포함된 컴포넌트의 크기가 자신보다 큰 경우 자동으로 스크롤바 사용
+- 생성자
+	- ScrollPane(int scrollbarDisplayPolicy)
+		- SCROLLBARS_ALWAYS : 스크롤바가 항상 보이게
+		- SCROLLBARS_AS_NEEDED : 필요할 때만 보이게
+		- SCROLLBARS_NEVER : 항상 보이지 않도록   
+
+```java
+package com.awt.day2;
+
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.Panel;
+import java.awt.ScrollPane;
+
+public class ScrollpaneTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame();
+		f.setSize(300,200);
+		
+		ScrollPane sp = new ScrollPane();
+		Panel p = new Panel();
+		p.setBackground(Color.green);
+		p.add(new Button("첫번쨰"));
+		p.add(new Button("두번쨰"));
+		p.add(new Button("세번쨰"));
+		p.add(new Button("네번쨰"));
+		
+		sp.add(p);
+		f.add(sp);
+		f.setVisible(true);
+		
+	}
+
+}
+
+```
+![sp](https://user-images.githubusercontent.com/99188096/161663477-9d1da9be-f1db-4eba-80df-74759aaa3234.PNG)   
+
+***
+
+### Dialog
+- 주로 화면에 메시지창을 보여주는데 사용
+- 생성자
+	- Dialog(Frame parent, String title, boolean modal)
+	- 하나의 frame이 부모로 지정되어야 한다
+	- modal이 true인 경우
+		- dialog가 사라지기 전까지 부모frame은 사용할 수 없다   
+
+```java
+package com.awt.day2;
+
+import java.awt.Button;
+import java.awt.Dialog;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Label;
+
+public class DialogTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("parent");
+		f.setSize(300,200);
+		
+		Dialog info = new Dialog(f,"information",true); //modal
+		info.setSize(140,90);
+		info.setLocation(50,50);
+		info.setLayout(new FlowLayout());
+		
+		Label lb = new Label("This is modal Dialog",Label.CENTER);
+		Button bt = new Button("OK");
+		info.add(lb);
+		info.add(bt);
+		
+		f.setVisible(true);
+		info.setVisible(true);
+
+	}
+
+}
+
+```
+
+![dial](https://user-images.githubusercontent.com/99188096/161664479-7603d258-7e03-4308-877c-6e9ef8f77efb.PNG)
+
+
+#### 이벤트처리 예시
+```java
+package com.awt.day2;
+
+import java.awt.Button;
+import java.awt.Dialog;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class DialogTest2 {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("parent2");
+		f.setSize(300,200);
+		
+		Dialog info = new Dialog(f,"information");
+		info.setSize(140,90);
+		info.setLocation(50,50);
+		info.setLayout(new FlowLayout());
+		
+		Label lb = new Label("This is modal Dialog",Label.CENTER);
+		Button bt = new Button("OK");
+		info.add(lb);
+		info.add(bt);
+		
+		f.setVisible(true);
+		info.setVisible(true);
+		
+		
+		//이벤트처리, 버튼 클릭시 모달창 닫힘
+		bt.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				info.dispose(); //dialog를 메모리에서 없앤다
+				
+			}
+		});
+	}
+}
+
+```
+
+
+***
+
+### FileDialog
+- 파일을 열거나 저장할 때사용
+- 생성자
+	- FileDialog(Frame parent, String title, int mode)
+		- mode : FileDialog.LOAD (기본값), FileDialog.SAVE   
+
+```java
+package com.awt.day2;
+
+import java.awt.FileDialog;
+import java.awt.Frame;
+
+public class FileDialogTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("Parent");
+		f.setSize(300,200);
+		
+		FileDialog fOpen = new FileDialog(f,"파일 열기", FileDialog.LOAD);
+		
+		f.setVisible(true);
+		
+		fOpen.setDirectory("C:\\lecture");
+		fOpen.setVisible(true);
+		
+		System.out.println(fOpen.getDirectory()+fOpen.getFile());
+		//취소버튼 누르면 null 리턴
+
+	}
+
+}
+
+```
+![test](https://user-images.githubusercontent.com/99188096/161666207-4374f2bc-ef05-4a18-8539-dafc24854130.png)
+![test2](https://user-images.githubusercontent.com/99188096/161666213-13e500fa-ad2f-4824-a464-50dc3b415240.PNG)   
+
+***
+
+### Font
+- 컴포넌트의 serFont를 이용하면 컴포넌트에 사용되는 text의 글꼴을 변경할 수 있다
+- 생성자
+	- Font(String name, int style, int size)
+	- 폰트의 이름
+		- jdk 제공 폰트
+			- Serif, SansSerif, Dialog, Dialoginput, Monospaced
+		- 그 외의 폰트는 컴퓨터에 설치되어있어야 사용 가능하다
+	- 폰트 스타일
+		- Font.PLAIN (보통체)
+		- Font.BOLD (굵게)
+		- Font.ITALIC (기울임체)
+		- Font.BOLD+Font.ITALIC (굵은 기울임체)
+
+- GraphicsEnviroㅜmentment 클래스
+	- 현재 설치된 font의 리스트를 얻을 수 있다   
+
+```java
+package com.awt.day2;
+
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GraphicsEnvironment;
+import java.awt.Label;
+
+public class FontTest {
+
+	public static void main(String[] args) {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		Font[] fontArr = ge.getAllFonts();
+		
+		for(Font font : fontArr) {
+			System.out.println(font.getFontName());
+		}//설치된 폰트 확인
+		
+		Frame f = new Frame("font");
+		String abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		
+		Label lb1 = new Label(abc);
+		Label lb2 = new Label(abc);
+		Label lb3 = new Label(abc);
+		Label lb4 = new Label(abc);
+		Label lb5 = new Label(abc);
+		
+		Font f1 = new Font("Serif", Font.PLAIN, 20);
+		Font f2 = new Font("궁서", Font.ITALIC, 20);
+		Font f3 = new Font("맑은고딕", Font.BOLD, 20);
+		Font f4 = new Font("휴먼둥근헤드라인", Font.BOLD+Font.ITALIC, 20);
+		
+		lb1.setFont(f1);
+		lb2.setFont(f2);
+		lb3.setFont(f3);
+		lb4.setFont(f4);
+		
+		f.setLayout(new FlowLayout());
+		f.add(lb1);
+		f.add(lb2);
+		f.add(lb3);
+		f.add(lb4);
+		f.add(lb5);
+		f.setSize(400,300);
+		f.setVisible(true);
+	}
+
+}
+
+```
+
+![font2](https://user-images.githubusercontent.com/99188096/161669202-eb548fc2-1df0-458b-a047-df9eea0678cd.PNG)
+![font](https://user-images.githubusercontent.com/99188096/161669211-1ab665b9-1440-48c0-8745-165c3e7e500a.PNG)   
+
+***
+
+### Color
+- 색을 표현하기 위한 클래스
+- RGB값을 알고있으면 그 색플 표현할 수 있는 객체 생성 가능
+- Blue,Red 등 자주 쓰이는 13가지 색 static 멤버변수로 저장되어있다
+- 주로 setBackground 등의 메서드의 매개변수로 사용된다
+- 생성자
+	- Color(int r, int g, inr b) : rgb값, 0~255 사이 정수값
+	- Color(float r, float g, float b) : rgb값, 0.0~1.0 사이 실수값
+	- Color(int r, int g, inr b) : rgb값, 0~255 사이 정수값
+	- Color(int r, int g, inr b) : rgb값, 0~255 사이 정수값   
+
+```java
+package com.awt.day2;
+
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Label;
+import java.awt.Panel;
+
+public class ColorTest {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("Color");
+		f.setLayout(new GridLayout(15,2)); //14행 2열
+		
+		Panel p1 = new Panel();		p1.setBackground(Color.BLACK);
+		Panel p2 = new Panel();		p2.setBackground(Color.black);
+		Panel p3 = new Panel();		p3.setBackground(Color.BLUE);
+		Panel p4 = new Panel();		p4.setBackground(Color.CYAN);
+		Panel p5 = new Panel();		p5.setBackground(Color.DARK_GRAY);
+		Panel p6 = new Panel();		p6.setBackground(Color.GRAY);
+		Panel p7 = new Panel();		p7.setBackground(Color.GREEN);
+		Panel p8 = new Panel();		p8.setBackground(Color.LIGHT_GRAY);
+		Panel p9 = new Panel();		p9.setBackground(Color.MAGENTA);
+		Panel p10 = new Panel();	p10.setBackground(Color.ORANGE);
+		Panel p11 = new Panel();	p11.setBackground(Color.PINK);
+		Panel p12 = new Panel();	p12.setBackground(Color.RED);
+		Panel p13 = new Panel();	p13.setBackground(Color.WHITE);
+		Panel p14 = new Panel();	p14.setBackground(Color.YELLOW);
+		Panel p15 = new Panel();	p15.setBackground(new Color(50,60,50));
+		
+		f.add(p1); f.add(new Label("Color.BLACK"));
+		f.add(p2); f.add(new Label("Color.black"));
+		f.add(p3); f.add(new Label("Color.BLUE"));
+		f.add(p4); f.add(new Label("Color.CYAN"));
+		f.add(p5); f.add(new Label("Color.darkGray"));
+		f.add(p6); f.add(new Label("Color.gray"));
+		f.add(p7); f.add(new Label("Color.green"));
+		f.add(p8); f.add(new Label("Color.lightGray"));
+		f.add(p9); f.add(new Label("Color.magenta"));
+		f.add(p10); f.add(new Label("Color.orange"));
+		f.add(p11); f.add(new Label("Color.pink"));
+		f.add(p12); f.add(new Label("Color.red"));
+		f.add(p13); f.add(new Label("Color.white"));
+		f.add(p14); f.add(new Label("Color.yellow"));
+		f.add(p15); f.add(new Label("Color(50,60,50"));
+		f.setSize(250,400);
+		f.setVisible(true);
+
+	}
+
+}
+```
+![color](https://user-images.githubusercontent.com/99188096/161670807-14dbeae9-7f39-462d-9762-7fe71d2792cd.PNG)   
+
+## 활용
+```java
+import java.awt.*;
+
+public class Prac_17_36 {
+
+	public static void main(String[] args) {
+		Frame f = new Frame("회원가입");
+		f.setSize(350,305);
+		f.setLayout(new FlowLayout());
+		
+		Label lb1 = new Label("이름");
+		Label lb2 = new Label("비밀번호");
+		Label lb3 = new Label("직업");
+		Label lb4 = new Label("결혼여부");
+		Label lb5 = new Label("멤버쉽 정보");
+		Label lb6 = new Label("자기소개");
+		
+		TextField tfID = new TextField(10);
+		TextField tfPW = new TextField(10);
+		
+		Choice jobChoice = new Choice();
+		jobChoice.add("자영업");
+		jobChoice.add("학생");
+		jobChoice.add("회사원");
+		
+		
+		CheckboxGroup marryGroup = new CheckboxGroup();
+		Checkbox marry1 = new Checkbox("미혼",marryGroup, true);
+		Checkbox marry2 = new Checkbox("기혼",marryGroup, false);
+		
+		Checkbox mem1 = new Checkbox("SKT");
+		Checkbox mem2 = new Checkbox("KT");
+		Checkbox mem3 = new Checkbox("LG U+");
+		
+		TextArea ta = new TextArea("",8,40,TextArea.SCROLLBARS_VERTICAL_ONLY);
+		
+		Button bt1 = new Button("저장");
+		Button bt2 = new Button("취소");
+		
+		f.add(lb1);
+		f.add(tfID);
+		f.add(lb2);
+		f.add(tfPW);
+		f.add(lb3);
+		f.add(jobChoice);
+		f.add(lb4);
+		f.add(marry1);
+		f.add(marry2);
+		f.add(lb5);
+		f.add(mem1);
+		f.add(mem2);
+		f.add(mem3);
+		f.add(lb6);
+		f.add(ta);
+		f.add(bt1);
+		f.add(bt2);
+		
+		f.setVisible(true);
+	}
+}
+
+```
+![signup](https://user-images.githubusercontent.com/99188096/161672573-6660397a-4233-458c-bf1b-0c7bcc23735f.PNG)

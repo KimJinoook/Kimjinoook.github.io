@@ -1,0 +1,65 @@
+---
+layout: post
+title:  "9. file 클래스"
+subtitle:   ""
+categories: lang
+tags: java2
+comments: false
+header-img: 
+---
+
+- 파일 클래스를 통해 파일과 디렉토리를 다룰 수 있다   
+
+### 파일의 생성자와 경로와 관련된 메서드
+![캡처](https://user-images.githubusercontent.com/99188096/163098100-e634cbda-aa29-4bb9-bdd3-c1a22f25db16.PNG)   
+
+### 경로와 관련된 파일의 멤버변수
+![캡처2](https://user-images.githubusercontent.com/99188096/163098157-fd317dfa-7433-4d20-a794-baee14feb403.PNG)
+
+```java
+
+package com.io.day2;
+
+import java.io.File;
+import java.io.IOException;
+
+public class FileTest {
+
+	public static void main(String[] args) {
+		File f = new File("text/test.txt");
+		
+		System.out.println("경로 제외한 파일명 : "+f.getName()); 
+		// test.txt
+		
+		System.out.println("경로 포함한 파일명 : "+f.getPath()); 
+		// text\test.txt
+		
+		System.out.println("절대경로 파일명 : "+f.getAbsolutePath()); 
+		// C:\lecture\workspace.list\java_ws\advanced\text\test.txt
+		
+		System.out.println("파일이 속해있는 디렉토리 : "+f.getParent());
+		// text
+		
+		System.out.println("pathSeparator : "+File.pathSeparator);
+		// ;
+		
+		System.out.println("Separator : "+File.separator);
+		// \
+		
+		File f2 = new File("text","newFile.txt");
+		try {
+			f2.createNewFile();
+			if(f2.exists()) {
+				System.out.println("파일생성");
+			}
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+```
+
+### File의 메서드   
+![캡처3](https://user-images.githubusercontent.com/99188096/163098925-b7cf8fd7-0d41-4deb-8bd7-055b809c7aae.PNG)   
+

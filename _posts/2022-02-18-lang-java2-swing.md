@@ -1,0 +1,334 @@
+---
+layout: post
+title:  "7. Swing, Jtable"
+subtitle:   ""
+categories: lang
+tags: java2
+comments: false
+header-img: 
+---
+
+## 1. Swing
+- JFC(Java Foundation Class Library) 라고 명시한다
+- Awt처럼 프레임을 생성하고 이벤트를 지정한다
+- Awt보다 컴포넌트의 기능이 많다
+- Awt
+  - 시스템 os의 자원을 그대로 이용
+  - 단일 Panel로 구성
+- Swing
+  - 컴포넌트를 자바로 구현
+  - 다중 패널로 구성
+    - 컴포넌트가 적재되는 패널이 계층별로 여러 개 존재한다   
+
+```java
+package com.swing.day1;
+
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
+
+public class SwingTest extends JFrame implements ActionListener {
+	JButton bt1, bt2, bt3, bt4;
+	
+	
+	public SwingTest() {
+		super("Swing 예제");
+		init();
+		addEvent();
+	}
+
+	private void addEvent() {
+		bt1.addActionListener(this);
+		bt2.addActionListener(this);
+		bt3.addActionListener(this);
+		bt4.addActionListener(this);
+		
+	}
+
+	private void init() {
+		setSize(700,250);
+		setLayout(new GridLayout(1,0));
+		bt1=new JButton("버튼");
+		
+		ImageIcon icon1 = new ImageIcon("img/open.jpg"); //프로젝트폴더\img폴더\open.jpg
+		ImageIcon icon2 = new ImageIcon("img/input.jpg");
+		ImageIcon icon3 = new ImageIcon("img/confirm.jpg");
+		
+		bt2 = new JButton("OPEN",icon1);
+		bt3 = new JButton("INPUT",icon2);
+		bt4 = new JButton("CONFIRM",icon3);
+		
+		this.add(bt1);
+		this.add(bt2);
+		this.add(bt3);
+		this.add(bt4);
+		
+		bt2.setVerticalTextPosition(JButton.BOTTOM);
+		bt2.setHorizontalTextPosition(JButton.CENTER);
+		
+		bt3.setVerticalTextPosition(JButton.TOP);
+		bt3.setHorizontalTextPosition(JButton.CENTER);
+		bt3.setToolTipText("풍선 도움말");
+		
+		ImageIcon icon4 = new ImageIcon("img/exit.jpg");
+		bt4.setPressedIcon(icon4); //누른상태시 아이콘
+		bt4.setMnemonic('C'); // 단축키 alt+c
+		
+		//각 버튼에 보더 추가
+		bt1.setBorder(new LineBorder(Color.green,5));
+		bt2.setBorder(new TitledBorder("테두리에 제목 주기"));
+		bt3.setBorder(new BevelBorder(BevelBorder.LOWERED));
+		bt4.setBorder(new EtchedBorder());
+		
+		
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //창닫기 처리
+		
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==bt1) {
+			//void showMessageDialog(Component parentComponent, Object message
+			JOptionPane.showMessageDialog(this, "환영합니다");
+		}
+		else if(e.getSource()==bt2) {
+			//void showMessageDialog(Component parentComponent, Object message, String title, int messageType)
+			JOptionPane.showMessageDialog(this, "누르지마세요","경고",JOptionPane.WARNING_MESSAGE);
+		}
+		else if(e.getSource()==bt3) {
+			//String showInputDialog(Component parentComponent, Object message)
+			String name = JOptionPane.showInputDialog(this,"이름을 입력하세요");
+			setTitle(name);
+		}
+		else if(e.getSource()==bt4) {
+			//int showConfirmDialog(Component parentComponent, Object message, String title, int optionType)
+			int quit = JOptionPane.showConfirmDialog(this, "종료하시겠습니까?","종료",JOptionPane.YES_NO_OPTION);
+			setTitle("quit = "+quit);
+			if(quit == JOptionPane.YES_OPTION) {
+				System.exit(0);
+			}
+		}
+		
+	}
+	
+	public static void main(String[] args) {
+		SwingTest f = new SwingTest();
+		f.setVisible(true);
+
+	}
+
+}
+
+```
+![1](https://user-images.githubusercontent.com/99188096/162100231-848ceb2f-a520-43f8-9404-96e2d682d48d.PNG)
+![2](https://user-images.githubusercontent.com/99188096/162100242-15af3629-20f5-4d40-8111-9946c6e9c881.PNG)
+![3](https://user-images.githubusercontent.com/99188096/162100246-c4c93c1e-b560-4155-90c0-216ff873c794.PNG)
+![4](https://user-images.githubusercontent.com/99188096/162100250-cd4dcdf9-0b35-4238-8add-8328212ad97e.PNG)
+![5](https://user-images.githubusercontent.com/99188096/162100252-af8d5c81-e99c-4620-9069-8bf72c248071.PNG)   
+
+***
+
+## 2. Swing의 JTable
+- Jtable
+	- JTable(Object[][] rowData, Object[] columnNames)   
+
+
+```java
+package com.swing.day1;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+public class TableTest extends JFrame {
+	JScrollPane scrollPane;
+	JTable table; //view
+	String data[][] = {
+			{"1","홍길동","서울"},
+			{"2","김길동","경기"},
+			{"3","이길동","인천"},
+			{"4","박길동","대전"},
+	}; //model
+	
+	String[] colNames = {"번호","이름","주소"};
+	
+	
+	public TableTest() {
+		super("Table Test");
+		//JTable(Object[][] rowData, Object[] columnNames)
+		table = new JTable(data, colNames);
+		scrollPane = new JScrollPane(table);
+		add(scrollPane);
+		
+		setSize(300,300);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public static void main(String[] args) {
+		TableTest f = new TableTest();
+		f.setVisible(true);
+
+	}
+
+}
+
+
+```
+![t](https://user-images.githubusercontent.com/99188096/162104211-4b942104-a0c3-4a87-b93b-eaa8f943c6c0.PNG)   
+
+- 테이블은 사실 상 뷰
+- 테이블에 직접 데이터를 넣지 않고 모델과 분리
+- DefaultTableModel model = new DefaultTableModel();   
+
+```java
+package com.swing.day1;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+public class TableTest2 extends JFrame{
+	JScrollPane scrollPane;
+	JTable table;
+	DefaultTableModel model = new DefaultTableModel();
+	String data[][] = {
+			{"1","홍길동","서울"},
+			{"2","김길동","경기"},
+			{"3","이길동","인천"},
+			{"4","박길동","대전"},
+	};
+	
+	String[] colNames = {"번호","이름","주소"};
+	
+	public TableTest2() {
+		table = new JTable();
+		scrollPane = new JScrollPane(table);
+		
+		//setDataVector(Object[][] dataVector, Object[] columnIdentifiers)
+		model.setDataVector(data, colNames);
+		table.setModel(model);
+		
+		add(scrollPane);
+		
+		setSize(300,300);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+	}
+
+	public static void main(String[] args) {
+		TableTest2 f = new TableTest2();
+		f.setVisible(true);
+
+	}
+
+}
+
+```
+
+
+***
+
+## JTable의 데이터베이스 연결
+```java
+package com.swing.day1;
+
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+
+public class TableTest3 extends JFrame {
+	JTable table;
+	JScrollPane scrollPane;
+	JButton bt;
+	DefaultTableModel model = new DefaultTableModel();
+	
+	
+	public TableTest3(){
+		super("table");
+		
+		bt = new JButton("조회");
+		table = new JTable();
+		scrollPane = new JScrollPane();
+		
+		model.addColumn("번호");
+		model.addColumn("상품명");
+		model.addColumn("가격");
+		model.addColumn("등록일");
+		
+		table.setModel(model);
+		table.getTableHeader().setBackground(Color.black);
+		table.getTableHeader().setForeground(Color.yellow);
+		table.getTableHeader().setReorderingAllowed(false);
+		table.setRowHeight(20);
+		
+		scrollPane.setViewportView(table);
+		this.add(scrollPane,"Center");
+		this.add(bt,"North");
+		
+		setSize(400,500);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		bt.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					showData();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+
+		});
+		
+	}
+	private void showData() throws SQLException {
+		PdDAO dao = new PdDAO();
+		List<PdDTO> list = dao.selectAll();
+		
+		String[] colNames = {"번호","상품명","가격","등록일"};
+		String[][] data = new String[list.size()][4];
+		
+		for(int i = 0; i<data.length; i++) {
+			PdDTO dto = list.get(i);
+			data[i][0] = dto.getNo()+"";
+			data[i][1] = dto.getPdName()+"";
+			data[i][2] = dto.getPrice()+"";
+			data[i][3] = dto.getRegdate()+"";
+		}
+		
+		model.setDataVector(data, colNames);
+		table.setModel(model);
+		
+	}
+
+	public static void main(String[] args) {
+		TableTest3 f = new TableTest3();
+		f.setVisible(true);
+
+	}
+
+}
+
+```

@@ -1,0 +1,304 @@
+---
+layout: post
+title:  "12. 쓰레드의 동기화"
+subtitle:   ""
+categories: lang
+tags: java2
+comments: false
+header-img: 
+---
+
+- 멀티쓰레드의 경우 여러 쓰레드가 같은 프로세스 내의 자원 공유
+- 쓰레드A가 작업하던 도중 쓰레드B에게 제어권이 넘어가 공유데이터를 변경하면 의도와 다른 결과가 나온다   
+
+```java
+package com.thread.day1;
+
+public class ThreadTest5 {
+
+	public static void main(String[] args) {
+		MyRunnable4 r = new MyRunnable4();
+		Thread th1 = new Thread(r);
+		Thread th2 = new Thread(r);
+		
+		th1.start();
+		th2.start();
+
+	}
+
+}
+
+class MyRunnable4 implements Runnable{
+	int insVar = 0; //공유
+	
+	@Override
+	public void run() {
+		int localVar = 0;
+		String name = Thread.currentThread().getName();
+		
+		while(localVar<3) {
+			System.out.println(name + " local var : "+ ++localVar);
+			System.out.println(name+"--------------instance var : "+ ++insVar);
+			System.out.println();
+		}
+	}
+	
+}
+/*
+Thread-1 local var : 1
+Thread-1--------------instance var : 1
+
+Thread-0 local var : 1
+Thread-1 local var : 2
+Thread-1--------------instance var : 3
+
+Thread-1 local var : 3
+Thread-1--------------instance var : 4
+
+Thread-0--------------instance var : 2
+
+Thread-0 local var : 2
+Thread-0--------------instance var : 5
+
+Thread-0 local var : 3
+Thread-0--------------instance var : 6
+
+*/
+```
+
+```java
+package com.thread.day1;
+
+class Circle{
+	int insR=0;
+}
+class MyThread5 extends Thread{
+	Circle c;
+	MyThread5(Circle c){
+		this.c=c;
+	}
+	public void run() {
+		int localVar=0;
+		
+		while(localVar<3) {
+			System.out.println(getName()+" localVar : "+ ++localVar);
+			System.out.println(getName()+" --------insVar : "+ ++c.insR+"\n");
+		}
+	}
+}
+public class ThreadTest6 {
+
+	public static void main(String[] args) {
+		Circle c = new Circle();
+		MyThread5 th = new MyThread5(c);
+		MyThread5 th2 = new MyThread5(c);
+		
+		th.start();
+		th2.start();
+
+	}
+
+}
+/*
+ * Thread-0 localVar : 1
+Thread-1 localVar : 1
+Thread-1 --------insVar : 2
+
+Thread-1 localVar : 2
+Thread-0 --------insVar : 1
+
+Thread-0 localVar : 2
+Thread-1 --------insVar : 3
+
+Thread-1 localVar : 3
+Thread-1 --------insVar : 5
+
+Thread-0 --------insVar : 4
+
+Thread-0 localVar : 3
+Thread-0 --------insVar : 6
+
+*/
+```
+
+- 다른 객체를 생성했지만, 같은 멤버변수를 공유   
+
+## 1. 동기화 (Synchronized)
+- 한 번에 하나의 쓰레드만 객체에 접근할 수 있도록 객체에 락을 걸어 데이터의 일관성 유지
+- 객체에 락을 걸 때
+  > synchronized(객체의 참조변수){}   
+- 메서드에 락을 걸 때   
+  > public synchronized void func1(){}   
+- 한쪽에서 쓰는 동안 다른 쪽을 대기시킨다
+- 공유자원을 액세스하는 문장을 synchronized로 감싸면 동시에 두 쓰레드가 하나의 객체를 액세스하지 않는다
+- 먼저 작업중이던 쓰레드가 작업을 마치기 전까지는, 다른 쓰레드에게 제어권이 넘어가더라도 데이터가 변경되지 않도록 보호   
+
+### synchronized()로 감싸기
+```java
+package com.thread.day1;
+
+class Account{
+	int balance = 1000;
+	
+	public void withdraw(int money) {
+		synchronized(this) {
+			
+			if(balance >= money) {
+				try {
+					Thread.sleep(1000);
+				}catch(InterruptedException e) {
+					e.printStackTrace();
+				}
+				balance -= money;
+			}
+		}
+	}
+}
+
+class MyRunnable6 implements Runnable{
+	Account acc = new Account();
+	public void run() {
+		while(acc.balance>0) {
+			int money=(int)(Math.random()*3+1)*100;
+			acc.withdraw(money);
+			System.out.println(Thread.currentThread().getName()+":balance="+acc.balance+", money="+money);
+		}
+	}
+}
+
+public class SyncTest {
+
+	public static void main(String[] args) {
+		MyRunnable6 r = new MyRunnable6();
+		Thread th = new Thread(r);
+		Thread th2 = new Thread(r);
+		th.start();
+		th2.start();
+
+	}
+
+}
+
+```
+
+### 메서드에 락 걸기
+```java
+package com.thread.day1;
+
+class Account{
+	int balance = 1000;
+	
+	public synchronized void withdraw(int money) {
+	
+		if(balance >= money) {
+			try {
+				Thread.sleep(1000);
+			}catch(InterruptedException e) {
+				e.printStackTrace();
+			}
+			balance -= money;
+		}
+
+	}
+}
+
+class MyRunnable6 implements Runnable{
+	Account acc = new Account();
+	public void run() {
+		while(acc.balance>0) {
+			int money=(int)(Math.random()*3+1)*100;
+			acc.withdraw(money);
+			System.out.println(Thread.currentThread().getName()+":balance="+acc.balance+", money="+money);
+		}
+	}
+}
+
+public class SyncTest {
+
+	public static void main(String[] args) {
+		MyRunnable6 r = new MyRunnable6();
+		Thread th = new Thread(r);
+		Thread th2 = new Thread(r);
+		th.start();
+		th2.start();
+
+	}
+
+}
+
+```
+
+### 진행바
+```java
+package com.thread.day1;
+
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JProgressBar;
+import javax.swing.JTextField;
+
+public class ProgressBarTest extends JFrame implements ActionListener, Runnable {
+
+	JButton bt;
+	JProgressBar bar;
+	JTextField tfMemo;
+	JLabel lb;
+	Thread th;
+	
+	public ProgressBarTest() {
+		this.setLayout(new FlowLayout());
+		
+		lb = new JLabel("메모");
+		tfMemo = new JTextField(30);
+		
+		add(lb);
+		add(tfMemo);
+		add(bt = new JButton("시작"));
+		bar = new JProgressBar();
+		bar.setStringPainted(true); // 진행바에 퍼센티지 표시
+		add(bar);
+		
+		bt.addActionListener(this);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setSize(400,300);
+		setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		new ProgressBarTest();
+
+	}
+
+	@Override
+	public void run() {
+		synchronized(bar) {
+			System.out.println(bar.getMinimum()+ " " +bar.getMaximum());
+			
+			for (int i = (bar.getMinimum());i<=bar.getMaximum(); i+=5) {
+				System.out.println("i="+i);
+				try {
+					Thread.sleep(200);
+				}catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				bar.setValue(i);
+			}
+		}
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		th = new Thread(this);
+		th.start(); //runnable로 진입시킨다
+		
+	}
+
+}
+
+```

@@ -1,0 +1,803 @@
+---
+layout: post
+title:  "9. 데이터 정의어 / DDL / 테이블 제약조건"
+subtitle:   ""
+categories: lang
+tags: sql
+comments: false
+header-img: 
+---
+
+
+## 1. ddl
+- 오라클
+  - 데이터를 저장하고 관리해주는 프로그램
+  - 관리를 위해 다양한 저장객체 (오브젝트)를 생성
+- ddl
+  - 오브젝트를 생성,변경,관리하는 명령어
+- create
+  - 새로운 오브젝트나 스키마를 생성
+  - 데이터 베이스 객체들을 생성
+  > create 객체종류 객체명..   
+
+- drop
+  - 객체들을 삭제할 때 사용
+  - delete : 테이블 상의 데이터를 삭제
+  - drop : 객체 자체를 데이터베이스에서 영구히 삭제
+  > drop 객체종류 객체명..   
+
+- alter
+  - 기존 생성된 객체를 변경할 때 사용
+  - 테이블 사용중 컬럼을 추가하는 등
+  > alter 객체종류 객체명..   
+
+- truncate
+  - delete문과 동일한 역할
+  - rollback으로 복구 불가 (자동 commit)
+  - delete보다 수행속도가 빠르다
+  - delete
+    - 메모리 상에 존재하는 테이블의 데이터만 삭제
+    - 디스크 상의 공간은 그대로 가지고 있다
+  - truncate
+    - 메모리,데이터파일의 데이터 삭제, 테이블 구조는 보존
+    - 최초에 테이블이 만들어졌던 상태로  
+  - drop
+    - 테이블 구조까지 소멸
+  > truncate table 테이블명...   
+
+
+***
+
+## 2. Create과 데이터타입
+```sql
+create table 테이블명
+(
+  컬럼1 데이터타입,
+  컬럼2 데이터타입,
+  ...
+)
+tablespace 테이블스페이스명;
+```
+
+- 테이블이름 : 최대 30byte
+- 컬럼명,스키마,사용자이름 : 30byte
+- 최대 255개의 컬럼
+- 컬럼의 데이터 타입
+  - 문자형 데이터
+    - char : 고정길이의 문자형데이터, 최대 2000byte
+    - varchar2 : 가변길이의 문자형데이터, 최대 4000byte
+    - clob : 문자열이나 문서 저장가능, 최대 4gb까지 저장
+  - 숫자형 데이터
+    - number : 가변숫자타입, 21byte
+  - 날짜형 데이터
+    - date : 고정길이의 데이터, 7byte   
+
+- 문자형데이터 확인  
+
+```sql
+create table char_exam1
+(
+    name1 char(3), --고정길이 3byte
+    name2 varchar2(3) -- 가변길이 3byte
+);
+
+
+insert into char_exam1
+values('AA','AA');
+
+select name1, name2, length(name1), length(name2),
+    replace(name1, ' ','*'), replace(name2,' ', '*') from char_exam1;
+    
+NAM NAM LENGTH(NAME1) LENGTH(NAME2) REP REP
+--- --- ------------- ------------- --- ---
+AA  AA              3             2 AA* AA
+```
+
+```sql
+create table char_exam1
+(
+    name1 char(3), --생략하면 byte
+    name2 varchar2(3),
+    name3 char(6 byte),
+    name4 char(6 char),
+    name5 char(6), --6byte
+    name6 clob --4gb까지 저장
+);
+
+insert into char_exam1(name1,name2,name3,name4,name5,name6)
+values('AAA','가','ABCDEF','ABCDEFG','AB',null);  --error
+--name4가 6개 문자만 입력 가능하므로 에러
+
+insert into char_exam1(name1,name2,name3,name4,name5,name6)
+values('AAA','가','ABCDEF','가나다라마바','가나',null);
+--인코딩에 따라 한글 1글자는 2바이트나 3바이트
+--UTF-8 : 한글 1글자가 3바이트
+
+insert into char_exam1(name1,name2,name3,name4,name5,name6)
+values('AAA','가','ABCDEF','가나다라마바','가나다',null); --error
+--name5는 6바이트이므로 한글 2글자만 입력 가능
+
+insert into char_exam1(name1,name3,name6)
+values('ABC','ABCDEF','ABCdefg가나다 clob 연습!!');
+```
+
+- 숫자형 데이터 확인   
+
+```sql
+create table num_exam1
+(
+    n1 number,
+    n2 number(9), --전체 9자리 수까지 표현 가능
+    n3 number(9,2), --전체 9자리수중 소수이하 2자리까지 표현
+                    -- 소수3째자리에서 반올림
+    n4 number(9,1),
+    n5 number(7), --전체 7자리 수 표현, 소수이하 자리수는 표현하지 않음
+    n6 number(7,-2), --7자리 표현, 10의 자리에서 반올림
+    n7 number(6), --전체 6자리수 표현
+    n8 number(3,5) --1보다 작은 실수 표현, 소수이하 5자리중 0이 두개 붙는다
+    
+);
+
+
+insert into num_exam1(n1,n2,n3,n4,n5,n6)
+values(1234567.89, 1234567.89,1234567.89,1234567.89,1234567.89,1234567.89);
+
+insert into num_exam1(n1,n2,n3,n4,n5,n6,n7)
+values(1234567.89, 1234567.89,1234567.89,1234567.89,1234567.89,1234567.89,1234567.89);
+--n7은 전체 자리수 6개만 가능, 7개를 입력해서 에러
+
+insert into num_exam1(n8)
+values(0.00123);
+
+insert into num_exam1(n8)
+values(0.01234);  --error
+
+insert into num_exam1(n8)
+values(0.0012);
+
+insert into num_exam1(n8)
+values(0.000123);
+
+        N1         N2         N3         N4         N5         N6         N7         N8
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ----------                    
+1234567.89    1234568 1234567.89  1234567.9    1234568    1234600                      
+                                                                                 .00123
+                                                                                  .0012
+                                                                                 .00012
+```
+
+- 날짜 데이터 확인   
+
+```sql
+create table date_exam1
+(
+    d1 date,
+    d2 timestamp
+);
+
+
+
+insert into date_exam1
+values(sysdate, systimestamp);
+
+insert into date_exam1
+values(sysdate, sysdate);
+
+insert into date_exam1
+values(systimestamp, systimestamp);
+
+D1                D2                         
+----------------- ---------------------------
+22/03/25 10:53:52 22/03/25 10:53:52.748000000
+22/03/25 10:53:54 22/03/25 10:53:54.000000000
+22/03/25 10:53:55 22/03/25 10:53:55.757000000
+```
+
+***
+
+## 3. 무결성 제약조건
+- 데이터를 흠 없이 안정되게 지켜주기 위한 것
+- 제대로된 데이터들이 올바르게 저장될 수 있도록 하기 위해 데이터베이스 측에서 제공하는 기능들 => 무결성 제약조건
+- 무결성을 지키기 위해 제약조건들을 제공함
+- 제약조건들은 테이블의 컬럼에 적용됨
+- 실체 무결성
+  - primary key가 대표적
+  - 여러 데이터(레코드)들 중 유일하게 구분지어 줄 수 있는 것
+- 영역 무결성
+  - 특정한 범위의 값만 와야하는 것
+  - 주민등록번호의 값으로 1,2,3,4,만 입력되어야 하는 것
+- 참조 무결성
+  - 기본키와 외래키의 관계
+  - 사원테이블의 부서코드는 반드시 부서테이블에 존재해야함
+- 무결성 제약 조건
+  - null
+  - unique
+  - primary key
+    - not null + unique
+  - foreign key
+  - check
+  - default
+
+### null
+- 데이터가 없음을 의미
+- 컬럼의 속성 중 하나로 해당 컬럼이 null을 허용할지 여부 지정
+- 데이터 타입 다음에 명시
+- 필수로 들어가야 할 데이터는 not null로 제약
+- 디폴트값 : null   
+
+
+```sql
+create table null_exam1
+(
+    col1 char(3) not null,
+    col2 char(3) null,
+    col3 char(3)
+);
+
+insert into null_exam1(col1,col2)
+values('AA','BB');
+
+insert into null_exam1(col2, col3)
+values('B2','C2');  
+--col1은 not null이므로 값을 입력해야 함
+
+insert into null_exam1(col1, col2, col3)
+values('A2',null, '');  --null을 직접 입력하는 경우 : null, ''입력
+
+insert into null_exam1(col1, col3)
+values('A3',' ');  --' '은 null이 아님
+
+insert into null_exam1(col1)
+values('A4');
+
+
+select * from null_exam1
+where col3 is null;
+
+COL COL COL
+--- --- ---
+AA  BB     
+A2         
+A4         
+
+select * from null_exam1
+where col3 is not null;
+
+COL COL COL
+--- --- ---
+A3         
+```
+
+### Unique
+- 테이블에 있는 데이터를 유일하게 식별하기 위한 조건
+- 사원테이블의 사원번호
+- 사원테이블의 이메일주소
+- 중복 값이 허용되지 않게 함
+- 복합 unique키 - 한개 이상의 컬럼으로 unique를 만드는 것
+- null 허용 가능   
+
+```sql
+create table unique_exam1
+(
+    col1    varchar2(10)  unique not null,
+    col2    varchar2(10)  unique null, --null 허용
+    col3    varchar2(10)  not null,
+    col4    varchar2(10)  not null,
+    constraint unique_col unique(col3, col4) --outline 제약조건, unique 복합키
+);
+
+
+insert into unique_exam1
+values('AA','BB','CC','DD');
+
+insert into unique_exam1(col1,col3,col4)
+values('AA','C1','D1'); 
+--unique제약조건 위배, col1에 AA가 이미 있으므로 중복될 수 없다
+
+insert into unique_exam1(col1,col3,col4)
+values('A4','CC','DD'); --error: col3, col4는 복합키로 unique해야 하므로
+
+insert into unique_exam1(col1,col3,col4)
+values('A1','C1','C2');  --col2는 unique 이지만, null허용하므로 입력 가능
+
+insert into unique_exam1
+values('A2',null,'C2','D2');
+
+insert into unique_exam1
+values('A3','','C3','D3');
+
+insert into unique_exam1
+values('A4','','C3','d2');
+
+
+select * from unique_exam1;
+
+COL1       COL2       COL3       COL4      
+---------- ---------- ---------- ----------
+AA         BB         CC         DD        
+A1                    C1         C2        
+A2                    C2         D2        
+A3                    C3         D3 
+A4                    C3         D2
+```
+
+
+### Primary Key
+- 유니크와 동일하게 테이블의 데이터들을 유일하게 식별
+- 반드시 not null
+  - not null + unique 인덱스
+- 하나 이상 컬럼으로 구성 - 복합키 가능
+- **테이블당 오직 1개만** 생성 가능
+- 인라인 표기방식
+  - 컬럼 char() privary key
+- 아웃라인 표기방식
+  - 컬럼 char(),
+  - constraints "제약명" primary key(컬럼)
+- 테이블 생성 후 기본키 생성
+  - alter table 테이블명 add constraints "제약명" primary key(컬럼)   
+- 후보키 (candidate key)
+  - 테이블 정의 후 후보키 선정
+    - 실체 내 특정 건의 유일성을 보장하는 속성을 후보키
+    - 레코드를 유일하게 식별할 수 있는 속성이나 속성들의 집합
+    - 모든 실체는 최소한 하나 이상의 후보 키 보유
+  - 대체키 (Alternative key)
+    - 후보키중 기본키를 제외한 나머지 후보키
+  - CK = pK+AK
+    - 여러 후보키중 **업무적 활용도가 높고**, 가능하면 **길이가 짧은 것** 을 **기본키**로 선정
+
+
+
+- 인라인 표기 기본키 생성   
+
+
+```sql
+create table pk_exam1
+(
+    col1 char(3) primary key, -- inline 제약조건
+    --col2 char(3) primary key, --error; 테이블당 하나의 기본키만 가능
+    col2 varchar2(4),
+    col3 number
+);
+
+
+insert into pk_exam1(col1,col2,col3)
+values('A01','AA',1);
+
+insert into pk_exam1(col1,col2,col3)
+values('A01','BB',2);  
+--col1은 unique해야 하므로  error
+
+insert into pk_exam1(col1,col2,col3)
+values(null,'CC',3); 
+--primary key는 not null이므로, null허용하지 않음
+
+insert into pk_exam1(col1)
+values('A02');
+
+
+select * from pk_exam1;
+
+COL COL2       COL3
+--- ---- ----------
+A01 AA            1
+A02                
+```
+
+- 복합키, 아웃라인표기   
+
+
+```sql
+create table pk_exam2
+(
+    col1 char(3),
+    col2 varchar2(4),
+    col3 number,
+    constraint pk1_col1 primary key(col1,col2) -- outline 제약조건 + 복합키
+);
+
+
+insert into pk_exam2
+values('A01', 'B01', 10);
+
+insert into pk_exam2
+values('A01', 'B01', 20);  --error:col1, col2가 복합키, unique 제약조건 위배
+
+insert into pk_exam2
+values('A01', 'B02', 30);
+
+select * from pk_exam2;
+
+update pk_exam2
+set col2='B01'
+where col1='A01' and col2='B02'; --error: unique제약조건 위배
+
+
+COL COL2       COL3
+--- ---- ----------
+A01 B01          10
+A01 B02          30
+
+```
+
+### Check
+- 입력되는 값을 체크하여 일정 조건에 해당되는 값만 입력될 수 있게 하는 제약조건
+- 성별 : 남자, 여자만 입력가능하고 이외의 값은 입력할 수 없도록   
+
+```sql
+create table check_exam1
+(
+    no number primary key,
+    name varchar2(30) not null,
+    gender char(6) check(gender in('남자','여자')), --inline 제약조건
+    pay number(10),
+    age number(3),
+    constraint ck_check_exam1_pay check(pay>=0),
+    constraint ck_check_exam1_age check(age>=0 and age <=120)
+);
+
+
+insert into check_exam1(no, name)
+values(1,'홍길동');
+
+insert into check_exam1(no, name, gender, pay, age)
+values(2,'김길동','남자', 5000000,35);
+
+insert into check_exam1(no, name, gender, pay, age)
+values(3,'이길순','여', 500000,30);  
+--gender check제약조건 위배
+
+insert into check_exam1(no, name, gender, pay, age)
+values(4,'김길자','여자', -300000,31); --error:pay check 제약조건 위배
+
+insert into check_exam1(no, name, gender, pay, age)
+values(5,'김길동','남자', 5000000,135); --error: age check제약조건 위배
+
+select * from check_exam1;
+
+        NO NAME                           GENDER        PAY        AGE
+---------- ------------------------------ ------ ---------- ----------
+         1 홍길동                                                     
+         2 김길동                         남자      5000000         35
+```
+
+### Default
+- 기본값
+- 컬럼에 값을 입력하지 않을 경우 디폴트값이 자동으로 입력
+> 컬럼명 데이터타입 default '값'   
+- 반드시 데이터타입 다음에, null이나 not null 앞에 위치   
+
+```sql
+create table default_exam1
+(
+    no       number      primary key,
+    name     varchar2(30),
+    gender   char(3)     default '남' check(gender in('남','여')),
+    hiredate date        default sysdate not null,
+    score    number(3)   default 0
+);
+
+
+insert into default_exam1(no, hiredate)
+values(1, sysdate);
+
+insert into default_exam1(no)
+values(2);
+
+insert into default_exam1(no, name, gender, hiredate, score)
+values(3,'홍길선','여', default, 90);
+
+insert into default_exam1
+values(4,'감길동',default, default, default);
+
+insert into default_exam1(no, name)
+values(5,'이길동');
+
+select * from default_exam1;
+
+        NO NAME                           GEN HIREDATE               SCORE
+---------- ------------------------------ --- ----------------- ----------
+         1                                남  22/03/25 13:02:38          0
+         2                                남  22/03/25 13:02:40          0
+         3 홍길선                         여  22/03/25 13:02:41         90
+         4 감길동                         남  22/03/25 13:02:43          0
+         5 이길동                         남  22/03/25 13:02:44          0
+```
+
+
+### Foreign key
+- 외래키
+- 테이블 간의 관계에서 공통값을 가진 컬럼을 통해 이루어짐
+- 부모테이블의 기본키가 자식테이블의 외래키
+- 부모테이블 : 부서, 기본키 : 부서코드
+- 자식테이블 : 사원, 외래키 : 부서코드
+- 자식테이블의 외래키는 부모테이블에 있는 데이터만 저장해야 한다
+- 입력시 부모 테이블을 먼저 insert하고, 그 후에 자식 테이블을 insert해야 함
+  - 부모 테이블에 있는 참조컬럼의 값만 자식 테이블에서 사용할 수 있다
+- 삭제시 자식 테이블을 먼저 삭제하고, 그 후에 부모 테이블을 삭제해야 함
+  - foreign key 지정시 on delete cascade 옵션을 주면 부모 테이블의 레코드를 삭제하면 자식 테이블의 해당 레코드도 삭제됨
+- 인라인 표기
+  > 컬럼명 constraints "외래키 이름" references 참조테이블명(참조컬럼);   
+  > 컬럼명 references 참조테이블명(참조컬럼);   
+
+- 아웃라인 표기
+  > alter table 테이블명   
+  > add constraints "외래키 이름" foreign key(컬럼)   
+  > references 참조테이블명(참조 컬럼);   
+
+```sql
+create table depart
+(
+    dept_cd char(3) primary key, --부서코드
+    dept_name varchar2(50) not null, --부서명
+    loc varchar2(100) --지역
+);
+
+
+--2) 사원 테이블 만들기
+--사원(부모) <--> 사원가족(자식)
+--drop table employee;
+
+create table employee
+(
+    empno number primary key, --사원번호
+    name varchar2(30) not null, --사원이름
+    dcode char(3) not null constraint fk_employee_dcode references depart(dept_cd), --부서코드
+    sal number(10) default 0 check(sal>=0), --급여
+    email varchar2(50) unique, --이메일
+    hiredate date default sysdate --입사일
+);
+
+select * from depart;
+select * from employee;
+    
+
+select a.TABLE_NAME, a.CONSTRAINT_NAME, a.CONSTRAINT_TYPE, a.INDEX_NAME,
+    b.COLUMN_NAME, b.POSITION
+from user_constraints a join user_cons_columns b
+on a.CONSTRAINT_NAME = b.CONSTRAINT_NAME
+and  a.table_name = 'EMPLOYEE';
+
+--테이블 생성 후 제약조건 추가
+--foreign key 추가하기
+
+alter table employee
+add constraint fk_employee_dcode foreign key(dcode)
+  references depart(dept_cd);
+
+
+--3) 사원가족 테이블 만들기
+--drop table family;
+create table family
+(
+    empno number not null constraint fk_family_empno references employee(empno) on delete cascade, --사원번호
+    name varchar2(30) not null, --가족이름
+    relation varchar2(50), --가족관계
+    constraint pk_family_empno_name primary key(empno, name)
+);
+
+select * from family;
+
+```
+
+- cascade 확인   
+
+```sql
+create table mytest1(
+col1 number(1) primary key,
+col2 number(1),
+col3 number(1)
+);
+create table mytest3(
+col1 number(1) primary key,
+col2 number(1),
+col3 number(1) constraint b references mytest1(col1) on delete cascade
+);
+- 테이블 두개 값 입력
+
+      COL1       COL2       COL3
+---------- ---------- ----------
+         1          1          1
+         2          2          2
+         3          3          3   
+
+
+delete from mytest1
+where col3= 3;
+
+select * from mytest3;
+
+      COL1       COL2       COL3
+---------- ---------- ----------
+         1          1          1
+         2          2          2
+
+-- 테이블 1에서 데이터 삭제시, 자식테이블에서도 데이터 삭제
+
+
+drop table mytest1;
+-- drop 불가
+
+drop table mytest1 cascade constraints
+-- mytest1 테이블 삭제
+
+select * from mytest3;
+
+      COL1       COL2       COL3
+---------- ---------- ----------
+         1          1          1
+         2          2          2
+
+--테이블3의 데이터는 그대로, 설정된 외래키 제약만 삭제
+
+```
+
+### 제약조건 조회
+- user_constraints, user_cons_columns 뷰 이용   
+- type
+  - c : not null
+  - c : check (제약조건명으로 not null과 구분)
+  - u : unique   
+
+```sql
+select * from user_constraints
+where table_name like '%EXAM%';
+
+select * from user_cons_columns
+where table_name like '%EXAM%';
+
+select a.table_name, a.constraint_name, a.constraint_type,
+    a.index_name, b.column_name, b.position
+from user_constraints a join user_cons_columns b
+on a.constraint_name = b.constraint_name
+and a.table_name like '%EXAM%';
+
+
+select column_name, data_default
+from user_tab_columns
+where table_name = 'EMPLOYEE2'; --디폴트값 확인
+```
+
+***
+
+## 4. Drop
+- 테이블 자체를 삭제
+- 테이블을 생성한 소유자만 제거할 수 있음
+- sys,system,drop any table
+> drop table 테이블명;   
+- 자식이 외래키로 참조하고 있을 경우 삭제 불가
+  - drop table 테이블명 cascade constraints;
+    - 자식의 테이블 데이터는 남아있고, 설정된 외래키 제약조건은 삭제
+    - 테이블 삭제   
+
+```sql
+create table mytest1(
+col1 number(1) primary key,
+col2 number(1),
+col3 number(1)
+);
+create table mytest3(
+col1 number(1) primary key,
+col2 number(1),
+col3 number(1) constraint b references mytest1(col1) on delete cascade
+);
+- 테이블 두개 값 입력
+
+      COL1       COL2       COL3
+---------- ---------- ----------
+         1          1          1
+         2          2          2
+         3          3          3   
+
+
+delete from mytest1
+where col3= 3;
+
+select * from mytest3;
+
+      COL1       COL2       COL3
+---------- ---------- ----------
+         1          1          1
+         2          2          2
+
+-- 테이블 1에서 데이터 삭제시, 자식테이블에서도 데이터 삭제
+
+
+drop table mytest1;
+-- drop 불가
+
+drop table mytest1 cascade constraints
+-- mytest1 테이블 삭제
+
+select * from mytest3;
+
+      COL1       COL2       COL3
+---------- ---------- ----------
+         1          1          1
+         2          2          2
+
+--테이블3의 데이터는 그대로, 설정된 외래키 제약만 삭제
+```
+
+***
+
+## 5. Alter
+- 만들어져있는 오브젝트를 변경하는 명령어
+- 컬럼추가, 삭제, 이름변경 등
+- 부하가 많이 걸리는 명령어  
+- add : 추가
+- modify : 변경
+- rename : 이름변경
+- drop : 컬럼삭제 
+
+### add 추가하기   
+> alter 테이블명 add constraint 제약조건명 제약조건(컬럼명);   
+
+
+
+```sql
+select * from user_constraints
+where table_name='EMPLOYEE2'; --현재 제약조건 2개
+
+
+--기본키 설정 제약조건 추가
+alter table employee2
+add constraint pk_employee2_empno primary key(empno);
+--제약조건 3개
+
+
+--외래키 추가
+alter table employee2
+add constraint fk_employee2_empno foreign key(dcode)
+    references depart(dept_cd);
+    
+    
+--check제약조건 추가
+alter table employee2
+add constraint ck_employee2_sal check(sal>=0);
+
+
+--unique제약조건 추가
+alter table employee2
+add constraint unique_employee2_email unique(email);
+
+
+-- loc 컬럼 추가
+alter table employee2
+add loc varchar2(10);
+```
+
+### modify 변경하기
+```sql
+alter table employee2
+modify name null; -- name 컬럼의 조건 null로 변경
+
+alter table employee2
+modify name not null;
+
+alter table employee2
+modify sal default 1000; --sal 컬럼의 기본값 변경
+```
+
+
+### rename 이름변경하기   
+```sql
+-- 제약조건 이름 변경하기
+alter table employee2
+rename constraint fk_employee2_empno to fk_employee2_dcode;
+
+-- 컬럼이름 변경하기
+alter table employee2
+rename column loc to area;
+
+```
+
+
+
+
+### drop 제거하기   
+
+```sql
+-- 제약조건 제거하기
+alter table employee2
+drop constraint pk_employee2_empno;
+```

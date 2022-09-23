@@ -1,0 +1,580 @@
+---
+layout: post
+title:  "4. CSS 속성"
+subtitle:   ""
+categories: lang
+tags: html
+comments: false
+header-img: 
+---
+
+## 1. 가시속성
+- 태그가 화면에 보이는 방식을 지정하는 속성
+
+### display 속성
+- none : 태그를 화면에 보이지 않게 한다
+- block : 태그를 block 형식으로 지정
+  - 혼자서 한 줄을 차지
+- inline : 태그를 inline 형식으로
+  - 줄을 차지하지 않고, 화면에 표시되는 콘텐츠 만큼만 영역을 차지
+  - width, height 속성 지정 불가
+  - margin 속성이 div태그의 좌우로만 지정
+- inline-block : 태그를 inline-block형식으로 지정   
+  - width, height 속성 지정 가능
+  - margin 속성이 상하좌우로 적용   
+
+
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<style type="text/css">
+	div{
+		border: 1px solid gray;
+		margin: 10px;
+	}
+	
+	#box{
+		background: pink;
+		width: 300px; height: 50px;
+        margin: 10px;		
+	}
+	
+	.div2 #box{
+		display: none;
+	}
+	.div3 #box{
+		display: block;
+	}
+	.div4 #box{
+		display: inline;
+	}
+	.div5 #box{
+		display: inline-block;
+	}
+	
+	.div6 #box{
+		visibility: hidden;
+	}
+	
+</style>
+</head>
+<body>
+	<div class="div1">
+		<span>Dummy</span>
+	    <div id="box">
+	        <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+	    </div>
+	    <span>Dummy</span>			
+	</div>
+	<div class="div2">
+		<span>Dummy</span>
+	    <div id="box">
+	        <span>display-none Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+	    </div>
+	    <span>Dummy</span>			
+	</div>
+	<div class="div3">
+		<span>Dummy</span>
+	    <div id="box">
+	        <span>display-block Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+	    </div>
+	    <span>Dummy</span>			
+	</div>
+	<div class="div4">
+		<span>Dummy</span>
+	    <div id="box">
+	        <span>display-inline Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+	    </div>
+	    <span>Dummy</span>			
+	</div>
+	<div class="div5">
+		<span>Dummy</span>
+	    <div id="box">
+	        <span>display-inline-block Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+	    </div>
+	    <span>Dummy</span>			
+	</div>
+	<div class="div6">
+		<span>Dummy</span>
+	    <div id="box">
+	        <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+	    </div>
+	    <span>Dummy</span>			
+	</div>
+	
+</body>
+</html>
+```
+![캡처](https://user-images.githubusercontent.com/99188096/166131337-79fad3fc-35b2-43b7-b5cd-630e191c518b.PNG)   
+
+### visibility 속성
+- 대상을 보이거나 보이지 않게 지정하는 스타일 속성
+- visible : 태그를 보이게 만듬
+- hidden : 태그를 보이지 않게 만듬. 영역은 차지
+  - display-none : 실제공간을 차지하지 않는다
+  - visbility-hidden : 실제로는 공간을 차지하고 있다
+- collapse : table 태그를 보이지 않게 만듬   
+
+
+### opacity 속성
+- 태그의 투명도를 조절
+- 0.0 ~ 1.0 사이의 숫자 입력, 0일수록 투명
+
+***
+
+## 2. 박스 속성
+- p태그 등을 사용한 텍스트는 단락형태를 가진다
+  - 텍스트 앞 뒤에 빈줄이 생기며, 텍스트 단락이 하나의 박스 형태
+- 박스모델 : 위와 같은 형태의 요소
+  - 콘텐츠 영역 : 실제 텍스트, 이미지 등이 나타나는 영역
+  - 패딩 : 박스와 콘텐츠 사이 영역
+  - 보더 : 박스의 테두리
+  - 마진 : 여러 박스 모델간의 여백   
+![캡처](https://user-images.githubusercontent.com/99188096/166131517-cfb7fe6e-ed76-4cd6-aa6f-99f6636e5486.PNG)   
+
+### width / height
+- 글자를 감싸는 영역의 크기를 지정
+- 단위
+  - 크기
+    - px,cm같은 단위와 함께 수치로 지정
+  - 백분율
+    - 박스모델을 포함하고 있는 부모요소를 기준으로 비율로 지정
+  - auto
+    - 자동으로 결정, 기본값   
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <style>
+        p {
+          padding : 10px;
+          margin: 15px 5px;
+          border:2px dotted blue; 
+        }
+        p.size1 {
+          width: 400px;
+          height: 50px;
+        }
+        p.size2{
+           width:50%;
+          height:50px;
+        }
+    </style>
+</head>
+<body>
+    <h3> 아메리카노</h3>
+    <p>에스프레소의 향은 그대로 느끼면서 뜨거운 물을 부어 1:2 정도의 비율로 연하게 먹는 커피다.</p>
+    <p class="size1">에스프레소의 향은 그대로 느끼면서 뜨거운 물을 부어 1:2 정도의 비율로 연하게 먹는 커피다.</p>
+    <p class="size2">에스프레소의 향은 그대로 느끼면서 뜨거운 물을 부어 1:2 정도의 비율로 연하게 먹는 커피다.</p>
+</body>
+</html>
+```
+![캡처](https://user-images.githubusercontent.com/99188096/166131714-390354d0-1cee-4726-acba-29a88f39de6b.PNG)   
+
+
+### margin / padding
+- margin : 바깥 여백 너비 지정
+- padding : 안쪽 여백 너비 지정
+- margin, padding 상하좌우 각각 지정
+	- margin-bottom
+	- margin-top
+	- margin-left
+	- margin-right
+- margin 속성 하나 만으로 각각의 너비 별도 지정
+	- margin: margin-top margin-right margin-bottom margin-left
+	- margin: 10px 20px 30px 40px;
+- 2개의 값으로 너비 지정
+	- margin: 상하, 좌우
+	- margin: 0px 30px   
+
+
+### box-sizing
+- width,height 속성은 글자를 감싸는 영역의 크기 지정
+- box-sizing : 이러한 공식을 변경할 수 있는 속성
+	- width, height 속성이 차지하는 범위 지정
+- content-box
+	- width, height 속성이 글자가 들어가있는 영역의 크기를 지정
+- border-box
+	- width, height 속성이 border와 padding을 포함한 영역의 크기를 지정   
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            margin: 10px; padding: 10px;
+            width: 100px; height: 100px;
+            border: 10px solid black;
+        }
+        div:first-child {
+            background: red;
+            box-sizing: content-box;
+        }
+        div:last-child {
+            background: orange;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <div></div>
+
+</body>
+</html>
+```
+
+![캡처](https://user-images.githubusercontent.com/99188096/166131988-578b280d-11df-4335-9c3f-c056dc9ad4f8.PNG)   
+
+***
+
+## 3. 테두리 속성
+### border-width, border-style
+- border-width
+	- 테두리의 너비 지정
+	- 크기나 단위, 혹은 키워드(medium, thick, thin)
+- border-style
+	- 테두리의 형태를 지정
+	- 키워드 : solid, dashed, dotted, double, groove, hidden, inset, nnone
+- 필수요소
+	- border-width
+	- border-style
+	- border-color
+	- 필수 요소 한번에 입력 가능
+		- border : border-width border-style border-color
+		- border : 1px solid black;
+- 부분 스타일 지정
+	- margin, padding처럼 상하좌우 별도 지정 가능
+	- border-left-color 등   
+
+### border-radius
+- 테두리가 둥근 사각형 또는 원을 만들 수 있음
+- 크기나 단위 입력
+- 모서리마다 별도 지정 가능
+	- border-radius : 좌상 우상 우하 좌하
+	- border-radius : 50px 40px 20px 10px   
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            border: thick dashed black;
+            border-radius: 20px;
+        }
+        .box2 {
+            border: thick dashed black;
+            /* border-radius: 왼쪽위 오른쪽위 오른쪽아래 왼쪽아래 */
+            border-radius: 50px 40px 20px 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Lorem ipsum dolor amet</h1>
+    </div>
+    <div class="box2">
+        <h1>Lorem ipsum dolor amet</h1>
+    </div>
+</body>
+</html>
+```
+
+![캡처](https://user-images.githubusercontent.com/99188096/166132189-144bde1d-2eb8-4206-81c7-905d1ebcf4a9.PNG)   
+
+***
+
+## 4. 배경 속성
+- 특정 태그의 배경 이미지 또는 색상을 지정하는 스타일 속성
+
+### background-image
+- 배경에 넣을 그림을 지정
+- url단위나 그래디언트 입력   
+
+```html
+<style>
+	body{
+		background-image : url('../images/Background.png');
+	}
+</style>
+```
+
+- 여러 개의 배경이미지 적용 가능
+	- 좌측에 위치한 이미지가 앞으로 나오며, 이미지가 층을 이루어 출력   
+
+
+```html
+<style>
+	body{
+		background-image : url('../images/Background.png'), url('../images/Background2.png');
+	}
+</style>
+```
+
+### background-size
+- 그림 크기를 조절할 때 사용
+- 익스플로러 8 이하 사용 불가
+- 키워드 : auto, contain, cover
+	- contain
+		- 너비를 100%로 지정한 것과 같은 효과
+		- 가로세로 비율 유지
+		- 이미지가 잘려나가지 않는 상태로 이미지를 꽉차게 보여준다
+		- 엘리먼트의 크기보다 항상 작거나 같다
+	- cover
+		- 높이를 100%로 지정한 것과 같은 효과
+		- 가로세로 비율 유지
+		- 엘리먼트가 이미지로 완전히 덮이도록 크게해서 표시, 이미지가 잘릴 수 있다
+		- 엘리먼트의 크기보다 항상 크거나 같다
+- 속성 : 1개 또는 2개의 크기단위 입력, 각각 너비와 높이
+
+### background-repeat
+- 배경이미지의 반복출력 여부 지정
+- 키워드
+	- repeat : 이미지가 패턴을 이루어 출력
+	- repeat-x : x축 방향으로 이미지 반복
+	- repeat-y : y축 방향으로 이미지 반복
+	- no-repeat : 반복없이 배경이미지 적용   
+
+
+### background-attachment
+- 배경이미지를 어떤 방식으로 화면에 붙일 것인지 지정
+- 키워드
+	- fixed : 스크롤을 이동해도 배경이미지 고정
+	- local
+	- scroll : 기본값, 스크롤을 내리면 배경이미지가 위로 올라가 사라진다   
+
+### background-position
+- 입력형태
+	- background-position : 키워드;
+	- background-position : x축 크기;
+	- background-position : x축 크기 y축 크기;
+- 크기 단위 % or px
+	- background-position : 위치(%) 위치(%)
+	- background-position : 길이(px) 길이(px)
+- 키워드
+	- 수평위치 : left, center, right
+	- 수직위치 : top, bottom, center   
+
+
+***
+
+## 5. 폰트 속성
+- font-size
+	- 글자의 크기를 지정
+	- 크기 단위
+		- px, em, %
+	- 키워드
+		- large, larger, medium, samll, smaller, x-large, x-small
+- font-family
+	- 글꼴을 지정
+	- 사용자 컴퓨터에 설치된 폰트 이용
+	- 한단어의 폰트이름은 따옴표를 사용하지 않는다
+	- 두단어 이상의 폰트이름은 따옴표를 사용
+	- 개발자 컴퓨터에는 폰트가 있지만, 사용자에게는 폰트가 설치되어있지 않을 수 있다
+		- font-family 속성을 여러개 입력
+		- font-family:'폰트1','폰트2'
+- font-style
+	- 폰트의 기울기
+	- italic, mormal, oblique
+- font-wright
+	- 폰트의 두께
+	- 숫자 입력 시
+		- 100~900 사이의 수치
+	- 키워드 입력 시
+		- bole, bolder, lighter, normal
+- line-height
+	- 글자의 높이를 지정
+	- 글자를 수직 중앙 정렬할 때 많이 사용
+		- 글자를 감싸는 박스의 높이와 같은 크기로 지정
+- text-aligh
+	- 글자의 정렬
+	- 키워드
+		- center, justify, left, right
+	- span태그는 적용되지 않는다
+		- inline 형식을 가지기 때문
+- text-decoration
+	- 글자의 밑줄, 중앙줄 설정
+	- 키워드
+		- none, underline, overline, line-through
+	- a태그에 href속성을 지정할 때 생기는 밑줄을 none 속성을 통해 제거 가능
+- direction
+	- 텍스트의 쓰기 방향 지정
+	- 기본 : 왼쪽에서 오른쪽으로
+	- 키워드
+		- ltr, rtl
+- text-indent
+	- 문단의 첫 글자를 얼마나 들여쓸지 지정
+	- 크기단위 이용
+- letter-spacing / word-spacing
+	- 글자 사이의 간격 조절
+	- letter
+		- 낱글자와 낱글자 사이 간격 조정
+	- word
+		- 단어와 단어 사이의 간격 조절
+	- 크기값 혹은 normal 이용   
+
+### 웹 폰트 사용
+- 웹 문서안에 글꼴 정보를 함께 저장
+- 사용자가 접속하면 글꼴을 사용자 시스템으로 다운로드하게 하는 방식
+- 사용자에게 없는 글꼴도 표시 가능   
+
+```html
+<style>
+	@font-face{
+		font-family:'myBand';
+		src:url('../etc/Band.eot');
+		src:url('../etc/Band.ttf') format('truetype');
+		src:url('../etc/Band.woff') format('woff');
+	}
+	
+	body{
+		font-family : myBand;
+	}
+</style>
+```
+- format
+	- truetype : 컴퓨터에서 사용하는 글꼴
+	- 확장자는 tff
+	- 파일의 크기가 너무 커서 모바일용으로 부적합
+	- 웹에 적합한 woff 많이 사용
+
+- src
+	- url()
+		- 사용자의 컴퓨터에 존재하지 않는 폰트를 지정
+		- 시용자의 컴퓨터에 해당 폰트가 있는지 확인 후 없으면 내려받는다
+	- local()
+		- 사용자의 컴퓨터에 존재하는 폰트 지정
+
+***
+
+## 6. 목록 속성
+- list-style-type
+	- 목록의 불릿과 번호 유형 지정
+	- 순서 없는 목록
+		- disc, circle, square, none
+	- 순서 있는 목록
+		- decimal, decimal-leading-zero
+		- lower-roman, upper-roman
+		- lower-greek
+		- lower-alpha, upper-alpha
+		- lower-latin, upper-latin
+		- hebrew
+		- armenian
+		- georgian
+		- cjk-ideographic
+		- hiragana, hiragana-iroha
+		- katakana, katagana-iroha
+- list-style-position
+	- 목록에 들여쓰는 효과
+	- 키워드
+		- inside : 불릿이나 숫자를 안으로 들여쓴다
+		- outside : 기본값, 불릿이나 숫자를 밖으로 내어쓴다
+- list-style-image
+	- 불릿 기호 대신 원하는 이미지를 불릿으로 넣을 수 있다
+	- 이미지 파일 경로
+		- list-style-image : url('파일경로');   
+
+
+***
+
+## 7. 그림자 속성
+- 태그에 그림자를 부여
+- text-shadow
+	- 글자에 그림자를 부여
+	- text-shadow : 오른쪽, 아래, 흐림도, 색상
+	- text-shadow : 5px, 5px, 5px, black   
+
+```html
+<style>
+body {
+	font-family:Arial;
+	background:#808080;
+}
+h1 {
+	font-size:5em;
+	color:white;
+}
+.shadow1 {
+	text-shadow:1px 1px 3px #000;
+}
+.shadow2 {
+	color:black;
+	text-shadow:3px -3px 5px #fff;
+}
+</style>
+</head>
+<body>
+	<h1>Joandora</h1>
+	<h1 class="shadow1">Joandora</h1>
+	<h1 class="shadow2">Joandora</h1>
+</body>
+```
+![캡처](https://user-images.githubusercontent.com/99188096/167284832-3fe0b5ad-7b27-41d7-b329-3f065b19c331.PNG)   
+
+- box-shadow 속성
+	- 박스에 그림자를 부여
+	- box-shadow : 오른쪽, 아래, 흐림도, 색상   
+
+```html
+<head>
+<title>CSS3 Property Basic</title>
+<style>
+div {
+	border: 3px solid black;
+	box-shadow: 10px 10px 30px black;
+	text-shadow: 5px 5px 5px black;
+}
+</style>
+</head>
+<body>
+	<div>
+		<h1>Lorem ipsum dolor amet</h1>
+	</div>
+</body>
+```
+
+![캡처](https://user-images.githubusercontent.com/99188096/167284943-fcb131bf-28a0-48c6-8523-a0abbe1d31cc.PNG)   
+
+- 중첩 그림자
+	- 쉼표를 사용해 여러 개의 그림자 적용   
+
+```html
+<head>
+<title>CSS3 Property Basic</title>
+<style>
+.box {
+	border: 3px solid black;
+	box-shadow: 10px 10px 10px black, 10px 10px 20px orange, 10px 10px 30px red; 
+	text-shadow: 10px 10px 10px black, 10px 10px 20px orange, 10px 10px 30px red; 
+}
+</style>
+</head>
+<body>
+	<div class="box">
+		<h1>Lorem ipsum dolor amet</h1>
+	</div>
+</body>
+```
+
+![캡처](https://user-images.githubusercontent.com/99188096/167284975-5cf1398e-5111-4560-aefc-0645db84da45.PNG)
