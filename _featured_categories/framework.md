@@ -1,6 +1,6 @@
 ---
 layout: list
-title: 프레임워크
+title: Framework
 slug: framework
 menu: true
 submenu: true
