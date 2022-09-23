@@ -1,4 +1,13 @@
-# 기타 메서드 및 참고사항
+---
+layout: post
+title:  "ex. 기타 및 참고사항"
+subtitle:   ""
+categories: lang
+tags: java1
+comments: false
+header-img: 
+---
+
 ## Escape Sequence
     - **문자열 안에서** 특별한 의미로 해석되는 문자
     - 표현하기 어려운 문자상수를 표현한다.
