@@ -2,11 +2,11 @@
 #  User configuration
 # -----------------------------------------------------------------------------
 
-title:               TheoryDB
+title:               Kimjinoook
 
 # The unique resource location of your page.
 # Set to `https://<username>.github.io` when hosting on GitHub Pages
-url:                 https://theorydb.github.io
+url:                 https://Kimjinoook.github.io
 
 # Set to '' when hosting a blog on GitHub Pages, ie on `//<username>.github.io`
 # Set to '/<reponame>' when using the `gh-pages` branch of a repository
@@ -23,7 +23,7 @@ description:         >
 # This should be the same author as first entry in `_data/authors.yml`
 author:
   name:              min
-  email:             theorydb@gmail.com
+  email:             kimjin0132@naver.com
 
 # Fallback image and color
 image:               /assets/img/main_left.jpg
@@ -44,11 +44,11 @@ google_fonts:        Lato
 
 # Set your Google Analytics id to receive `pageview` events.
 # To remove Google Anaylics from your page, remove the line below.
-google_analytics:    UA-137374202-1
+google_analytics:    
 
 # Setting a disqus shortname will enable the comment section on pages with `comments: true` in the front matter
-disqus: True
-disqus_shortname:    theorydb
+disqus: false
+disqus_shortname:    kimjinoook
 
 # This text will appear in the footer of every page. Markdown enabled.
 copyright:           '&copy; 2019.04. by theorydb'
