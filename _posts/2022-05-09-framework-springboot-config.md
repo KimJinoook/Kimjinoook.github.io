@@ -1,0 +1,96 @@
+---
+layout: post
+title:  "2.설정"
+subtitle:   ""
+categories: framework
+tags: springboot
+comments: false
+header-img: 
+---
+
+## jsp 사용 방법
+- 스프링 웹 프로젝트의 기본 dependency   
+
+```html
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+
+- tomcat은 포함되어있지만, jsp 엔진은 포함되어있지 않다
+- jsp를 사용하기 위해 설정 필요
+  - pom.xml에 jsper, jstl 의존성 추가
+  - jsp 경로 설정
+  - application.properties 설정
+  - controller 작성
+  - jsp파일 서버 재시작 없이 바로 적용하기
+  - application 실행   
+
+#### pom.xml에 의존성 추가   
+```html
+<!-- 메이븐 -->
+
+<!-- 재스퍼 -->
+<dependency>
+  <groupId>org.apache.tomcat.embed</groupId>
+  <artifactId>tomcat-embed-jasper</artifactId>
+  <scope>provided</scope>
+
+</dependency>
+<!-- jstl 라이브러리 -->
+<dependency>
+  <groupId>javax.servlet</groupId>
+  <artifactId>jstl</artifactId>
+</dependency>
+
+```
+
+```java
+//그래들
+compile('org.apache.tomcat.embed:tomcat-embed-jasper')
+compile('javax.servlet:jstl:1.2')
+```
+
+#### jsp 경로설정 / application.properties 설정
+- WEB-INF/views
+  - (/src/main/webapp/WEB-INF/views/)
+- 톰캣기반 웹어플리케이션에서는 보안상 jsp위치를 url로 직접 접근할 수 없는 WEB-INF 폴더 아래 위치   
+- application.properties
+  - 어플리케이션 실행 시 해당 파일에 정의된 내용을 로드한다
+  - 자동으로 설정된 기본값들이 존재하며, 위 설정파일의 값들은 오버라이드한다
+  - server.port
+    - default : 8080
+  - prefix, suffix
+    - jsp페이지를 처리하기 위한 접두 접미 설정 추가   
+
+
+
+```html
+server.port = 9091
+spring.mvc.view.prefix=/WEB-INF/views/
+spring.mvc.view.suffix=.jsp
+```
+
+
+***
+
+## sts 환경설정
+
+- sts 폴더에 있는 SpringToolSuite4.ini   
+
+```html
+-vmargs
+C:\Java\jdk-15.0.2/bin/javaw.exe
+
+-Xms2048m
+-Xmx2048m
+
+```
+- 다른이름으로 저장, 인코딩 시 utf-8
+- 경로는 jdk 경로와 일치해야하며, -vmargs 추가
+- jvm이 사용하는 힙 메모리
+  - 시작사이즈, 최대사이즈를 동일하게 설정, 버벅거림이 조금 나아짐
+  - 4기가 램 : 512
+  - 8기가 램 : 1024
+  - 16기가 램 : 2048

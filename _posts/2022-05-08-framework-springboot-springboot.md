@@ -1,0 +1,34 @@
+---
+layout: post
+title:  "1. 스프링부트란"
+subtitle:   ""
+categories: framework
+tags: springboot
+comments: false
+header-img: 
+---
+
+- 스프링 프레임워크의 복잡한 설정을 간편하게 할 수 있는 서브프로젝트
+- 웹컨테이너를 내장하고 있어 최소한의 설정으로 쉽게 웹 어플리케이션 제작 가능
+- 특징
+  - templates 폴더 자동 생성
+    - 스프링
+      - 기존의 스프링은 HTML내에 자바코드를 삽입하는 방식의 JSP 사용
+      - 디렉터리의 위치도 웹 디렉토리에 해당하는 src/main/webapp 안에 존재
+      - 위 방식은 war파일로 패키지화했을 경우에만 정적리소스를 정상적으로 사용 가능
+    - 스프링부트
+      - src/main/resources 디렉터리 내 화면과 관련된 파일 관리
+  - static 폴더 자동 생성
+    - css, fonts, images, plugin, scripts 등의 정적 리소스 파일이 위치
+  - application.properties
+    - 해당 파일은 웹 어플리케이션 실행 시 자동으로 로딩
+    - 각각으로 분리되어있는 xml 또는 자바 기반의 설정을 해당 파일에서 key-value 형직으로 지정 처리 가능
+
+### http 응답
+- 정적 리소스
+  - 웹 브라우저에 정적인 HTML, css, js을 제공할 때는, 정적 리소스를 사용한다
+- 뷰 템플릿 사용
+  - 웹 브라우저에 동적인 HTML을 제공할 때는 뷰 템플릿 사용
+- HTTP 메시지 사용
+  - HTTP API를 제공하는 경우에는 HTML이 아니라 데이터를 전달해야 한다
+  - HTTP 메세지 바디에 JSON같은 형식으로 데이터를 실어 보낸다
