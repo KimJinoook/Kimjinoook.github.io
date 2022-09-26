@@ -1,0 +1,187 @@
+---
+layout: post
+title:  "2. security"
+subtitle:   ""
+categories: framework
+tags: egov
+comments: false
+header-img: 
+---
+
+### 용어
+- 접근주체 / Principal : 보호된 리소스에 접근하는 대상
+- 인증 / Authentication : 접근주체에 대해 누구인지, 어플리케이션의 작업을 수행해도 되는 주체인지 확인하는 과정
+- 인가 / Authorization : 해당 리소스에 대해 접근 가능한 권한을 가지고 있는지 확인하는 과정
+- 권한 / Authority : 
+  - 어떤 리소스에 대한 접근 제한
+  - 모든 리소스는 접근 제어 권한이 걸려있다
+  - 인가과정에서 해당 리소스에 대한 제한된 최소한의 권한을 가졌는지 확인
+
+## 개요
+- 엔터프라이즈 어플리케이션을 위한 인증(Authentication)
+- 권한처리 (Authorization)
+- ServletFilter 와 JavaAOP를 통한 Interceptor를 사용, 보안을 강제
+- Spring IoC와 Lifecycle 서비스 기반으로 동작
+- 인증, Web URL authorization, Method호출 authorization, 도메인 객체 기반의 security처리, 채널 보안(https 강제), Human user 인식 등의 기능 제공   
+
+#### 절차
+- 일반적인 경우
+  - 리소스 요청
+  - 보호된 리소스인지 확인
+  - 인증여부 확인 (개발자 직접 구성)
+    - 로그인 진행 (개발자 직접 구성)
+      - 유효하지 않을 경우 재요청
+  - 권한부여 (개발자 직접 구성)
+
+- 스프링시큐리티
+  - 요청이 서블릿에 전달되기 전 필터가 걸러 인증확인
+  - AuthenticationFilter
+    - 아이디와 비밀번호를 사용하는 form기반 인증에서 로그인 URL로 오는 요청 감시
+    - AuthenticationManager를 통한 인증 실행
+    - 인증 성공 시 SecurityContext에 저장 후 AunthenticationSuccessHandler 실행
+    - 인증 실패 시 AuthenticationFailureHandler 실행
+  - AuthenticationManager
+    - Spring Security의 필터들이 인증을 수행하는 방법에 대한 명세를 정의해 놓은 인터페이스
+  - AuthenticationProvider
+    - form 기반 인증에서는 아이디, 패스워드가 유효한지 확인하는 이너페이스
+    - 직접 구현하거나 Spring의 DaoAuthenticationProvider클래스 활용 가능
+  - UserDetailsService
+    - DB에서 유저 정보를 가져오는 역할
+    - loadUserByUsername 메소드를 구현
+  - UserDetails
+    - 사용자 정보를 담는 인터페이스
+    - UserDetailsService 인터페이스를 통해 가져온 사용자 정보를 담아두는 구현체를 구성해 사용   
+
+***
+
+## 설정 간소화
+- egovframework는 spring security의 설종을 간소화할 수 있는 방법 제공   
+- conext-security.xml
+
+### XML namespace 및 schema 설정   
+
+```xml
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:egov-security="http://maven.egovframe.go.kr/schema/egov-security"
+  xmlns:security="http://www.springframework.org/schema/security"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http:// maven.egovframe.go.kr/schema/egov-security
+    http:// maven.egovframe.go.kr/schema/egov-security/egov-security-4.0.0.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security.xsd">
+…
+</beans>
+```
+
+### Security Config 설정   
+
+```xml
+<egov-security:config id="securityConfig"
+  loginUrl="/uat/uia/EgovCvplLogin.do"
+  logoutSuccessUrl="/EgovCvplLogin.do"
+  loginFailureUrl="/uat/uia/EgovCvplLogin.do?login_error=1"
+  accessDeniedUrl="/sec/ram/accessDenied.do"
+  dataSource="dataSource"
+  jdbcUsersByUsernameQuery="SELECT USER_ID,PASSWORD,ENABLED FROM USERS WHERE USER_ID = ?"
+  jdbcAuthoritiesByUsernameQuery="SELECT USER_ID,AUTHORITY FROM AUTHORITIES WHERE USER_ID = ?"
+  jdbcMapClass=”egovframework.com.sec.security.com.EgovSessionMapping"
+  requestMatcherTpe="regex"
+  hash =“sha256“
+  hashBase64=“false“
+  sniff="true"
+  xframeOptions="SAMEORIGIN"
+  xssProtection="true"
+  cacheControl=“false”
+  csrf="false"
+  csrfAccessDeniedUrl=”/egovCSRFAccessDenied.do"
+/>
+```
+
+- loginUrl : 필수 / 로그인 페이지 URL
+- logoutSuccessUrl : 필수 / 로그아웃 처리 시 호출되는 페이지 URL
+- loginFailureUrl : 필수 / 로그인 실패 시 호출되는 페이지 URL
+- accessDeniedUrl : 필수 / 권한이 없는 경우 호출되는 페이지 URL
+- dataSource : 선택 / DBMS 설정 dataSource
+  - 미지정시 'dataSource'
+- jdbcUserByUsernameQuery : 선택 / 인증에 사용되는 쿼리
+  - 디폴트 : select user_id, password, enabled, users.* from users where user_id = ?
+- jdbcAuthoritiesByUsernameQuery ; 선택 / 인증된 사용자의 권환 조회 쿼리
+  - 디폴트 : select user_id, authority from authorites where user_id = ?
+- jdbcMapClass : 선택 / 사용자 정보 mapping처리 class
+  - 디폴트 : egovframework.rte.fdl.security.userdetails.DefaultMapUserDetailsMapping
+- requestMatcherType : 선택 / 패턴매칭방식
+  - 디폴트 : regex
+  - ant, regex, ciRegex:case-insenstive regex
+- hash : 선택 / 패스워드 저장 방식
+  - 디폴트 : sha-256
+  - sha-256, plaintext, sha, md5, bcrypt
+- hastBase64 : 선택 / hash값 base64 인코딩 사용 여부
+  - 디폴트 : true
+- concurrentMaxSessions : 선택 / 동시 접속 가능 연결 수
+  - 디폴트 : 999
+- concurrentExpiredUrl : 선택 / expried된 경우 redirect되는 페이지 URL
+- errorIfMaximumExceeded : 필수 / 중복 로그인 방지 옵션
+  - 디폴트 : false
+- defaultTargetUrl : 선택 / 로그인 성공 시 redirect 되는 페이지 URL
+  - 미지정시 처음 접속하려 했던 URL로 redirect
+- alwaysUseDefaultTargetUrl : 필수 / 로그인 이후 설정한 페이지로 이동하게 하는 옵션
+  - 디폴트 : true
+- sniff : 필수 / 선언된 콘텐츠 유형으로부터 벗어난 응답에 대한 브라우저의 MIME 가로채기 방지 여부
+  - 디폴트 : true
+- xframeOptions : 선택 / sniff옵션이 true일 때 X-Frame-Options 범위 설정
+  - DENY, SAMEORIGIN
+- xssProtection : 필수 / 해당 기능 사용 여부
+  - 디폴트 : true
+- cacheControl : 필수 / 캐쉬 비활성화 여부
+  - 디폴트 : false
+- csrf : 필수 / 해당 기능 사용 여부
+  - 디폴트 : false
+- csrfAccessDeniedUrl : 필수 / 토큰 검증이 실패했을 경우 호출되는 페이지 URL
+
+### Security Object Config 설정   
+
+```html
+<egov-security:secured-object-config id="securedObjectConfig“
+  roleHierarchyString="
+    ROLE_ADMIN > ROLE_USER
+    ROLE_USER > ROLE_RESTRICTED
+    ROLE_RESTRICTED > IS_AUTHENTICATED_FULLY
+    IS_AUTHENTICATED_FULLY >IS_AUTHENTICATED_REMEMBERED
+    IS_AUTHENTICATED_REMEMBERED > IS_AUTHENTICATED_ANONYMOUSLY"
+  sqlRolesAndUrl="
+    SELECT auth.URL url, code.CODE_NM authority
+    FROM RTETNAUTH auth, RTETCCODE code
+    WHERE code.CODE_ID = auth.MNGR_SE"
+/>
+```
+
+- roleHierarchyString : 선택 / 계층처리를 위한 설정 문자열 지정
+  - 미지정시 DB로부터 지정된 설정정보 지정
+- sqlRolesAndUrl : 선택 / URL 방식 role 지정
+  - 미지정시 SecuredObjectDAO의 기본 쿼리
+- sqlRolesAndMethod
+- sqlRolesAndPointcut
+- sqlRegexMatchedRequestMapping : 선택 / reqiest마다 best matching url 보호차원 지정 쿼리
+- sqlHierarchicalRoles : 선택 / 계층처리를 위한 쿼리   
+
+### Security Config Initializer 설정   
+
+```html
+<egov-security:initializer id="initializer"
+  supportPointcut="true”
+  supportMethod=“true”
+/>
+```
+
+- supportPointcut : 선택 / pointcut 방식 지원여부
+  - 디폴트 : false
+- supportMethod : 선택 / method 방식 지원여부
+  - 디폴트 : true   
+
+***
+
+## 참고
+- https://spring.io/projects/spring-security
+- https://docs.spring.io/spring-security/site/docs/5.4.6/reference/html5/
