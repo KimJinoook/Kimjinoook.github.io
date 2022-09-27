@@ -13,7 +13,7 @@ url:                 https://Kimjinoook.github.io
 baseurl:             ""
 
 # A very short description of your page
-tagline:             "All roads lead to data."
+tagline:             ""
 
 # A short description of the page, used in the sidebar and as fallback for the meta description tag.
 # Markdown enabled, but don't use more than one paragraph (enforced by `>`)
@@ -51,7 +51,7 @@ disqus: false
 disqus_shortname:    kimjinoook
 
 # This text will appear in the footer of every page. Markdown enabled.
-copyright:           '&copy; 2019.04. by theorydb'
+# copyright:           '&copy; 2019.04. by theorydb'
 
 # Format of the permalinks
 permalink:           pretty
