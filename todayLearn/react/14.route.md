@@ -267,4 +267,73 @@ export default About;
 - 주의할점
   - 파라미터의 값은 모두 문자열로 조회된다
   - true/false값을 비교할땐 'true'와 같이 문자열로 비교
-  - 혹은 parseInt 등을 이용해 변환
+  - 혹은 parseInt 등을 이용해 변환   
+
+***
+
+## 중첩라우트
+
+- 게시글 목록페이지를 열었을 때. 게시글 하단에 목록을 또 보여줘야 한다면
+  - 기존 방식   
+
+```javascript
+<div>
+  <h2>게시글 {id}</h2>
+  <ArticleList/>
+</div>
+```
+
+  - 중첩라우트 사용   
+
+```javascript
+//App.js
+import { Route, Routes } from'react-router-dom';
+import About from './pages/About';
+import Article from './pages/Article';
+import Articles from './pages/Articles';
+import Home from './pages/Home';
+import Profile from './pages/Profile';
+
+const App = () => {
+  return(
+    <Routes>
+      <Route path="/" element={<Home />} /> 
+      <Route path="/about" element={<About />} /> 
+      <Route path="/profiles/:username" element={<Profile />} /> 
+      <Route path="/articles" element={<Articles />}> 
+        <Route path=":id" element={<Article />} />
+      </Route>
+    </Routes>
+  );
+};
+export default App;
+
+
+//<Route path=":id" element={<Article />} />
+//Articles.js
+import { Link, Outlet } from 'react-router-dom';
+const Articles = () => {
+  return (
+    <div>
+      <Outlet />
+      <ul>
+        <li>
+          <Link to="/articles/1">게시글 1</Link>
+        </li>
+        <li>
+          <Link to="/articles/2">게시글 2</Link>
+        </li>
+        <li>
+          <Link to="/articles/3">게시글 3</Link>
+        </li>
+      </ul>
+    </div>
+  );
+};
+export default Articles;
+
+```
+
+- Outlet 컴포넌트
+  - 리액트 라우터에서 제공하는 컴포넌트
+  - Route의 자식으로 들어가는 jsx 엘리먼트를 보여주는 역할
