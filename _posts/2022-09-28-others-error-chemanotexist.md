@@ -63,7 +63,7 @@ select * from 스키마명.테이블명
 ##### application.properties에서 스키마 지정   
 ```java
 //하이버네이트 일 경우
-spring.jpa.properties.hibernate.default_schema=dbo
+spring.jpa.properties.hibernate.default_schema=스키마명
 
 //jdbc일 경우
 jdbc:postgresql://localhost:5432/mydatabase?currentSchema=스키마명
