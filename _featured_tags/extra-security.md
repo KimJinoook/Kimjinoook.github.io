@@ -2,7 +2,7 @@
 layout: list
 title: Security
 slug: security
-category: extra
+category: others
 menu: false
 order: 1
 ---
