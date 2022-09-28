@@ -2,7 +2,7 @@
 layout: post
 title:  "HTTP/SSL"
 subtitle:   ""
-categories: extra
+categories: others
 tags: security
 comments: false
 header-img: 
