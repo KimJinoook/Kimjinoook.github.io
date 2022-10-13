@@ -17,10 +17,144 @@ header-img:
 
 ***
 ***
+
+# 1. 백단에서의 데이터 조회   
+```java
+@RequestMapping(value = "/sym/ccm/cde/SelectCcmCmmnDetailCodeList.do")
+@ResponseBody
+public HashMap<String, Object> selectCmmnDetailCodeList(@RequestBody CmmnDetailCodeVO searchVO) throws Exception {
+
+    /** 
+        페이지번호 클릭 시 searchVO에 이동할 pageIndex가 담아져 올 것이다.
+        그 외 검색조건이 있다면, 검색 조건과 키워드가 같이 searchVO에 담아져 온다.
+    */
+    HashMap<String, Object> result = new HashMap<>(); //리턴값을 담을 map
+    
+    /** 
+        searchVO에 기본 설정파일에서 설정한 상수를 담는다
+        기본설정파일이 없다면, 그냥 상수 입력
+        pageUnit : 각 페이지당 보여줄 레코드 수 (10)
+        pageSize : 각 블럭당 보여줄 페이지 수 (10일 경우 1~10페이지, 11~20페이지...)
+    */
+    searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
+    searchVO.setPageSize(propertiesService.getInt("pageSize"));
+
+
+    /** pageing */
+    /** 
+        프론트단으로 되돌려줄 페이지 정보
+        currentPageNo : 현재페이지를 뜻하며, 우리가 이동할 페이지 (pageIndex)를 삽입한 후 이를 토대로 데이터를 불러올 것이다
+        recordCountPerPage : 페이지당 보여줄 레코드 수
+        pageSize : 각 블럭당 보여줄 페이지 수
+    */
+    PaginationInfo paginationInfo = new PaginationInfo();
+    paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
+    paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
+    paginationInfo.setPageSize(searchVO.getPageSize());
+
+    
+    /**
+        데이터를 불러오기 위한 searchVO설정
+        페이지의 첫번째 레코드 인덱스 설정
+        페이지의 마지막 레코드 인덱스 설정
+        페이지당 보여줄 레코드 수 설정
+        페이지인포메이션 클래스에서 내부적으로 계산 후 설정
+    */
+    searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());  // (현재페이지번호 - 1) * 각페이지당 보여줄 레코드 수;
+    searchVO.setLastIndex(paginationInfo.getLastRecordIndex()); // 현재페이지번호 * 각 페이지당 보여줄 레코드 수;
+    searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+
+    
+    /** 
+        searchVO를 이용해 DB에서 데이터 조회
+        sql문은 하단 참고
+    */
+    List<?> CmmnCodeList = cmmnDetailCodeManageService.selectCmmnDetailCodeList(searchVO);
+    result.put("resultList", CmmnCodeList);
+
+    
+    /** 전체 레코드 수 */
+    int totCnt = cmmnDetailCodeManageService.selectCmmnDetailCodeListTotCnt(searchVO);
+    paginationInfo.setTotalRecordCount(totCnt);
+    result.put("paginationInfo", paginationInfo);
+
+    
+    /** 반환값에는 현재 페이지 정보와, 레코드를 담아 리턴한다 */
+    return result;
+}
+```   
+
+```xml
+<select id="selectCmmnDetailCodeList" parameterType="egovframework.com.sym.ccm.cde.service.CmmnDetailCodeVO"   
+    resultType="egovframework.com.sym.ccm.cde.service.CmmnDetailCodeVO">
+		
+    <![CDATA[
+        SELECT  *
+          FROM  (
+        SELECT ROWNUM RNUM, ALL_LIST.*
+          FROM  (
+        /* 구현 Sql */
+        SELECT  A.CODE_ID
+             ,  A.CODE
+             ,  A.CODE_NM
+             ,  A.USE_AT
+          FROM  COMTCCMMNDETAILCODE A
+             ,  COMTCCMMNCODE       B
+         WHERE 	B.USE_AT  = 'Y'
+           AND  A.CODE_ID = B.CODE_ID
+          ]]>
+
+        <if test="searchCondition == 1">	<![CDATA[	AND
+            A.CODE_ID LIKE '%' || #{searchKeyword} || '%'	]]>
+        </if>
+        <if test="searchCondition == 2">	<![CDATA[	AND
+            A.CODE    LIKE '%' || #{searchKeyword} || '%'	]]>
+        </if>
+        <if test="searchCondition == 3">	<![CDATA[	AND
+            A.CODE_NM LIKE '%' || #{searchKeyword} || '%'	]]>
+        </if>
+
+    <![CDATA[
+        /* 구현 Sql
+            searchVO에 담겨있던 파라미터를 이용해 현재 페이지에 불러올 레코드만 조회한다
+        */
+                ) ALL_LIST
+                )
+         WHERE  RNUM  > #{firstIndex}
+           AND  RNUM <= #{firstIndex} + #{recordCountPerPage}
+           ]]>
+
+</select>
+
+
+
+<!-- 전체 레코드 수 -->
+<select id="selectCmmnDetailCodeListTotCnt" parameterType="egovframework.com.sym.ccm.cde.service.CmmnDetailCodeVO" resultType="int">
+
+    <![CDATA[
+        SELECT  COUNT(*) totcnt
+          FROM  COMTCCMMNDETAILCODE A
+             ,  COMTCCMMNCODE       B
+         WHERE 	B.USE_AT  = 'Y'
+           AND  A.CODE_ID = B.CODE_ID
+           ]]>
+
+        <if test="searchCondition == 1">	<![CDATA[	AND
+            A.CODE_ID LIKE '%' || #{searchKeyword} || '%'	]]>
+        </if>
+        <if test="searchCondition == 2">	<![CDATA[	AND
+            A.CODE    LIKE '%' || #{searchKeyword} || '%'	]]>
+        </if>
+        <if test="searchCondition == 3">	<![CDATA[	AND
+            A.CODE_NM LIKE '%' || #{searchKeyword} || '%'	]]>
+        </if>
+</select>
+```
+
 ***
 ***
 
-# pagination.js / 리액트의 페이지네이션 컴포넌트   
+# 3. pagination.js / 리액트의 페이지네이션 컴포넌트   
 
 ```javascript
 import React from 'react';
