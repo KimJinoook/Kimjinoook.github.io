@@ -4,7 +4,7 @@ title:  "17. 리액트 페이징처리"
 subtitle:   ""
 categories: library
 tags: react
-comments: false
+comments: true
 header-img: 
 ---
 
