@@ -90,39 +90,45 @@ public HashMap<String, Object> selectCmmnDetailCodeList(@RequestBody CmmnDetailC
 		
     <![CDATA[
         SELECT  *
-          FROM  (
-        SELECT ROWNUM RNUM, ALL_LIST.*
-          FROM  (
-        /* 구현 Sql */
-        SELECT  A.CODE_ID
-             ,  A.CODE
-             ,  A.CODE_NM
-             ,  A.USE_AT
-          FROM  COMTCCMMNDETAILCODE A
-             ,  COMTCCMMNCODE       B
-         WHERE 	B.USE_AT  = 'Y'
-           AND  A.CODE_ID = B.CODE_ID
-          ]]>
+        FROM  (
+        	SELECT ROWNUM RNUM, ALL_LIST.*
+          	FROM  (
+        		/* 구현 Sql */
+        		SELECT  A.CODE_ID
+             			,  A.CODE
+             			,  A.CODE_NM
+             			,  A.USE_AT
+          		FROM  COMTCCMMNDETAILCODE A
+             			,  COMTCCMMNCODE       B
+         		WHERE 	B.USE_AT  = 'Y'
+           		AND  A.CODE_ID = B.CODE_ID
+  ]]>
 
-        <if test="searchCondition == 1">	<![CDATA[	AND
-            A.CODE_ID LIKE '%' || #{searchKeyword} || '%'	]]>
+        <if test="searchCondition == 1">	
+		<![CDATA[	
+			AND A.CODE_ID LIKE '%' || #{searchKeyword} || '%'	
+		]]>
         </if>
-        <if test="searchCondition == 2">	<![CDATA[	AND
-            A.CODE    LIKE '%' || #{searchKeyword} || '%'	]]>
+        <if test="searchCondition == 2">	
+		<![CDATA[	
+			AND A.CODE    LIKE '%' || #{searchKeyword} || '%'	
+		]]>
         </if>
-        <if test="searchCondition == 3">	<![CDATA[	AND
-            A.CODE_NM LIKE '%' || #{searchKeyword} || '%'	]]>
+        <if test="searchCondition == 3">	
+		<![CDATA[	
+			AND A.CODE_NM LIKE '%' || #{searchKeyword} || '%'	
+		]]>
         </if>
 
-    <![CDATA[
+   	<![CDATA[
         /* 구현 Sql
             searchVO에 담겨있던 파라미터를 이용해 현재 페이지에 불러올 레코드만 조회한다
         */
                 ) ALL_LIST
-                )
+	 )
          WHERE  RNUM  > #{firstIndex}
-           AND  RNUM <= #{firstIndex} + #{recordCountPerPage}
-           ]]>
+         AND  RNUM <= #{firstIndex} + #{recordCountPerPage}
+ ]]>
 
 </select>
 
