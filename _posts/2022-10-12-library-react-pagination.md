@@ -160,7 +160,282 @@ public HashMap<String, Object> selectCmmnDetailCodeList(@RequestBody CmmnDetailC
 ***
 ***
 
-# 3. pagination.js / 리액트의 페이지네이션 컴포넌트   
+# 2. 데이터를 조회할 리액트 페이지   
+```javascript
+import React from 'react'
+import {
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CRow,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CPagination,
+  CPaginationItem,
+  CTable,
+  CTableBody,
+  CTableCaption,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from '@coreui/react'
+import { DocsExample } from 'src/components'
+import { useState, useEffect, useContext } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
+import * as EgovNet from 'src/context/egovFetch';
+import {COM013} from 'src/context/CmmCodeDetail';
+import {LoginContext} from 'src/App';
+import {Pagination} from 'src/context/Pagination'
+
+
+function DetailCodeManager() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [searchVO, setSearchVO] = useState(location.state?.searchVO || { pageIndex: 1, searchCnd: '0', searchKeyword: '' });// 기존 조회에서 접근 했을 시 || 신규로 접근 했을 시
+  const [resultList, setResultList] = useState();
+  const [pageButton, setPageButton] = useState();
+
+
+  const retrieveList = (searchVO)=>{
+    var url = '/sym/ccm/cde/SelectCcmCmmnDetailCodeList.do'
+    var options = {
+      
+      method: 'POST',
+      headers: {
+          'Content-type': 'application/json'
+      },
+      body: JSON.stringify(searchVO)
+      
+    }
+
+    EgovNet.requestFetch(url,options,
+      (resp) => {
+
+          let mutResultList = [];
+          
+          
+          resp.resultList.forEach(function (item, index) {
+            if (index === 0) mutResultList = []; // 목록 초기화
+            //let listIdx = resultCnt + 1 - ((currentPageNo - 1) * pageSize + index + 1);
+
+
+            mutResultList.push(
+              <CTableRow onClick={()=>navigate('/system_manager/code_manager/EgovCcmCmmnDetailCodeDetail',{state:{codeId:item.codeId, code:item.code}})}>
+                <CTableHeaderCell scope="row">{index+resp.paginationInfo.firstRecordIndex+1}</CTableHeaderCell>
+                <CTableDataCell>{item.codeId}</CTableDataCell>
+                <CTableDataCell>{item.code}</CTableDataCell>
+                <CTableDataCell>{item.codeNm}</CTableDataCell>
+                <CTableDataCell>{item.useAt}</CTableDataCell>
+                
+              </CTableRow>
+            );
+          });
+          setResultList(mutResultList);
+
+          setPageButton(
+            Pagination(resp.paginationInfo,searchVO,setSearchVO,retrieveList)
+          )
+
+
+          
+
+          
+      },
+      function (resp) {
+          console.log("err response : ", resp);
+      }
+    )
+  } //retrieveList()
+
+  
+  useEffect(() => {
+    retrieveList(searchVO);
+    return () => {
+    }
+  }, []);
+
+    
+  return (
+    <CRow>
+      
+      <CCol xs={12}>
+        <CCard className="mb-4">
+          <CCardHeader>
+            <strong>공통상세코드 목록</strong> <small></small>
+          </CCardHeader>
+          <CCardBody>
+          <CForm className="row g-3 d-flex justify-content-end">
+          
+            <CCol md={2}>
+            <CFormSelect onChange={(e)=>setSearchVO({...searchVO,searchCondition:e.target.value})}>
+              <option value="">선택하세요</option>
+              <option value="1">코드ID</option>
+              <option value="2">상세코드</option>
+              <option value="3">상세코드명</option>
+            </CFormSelect>
+            </CCol>
+            <CCol md={5}>
+            <CFormInput  name="searchKeyword" type="text" size="35" 
+                    value={searchVO && searchVO.searchKeyword}
+                    onChange={(e)=>setSearchVO({...searchVO,searchKeyword:e.target.value})}
+                    maxLength="255"/>
+            </CCol>
+            <CCol md={1}>
+            <CFormInput  type="button"
+                    value="조회"
+                    onClick={()=>retrieveList(searchVO)}/>
+            </CCol>
+            <CCol md={1}>
+            <CFormInput  type="button"
+                    value="등록"
+                    onClick={()=>navigate('/system_manager/code_manager/EgovCcmCmmnDetailCodeRegist')}/>
+            </CCol>
+            </CForm>
+            
+
+            
+
+            <DocsExample >
+              <CTable hover>
+                <CTableHead>
+                  <CTableRow>
+                    <CTableHeaderCell scope="col">번호</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">코드ID</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">상세코드</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">상세코드명</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">사용여부</CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+
+                    {resultList}
+                    
+ 
+                </CTableBody>
+              </CTable>
+            </DocsExample>
+            
+                {pageButton}
+              
+          </CCardBody>
+        </CCard>
+      </CCol>
+      
+    </CRow>
+  )
+}
+
+export default DetailCodeManager
+
+```
+## 사용할 변수   
+```javascript
+import { useState, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
+import * as EgovNet from 'src/context/egovFetch';
+import {Pagination} from 'src/context/Pagination'
+
+
+function DetailCodeManager() {
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [searchVO, setSearchVO] = useState();
+  const [resultList, setResultList] = useState();
+  const [paginationInfo, setPaginationInfo] = useState();
+  const [pageButton, setPageButton] = useState();
+```   
+- import
+	- Pagination
+		- 직접 제작한 페이지네이션 컴포넌트
+		- 해당 컴포넌트에 페이지정보 등의 파라미터를 전달한 후 페이지 버튼들을 리턴받는다
+		- 하단에서 해당 컴포넌트 설명
+- const 변수
+	- location, navigate
+		- 페이지 이동이 아닌, 기타 버튼 클릭시 이동을 위해 사용할 변수, 이 글에서는 신경쓰지 않아도 된다
+	- searchVO
+		- 검색조건과, 이동할 페이지 index를 담을 변수
+	- resultList
+		- 조회한 데이터를 담을 배열
+	- pageButton
+		- Pagination컴포넌트를 통해 가져온 페이지 버튼을 담을 배열   
+
+## 데이터 조회 함수   
+```javascript
+//searchVO를 파라미터로, 위에 작성한 백단과 비동기적으로 통신하여, 데이터를 받아온다
+//searchVO에는 필요시 검색 조건과 검색키워드가 담아지며
+//페이지 버튼 클릭 시 이동할 페이지인덱스를 담는다
+  const retrieveList = (searchVO)=>{
+    var url = '/sym/ccm/cde/SelectCcmCmmnDetailCodeList.do'
+    var options = {
+      
+      method: 'POST',
+      headers: {
+          'Content-type': 'application/json'
+      },
+      body: JSON.stringify(searchVO)
+      
+    }
+
+    //fetch 컴포넌트를 따로 만들어 불러왔으며, axios나 fetch를 사용하여 데이터를 조회해오면 된다
+    EgovNet.requestFetch(url,options,
+      
+      //성공했을 때의 함수
+      (resp) => {
+
+          let mutResultList = [];
+         
+          resp.resultList.forEach(function (item, index) {
+            if (index === 0) mutResultList = []; // 목록 초기화
+            //let listIdx = resultCnt + 1 - ((currentPageNo - 1) * pageSize + index + 1);
+
+
+            mutResultList.push(
+              <CTableRow onClick={()=>navigate('/system_manager/code_manager/EgovCcmCmmnDetailCodeDetail',{state:{codeId:item.codeId, code:item.code}})}>
+                <CTableHeaderCell scope="row">{index+resp.paginationInfo.firstRecordIndex+1}</CTableHeaderCell>
+                <CTableDataCell>{item.codeId}</CTableDataCell>
+                <CTableDataCell>{item.code}</CTableDataCell>
+                <CTableDataCell>{item.codeNm}</CTableDataCell>
+                <CTableDataCell>{item.useAt}</CTableDataCell>
+                
+              </CTableRow>
+            );
+          });
+          setResultList(mutResultList);
+
+	  //페이지 버튼들을 state로 관리하며, import한 Pagination 컴포넌트를 통해 리턴받은 버튼들을 pagebutton state에 담는다
+	  //Pagination 파라미터는 아래 기술
+          setPageButton(
+            Pagination(resp.paginationInfo,searchVO,retrieveList)
+          )
+       
+      },
+      function (resp) {
+          console.log("err response : ", resp);
+      }
+    )
+  } //retrieveList()
+```   
+- Pagination(resp.paginationInfo, searchVO, retrieveList)
+	- 해당 컴포넌트에 파라미터를 전달 후 페이지 버튼들을 리턴받는다
+	- resp.paginationInfo
+		- 백단과 통신후 받아온 HashMap 내의 paginationInfo 객체를 담는다
+		- 현재 페이지 번호, 페이지 사이즈 등의 정보가 담겨있다
+	- searchVO
+		- 검색조건이나 이동할 페이지인덱스를 담을 객체
+		- 페이지번호 클릭 시 searchVO를 백단 파라미터로 보내 데이터를 받아올 것이다
+	- retrieveList
+		- 페이지 번호 클릭시 호출할 함수
+
+***
+***
+
+# 3. pagination.js / 페이지네이션 컴포넌트   
 
 ```javascript
 import React from 'react';
@@ -170,7 +445,7 @@ import {
   } from '@coreui/react'
   import { DocsExample } from 'src/components'
 
-export function Pagination(pi,searchVO,setSearchVO,retrieveList) {
+export function Pagination(pi,searchVO,retrieveList) {
 
     
 
