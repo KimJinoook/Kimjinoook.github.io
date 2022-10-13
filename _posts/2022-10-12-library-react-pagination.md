@@ -15,7 +15,7 @@ header-img:
 
 ***
 
-## pagination.js / 리액트의 페이지네이션 컴포넌트   
+# pagination.js / 리액트의 페이지네이션 컴포넌트   
 
 ```javascript
 import React from 'react';
@@ -145,7 +145,7 @@ export function Pagination(pi,searchVO,setSearchVO,retrieveList) {
 
 ```
 
-#### 변수의 계산
+## 변수의 계산
 ```javascript
     var totalPageCount = Math.floor((pi.totalRecordCount - 1) / pi.recordCountPerPage) + 1
     var firstPageNoOnPageList = Math.floor((pi.currentPageNo - 1) / pi.pageSize) * pi.pageSize + 1;
@@ -184,3 +184,119 @@ export function Pagination(pi,searchVO,setSearchVO,retrieveList) {
       - firstPageNoOnPageList + pi.pageSize -1
       - if문을 통해, 마지막 페이지번호가 전체 페이지수(totalPageCount)보다 크다면, 마지막 페이지번호를 재설정
       - if(lastPageNoOnPageList > pi.totalPageCount) { lastPageNoOnPageList = pi.totalPageCount; }
+    - firstRecordIndex : 페이지당 첫번째 레코드의 인덱스
+      - (pi.currentPageNo - 1) * pi.recordCountPerPage
+    - lastRecordIndex : 페이지당 마지막 레코드의 인덱스
+        - (pi.currentPageNo) * pi.recordCountPerPage;   
+
+## 페이지 버튼의 생성   
+- 페이지버튼을 담을 배열 생성
+    - const paginationButton = \[\];
+- 조건에 따라 배열에 페이지 버튼 삽입 (push)
+    - 디자인을 위해 coreui의 페이지버튼 컴포넌트를 삽입했지만, 기본 input type button을 넣는 것과 동일   
+- 배열에 페이지버튼을 담기 때문에, 각 버튼의 생성 순서에 주의한다
+    - 첫페이지이동버튼, 10페이지 앞 이동버튼, 각 페이지 버튼, 10페이지 뒤 이동버튼, 마지막페이지 이동버튼 순서   
+
+```javascript
+//첫번째 페이지, 10페이지 앞 이동 버튼
+//현재 페이지가 2페이지 이상일 경우에만 생성되게 조건을 건다
+if(paginationInfo.currentPageNo > 1){
+    paginationButton.push(
+        <CPaginationItem aria-label="Previous" 
+            onClick={(e)=>pageFirst()}
+        >
+            <span aria-hidden="true">&laquo;</span>
+        </CPaginationItem>
+    )
+    paginationButton.push(
+        <CPaginationItem aria-label="Previous" 
+            id={'prev'}
+            onClick={(e)=>pagePrev()}
+        >
+            <span aria-hidden="true">&lt;</span>
+        </CPaginationItem>
+    )
+}
+
+
+//각 페이지 이동 버튼
+//해당 버튼이 가리키는 페이지번호를 파라미터로, onClick함수에 담아준다
+for(var i=paginationInfo.firstPageNoOnPageList-1;i<paginationInfo.lastPageNoOnPageList;i++){
+
+    if(i==paginationInfo.currentPageNo-1){
+        paginationButton.push(
+            <CPaginationItem active>{i+1}</CPaginationItem>
+        )
+    }else{
+        paginationButton.push(
+            <CPaginationItem 
+                id={i+1}
+                onClick={(e)=>pageMove(e.target.id)
+            }>{i+1}</CPaginationItem>
+        )
+    }
+}
+
+//10페이지 뒤로 이동버튼, 마지막페이지 이동버튼
+//현재페이지가 마지막페이지가 아닐 경우에만 생성
+if(paginationInfo.currentPageNo != paginationInfo.totalPageCount){
+    paginationButton.push(
+        <CPaginationItem aria-label="Next"
+            onClick={(e)=>pageNext()}
+        >
+            <span aria-hidden="true">&gt;</span>
+        </CPaginationItem>
+    )
+    paginationButton.push(
+        <CPaginationItem aria-label="Next"
+            onClick={(e)=>pageLast()}
+        >
+            <span aria-hidden="true">&raquo;</span>
+        </CPaginationItem>
+    )
+}
+```
+
+## 페이지버튼 클릭시 호출할 함수   
+```javascript
+//각 페이지버튼 클릭시 이동 함수
+//페이지 버튼이 가리키는 페이지번호를 index로 받아온다
+//searchVO에 해당 pageIndex를 지정 후 데이터 조회함수 (retrieveList)를 호출한다
+//searchVO와 retrieveList는 모두 부모 컴포넌트에서 pagination 컴포넌트를 호출할 때 받아온 파라미터
+function pageMove(index){
+
+    searchVO={...searchVO,pageIndex:index};
+
+    retrieveList(searchVO);  
+}
+
+
+
+//10페이지씩 이동하는 함수
+function pagePrev(){
+    var pageIndex = paginationInfo.firstPageNoOnPageList-1;
+    if(pageIndex < 1) {
+        pageIndex = 1;
+    }
+    retrieveList({...searchVO,pageIndex:pageIndex});  
+}
+
+function pageNext(){
+    var pageIndex = paginationInfo.lastPageNoOnPageList+1;
+    if(pageIndex > paginationInfo.totalPageCount) pageIndex = paginationInfo.totalPageCount;
+    retrieveList({...searchVO,pageIndex:pageIndex});  
+}
+
+
+//첫,마지막페이지 이동하는 함수
+function pageFirst(){
+    var pageIndex = 1;
+    retrieveList({...searchVO,pageIndex:pageIndex});  
+}
+
+function pageLast(){
+    var pageIndex = paginationInfo.totalPageCount;
+    retrieveList({...searchVO,pageIndex:pageIndex});  
+}
+```
+
