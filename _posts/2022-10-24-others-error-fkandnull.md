@@ -3,7 +3,7 @@ layout: post
 title:  "fk 참조시 null값과 공백값의 차이"
 subtitle:   ""
 categories: others
-tags: error postgresql springboot
+tags: error postgresql
 comments: false
 header-img: 
 ---
