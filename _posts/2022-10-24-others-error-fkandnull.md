@@ -7,10 +7,10 @@ tags: error postgresql springboot
 comments: false
 header-img: 
 ---
-#### 환경 : postgresql   
+### 환경 : postgresql   
 
 
-#### 에러   
+### 에러   
 
 테이블의 fk가 null값을 허용하는 컬럼이고 분명히 아무 값도 넣지않았는데, fk가 잠조하는 부모테이블에 해당하는 값이 없다고 뜬다.   
 
@@ -36,12 +36,14 @@ values('')
 
 null값을 넣으면 정상적으로 값이 들어가지만, ''로 값을 넣으면 부모테이블에 해당 데이터가 없다고 오류가 발생   
 
-#### 원인   
+### 원인   
 이는 null과 '', 공백없는 따옴표의 차이에 있다. 오라클의 경우 null과 ''를 동일하게 취급하지만, postgresql이나 mysql은   
 null은 어떠한 값도 존재하지 않는 것이고   
 ''은 길이가 0인 값이 존재하는 것으로 인식.   
+![캡처](https://user-images.githubusercontent.com/99188096/197713302-76cccb3d-c6b5-4575-b680-2226fcd6d701.PNG)   
 
-#### postgresql의 테이블 구성   
+
+### postgresql의 테이블 구성   
 postgresql의 테이블이나 인덱스는 일반적으로 8kb 고정크기의 페이지 배열로 저장된다   
 - 페이지의 레이아웃   
 ![캡처](https://user-images.githubusercontent.com/99188096/197709948-8764b920-1efb-409c-bb05-475849781ae5.PNG)   
