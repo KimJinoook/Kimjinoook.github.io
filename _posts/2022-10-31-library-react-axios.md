@@ -12,6 +12,10 @@ header-img:
 - Promise 기반 HTTP 비동기 통신 라이브러리
 - 운영환경에 따라 브라우저 간 XMLHttpRequest 객체 또는 Node.js의 HTTP API를 사용
 - 요청과 응답을 JSON형태로 자동 변경   
+- 라이브러리로, npm을 통한 별도 설치 필요   
+  > npm install axios   
+
+
 
 ***
 
