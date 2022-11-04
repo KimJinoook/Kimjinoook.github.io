@@ -36,9 +36,9 @@ axios({
 });
 ```
 - 구성옵션은 url이 필수값
-- url : 요청에 사용될 서버 URL
+- *url* : 요청에 사용될 서버 URL
   - url 값이 상대url이라면, 앞에 자동적으로 baseURL이 붙는다
-  - '/user' 입력 시, 기본적으로 'http://localhost:8080/user'
+  - '/user' 입력 시, 'http://localhost:8080/user'
 - method : 요청할 때 사용될 메서드, 기본값 get
 - headers : 서버에 전송 될 사용자 정의 헤더
   - { 'X-Requested-With': 'XMLHttpRequest' }
