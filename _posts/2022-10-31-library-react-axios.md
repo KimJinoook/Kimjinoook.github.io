@@ -115,7 +115,14 @@ const onClick =() => {
 ***
 
 ## 단축메서드
-
+- get : 주로 리소스 조회에 사용
+  - axios.get(url)
+  - axios.get(url,config)
+- post : 요청 데이터 처리, 주로 등록세 아용
+  - axios.post(url,data)
+  - axios.post(url,data,config)
+- put : 리소스를 대체할 때 주로 사용
+- delete : 리소스를 삭제할 때 주로 시용
 
 ```javascript
 const onClick = () => {
@@ -140,4 +147,7 @@ const onClick = async() => {
 }
 ```
 
-- 비동기 방식이지만, async와 await을 사용하면 promise가 끝날 때까지 기다렸다가 결과값을 특정 변수에 담을 수 있다.
+- 비동기 방식이지만, async와 await을 사용하면 promise가 끝날 때까지 기다렸다가 결과값을 특정 변수에 담을 수 있다.   
+
+*** 
+## axios.get
