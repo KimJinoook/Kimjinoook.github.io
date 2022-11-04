@@ -155,7 +155,14 @@ const onClick = async() => {
 ```javascript
 axios.get('/getOne',{
   params:searchVO
-}
+})
+
+axios.get('/getOne',{
+  params:{
+    searchKeyword:'a',
+    searchCondition:'b'
+  }
+})
 ```
 ```java
 @GetMapping("/getOne")
@@ -185,6 +192,88 @@ axios.get('getThree/${key})
 ```java
 @GetMapping("/getThree/{key}
 public ResultVO getThree(@PathVariable int key)
+  ...
+  return ResultVO
+}
+```
+
+## axios.post
+#### 1
+```javascript
+axios.post('/postOne',searchVO)
+
+axios.post('/postOne',{
+  searchKeyword:'a',
+  searchCondition:'b'
+})
+```
+```java
+@PostMapping('/postOne')
+public ResultVO postOne(@RequestBody SearchVO searchVO) {
+  ...
+  return ResultVO
+}
+```
+
+- 파일 업로드 등 formData를 내보낼 시   
+
+```javascript
+const form = new FormData();
+form.append("file",file);
+form.append("name",name);
+
+axios.post('/url',form,{
+  headers:{
+     "content-type": "multipart/form-data",
+  },
+})
+```
+```java
+public ResultVO insertForm(final MultipartHttpServletRequest multiRequest,DataVO dataVO) throws Exception {
+}
+```
+
+## axios.put
+- 서버 내부적으로 get-post 과정을 거치기 때문에 post 메서드와 비슷한 형태   
+
+#### 1
+```javascript
+axios.put('/putOne',boardVO)
+
+axios.put('/putOne',{
+  boardNo:1,
+  boardTitle:'title',
+  boardContent:'content'
+})
+```
+```java
+@PutMapping("/putOne")
+public ResultVO putOne(@RequestBody BoardVO boardVO){
+  ...
+  return ResultVO
+}
+```
+#### 2
+```javascript
+axios.put('/putTwo/${no}',boardVO)
+```
+```java
+@PutMapping("/putTwo/{no}")
+public ResultVO putTwo(@PathVariable int no, @RequestBody BoardVO boardVO){
+  ...
+  return ResultVO
+}
+```
+
+## axios.delete
+- 일반적으로 body가 비어있으며, 리소스 삭제를 목적으로 사용된다   
+
+```javascript
+axios.delete('/deleteOne/${id}/${pw})
+```
+```java
+@DeleteMapping("/deleteOne/{id}/{pw}")
+public ResultVO deleteOne(@PathVariable String id, @PathVariable String pw){
   ...
   return ResultVO
 }
