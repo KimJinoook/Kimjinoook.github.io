@@ -85,6 +85,36 @@ axios({
 - xsrfHeaderName : xsrf 토큰 값을 운반하는 HTTP 헤더 이름
 - onUploadProgress : 업로드 프로그레스 이벤트 처리
 - onDownloadProgress : 다운르도 프로그레스 이벤트 처리
+- maxContentLength : HTTP 응답 콘텐츠의 최대 크기를 바이트 단위로 설정
+- validateStatus : 주어진 HTTP응답 상태코드에 대한 약속을 해결할지 거절할지 정의
+- maxRedirects : Node.js에서 리다이렉트 가능한 최대 개수를 정의
+  - 기본값 5
+- socketPath : Node.js에서 사용될 UNIX 소켓 정의
+  - 기본값 null
+- httpAgent, httpsAgent : Node.js에서 http,https 요청을 수행할 때 사용할 커스텀에이전트 정의
+- proxy : 프록시 서버의 호스트 이름과 포트를 정의
+- cancelToken : 요청을 취소하는데 사용할 수 있는 취소토큰 지정   
+
+## 구성을 설정한 인스턴스 생성   
+``` javascript
+const instance = axios.create({
+  baseURL : 'http://localhost:9999',
+  headers: { 'X-Custom-Header': 'foobar' },
+  timeout: 1000,
+})
+
+const onClick =() => {
+  instance.get('url')
+  .then((resp)=>{
+    setData(resp.data);
+  });
+}
+```
+- 기본 구성을 설정한 인스턴스를 생성해 axios 기본세팅을 할 수 있다.   
+
+***
+
+## 단축메서드
 
 
 ```javascript
