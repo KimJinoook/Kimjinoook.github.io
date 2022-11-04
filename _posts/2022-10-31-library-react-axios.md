@@ -151,3 +151,41 @@ const onClick = async() => {
 
 *** 
 ## axios.get
+#### 1
+```javascript
+axios.get('/getOne',{
+  params:searchVO
+}
+```
+```java
+@GetMapping("/getOne")
+public ResultVO getOne(SearchVO searchVO) throws Exception{
+  ...
+  return ResultVO
+}
+```
+
+#### 2
+```javascript
+axios.get('/getTwo?key=value')
+```
+```java
+@GetMapping("/getTwo")
+public ResultVO getTwo(@RequestParam int key)
+  ...
+  return ResultVO
+}
+```
+
+#### 3
+```javascript
+//es6의 템플릿리터럴 이용
+axios.get('getThree/${key})
+```
+```java
+@GetMapping("/getThree/{key}
+public ResultVO getThree(@PathVariable int key)
+  ```
+  return ResultVO
+}
+```
