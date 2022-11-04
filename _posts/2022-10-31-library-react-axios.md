@@ -185,7 +185,7 @@ axios.get('getThree/${key})
 ```java
 @GetMapping("/getThree/{key}
 public ResultVO getThree(@PathVariable int key)
-  ```
+  ...
   return ResultVO
 }
 ```
