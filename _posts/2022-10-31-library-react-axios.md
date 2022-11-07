@@ -13,11 +13,13 @@ header-img:
 - 운영환경에 따라 브라우저 간 XMLHttpRequest 객체 또는 Node.js의 HTTP API를 사용
 - 요청과 응답을 JSON형태로 자동 변경   
 - 라이브러리로, npm이나 기타 방법을 통한 별도 설치 필요   
-  > npm install axios   
-  > bower install axios   
-  > yarn add axios   
-  > <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"\></script\>   
-  > <script src="https://unpkg.com/axios/dist/axios.min.js"\></script\>   
+```html
+npm install axios   
+bower install axios   
+yarn add axios   
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"\></script\>   
+<script src="https://unpkg.com/axios/dist/axios.min.js"\></script\>   
+```
 
 
 ***
