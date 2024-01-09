@@ -32,20 +32,3 @@
   
 </script>
 
-<!DOCTYPE html>
-<html>
-  <body>
- ```   <button type="button">a</button>
-
-    
-<script type="application/javascript">
-  
-  alert('a');
-  
-</script>
-
-  </body>
-</html>
-
- <button> a </button>
- 
