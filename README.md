@@ -24,9 +24,9 @@
 4.보안
   - a
     
->
->
-<script type="application/javascript">
+
+
+<script>
   
   alert('a');
   
