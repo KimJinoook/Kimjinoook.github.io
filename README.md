@@ -26,7 +26,7 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <button type="button">a</button>
+ ```   <button type="button">a</button>
 <script type="application/javascript">
   alert('a');
 </script>
