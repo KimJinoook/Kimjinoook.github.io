@@ -23,6 +23,7 @@
 
 4.보안
 
+<!DOCTYPE html>
 <html>
   <body>
     <button type="button">a</button>
