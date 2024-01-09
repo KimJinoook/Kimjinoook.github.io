@@ -23,7 +23,9 @@
 
 4.보안
 
+<javascript>
 alert('a');
-  
+</javascript>
+
  
  
