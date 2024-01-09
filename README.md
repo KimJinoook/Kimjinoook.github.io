@@ -26,9 +26,7 @@
 <html>
   <body>
     <button>a</button>
-<script>
 alert('a');
-</script>
   </body>
 </html>
 
