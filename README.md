@@ -24,9 +24,12 @@
 4.보안
 
 <html>
+  <body>
+    <button>a</button>
 <script>
 alert('a');
 </script>
+  </body>
 </html>
 
  <button> a </button>
