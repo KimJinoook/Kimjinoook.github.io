@@ -23,10 +23,11 @@
 
 4.보안
 
-```html
+<html>
 <script>
 alert('a');
 </script>
+</html>
 
  <button> a </button>
  
