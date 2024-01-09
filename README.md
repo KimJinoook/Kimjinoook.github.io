@@ -27,7 +27,8 @@ var a = 1;
 
 <script>
   
-  alert('a');
+alert('a');
   
 </script>
 
+alert('a');
