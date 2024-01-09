@@ -23,9 +23,9 @@
 
 4.보안
 
-<javascript>
+<script>
 alert('a');
-</javascript>
+</script>
 
  <button> a </button>
  
