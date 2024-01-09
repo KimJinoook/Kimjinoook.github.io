@@ -23,7 +23,7 @@
 
 4.보안
 
-```javascript
+```html
 <script>
 alert('a');
 </script>
