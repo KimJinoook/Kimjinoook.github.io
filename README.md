@@ -25,8 +25,8 @@
 
 <html>
   <body>
-    <button>a</button>
-alert('a');
+    <button type="button">a</button>
+
   </body>
 </html>
 
